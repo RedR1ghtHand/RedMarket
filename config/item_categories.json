@@ -1,0 +1,34 @@
+[
+  {
+    "name": "armor",
+    "description": "Items worn for protection."
+  },
+  {
+    "name": "weapons",
+    "description": "Offensive equipment."
+  },
+  {
+    "name": "tools",
+    "description": "Useful instruments."
+  },
+  {
+    "name": "ammunition",
+    "description": "Consumables for ranged weapons."
+  },
+  {
+    "name": "utilities",
+    "description": "Miscellaneous helpful items."
+  },
+  {
+    "name": "wooden",
+    "description": "Wood-based items."
+  },
+  {
+    "name": "structural",
+    "description": "Blocks used in construction."
+  },
+  {
+    "name": "decorative",
+    "description": "Aesthetic blocks and items."
+  }
+]
