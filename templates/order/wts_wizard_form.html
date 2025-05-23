@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Create Sell Order Wizard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<div class="container">
+    <h1>
+        {% if wizard.steps.current == 'fill_order' %}
+            Want to Sell - [{{ selected_item_type.name }}]
+        {% else %}
+            Place order - Step 1 of {{ wizard.steps.count }}
+        {% endif %}
+    </h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ wizard.management_form }}
+
+        <fieldset>
+            <legend>Order Details</legend>
+            <p class="help-text">Fill out the basic order details to continue.</p>
+
+            {% if wizard.form.forms %}
+                {{ wizard.form.management_form }}
+                {% for form in wizard.form.forms %}
+                    {% for field in form %}
+                        {% if "enchantment_" not in field.name %}
+                            <div>
+                                <label>{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <p class="help-text">{{ field.help_text }}</p>
+                                {% endif %}
+                                {% if field.errors %}
+                                    <p class="error-text">{{ field.errors|striptags }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                {% for field in wizard.form %}
+                    {% if "enchantment_" not in field.name %}
+                        <div>
+                            <label>{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <p class="help-text">{{ field.help_text }}</p>
+                            {% endif %}
+                            {% if field.errors %}
+                                <p class="error-text">{{ field.errors|striptags }}</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </fieldset>
+
+        {% if wizard.steps.current == "fill_order" %}
+            {% if selected_item_type.enchantments.exists %}
+                <div>
+                    <button type="button" id="toggle-enchantments" class="toggle-button minecraft-font">
+                        <span class="toggle-text">Add enchantments</span>
+                        <span class="arrow">&#9660;</span>
+                    </button>
+                </div>
+
+                <fieldset id="enchantments-section">
+                    <legend>Enchantments (Optional)</legend>
+                    <p class="help-text">Select enchantments to enhance your item.</p>
+                    <div class="form-grid">
+                    {% if wizard.form.forms %}
+                        {% for form in wizard.form.forms %}
+                            {% for field in form %}
+                                {% if "enchantment_" in field.name %}
+                                        <label>{{ field.label }}</label>
+                                        {{ field }}
+                                        {% if field.help_text %}
+                                            <p class="help-text">{{ field.help_text }}</p>
+                                        {% endif %}
+                                        {% if field.errors %}
+                                            <p class="error-text">{{ field.errors|striptags }}</p>
+                                        {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        {% for field in wizard.form %}
+                            {% if "enchantment_" in field.name %}
+                                <div>
+                                    <label>{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <p class="help-text">{{ field.help_text }}</p>
+                                    {% endif %}
+                                    {% if field.errors %}
+                                        <p class="error-text">{{ field.errors|striptags }}</p>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    </div>
+                </fieldset>
+            {% endif %}
+        {% endif %}
+
+        <div class="form-buttons {% if not wizard.steps.prev %}single-button{% endif %}">
+            {% if wizard.steps.prev %}
+                <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn-back">
+                    Back
+                </button>
+            {% endif %}
+            <button type="submit" class="btn-next">
+                {% if wizard.steps.next == "fill_order" %}
+                    Next
+                {% else %}
+                    Submit Order
+                {% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleButton = document.getElementById('toggle-enchantments');
+        const enchantmentSection = document.getElementById('enchantments-section');
+
+        toggleButton.addEventListener('click', () => {
+            enchantmentSection.classList.toggle('open');
+            toggleButton.classList.toggle('active');
+        });
+    });
+</script>
+{% endblock %}
+
+
