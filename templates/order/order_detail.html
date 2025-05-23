@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
+<div class="market-container">
+    {% include "market_sb.html" %}
+    <h1 class="item-title">{{ item_type.name }}</h1>
+    <p class="item-description">{{ item_type.description }}</p>
+
+    <h3>Orders:</h3>
+
+    <table class="order-table">
+        <thead>
+            <tr>
+                <th>Seller</th>
+                <th>
+                    <form method="get" id="material-filter-form">
+                        <div class="material-label">Material</div>
+                        <div class="material-select-wrapper">
+                            <select name="material" onchange="document.getElementById('material-filter-form').submit()" class="material-select">
+                                <option value="">{% if not selected_material %}any{% else %}any{% endif %}</option>
+                                {% for id, name in materials %}
+                                    <option value="{{ id }}" {% if selected_material == id %}selected{% endif %}>{{ name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        {% if current_sort %}
+                            <input type="hidden" name="sort" value="{{ current_sort }}">
+                        {% endif %}
+                        {% if current_direction %}
+                            <input type="hidden" name="direction" value="{{ current_direction }}">
+                        {% endif %}
+                    </form>
+                </th>
+                {% for field in sort_fields %}
+                    <th>
+                        <a href="?material={% if selected_material %}{{selected_material}}{% else %}{% endif %}&sort={{ field }}&direction={% if current_sort == field and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                           class="sortable {% if current_sort == field %}sorted {{ current_direction }}{% endif %}"
+                           data-field="{{ field }}">
+                            {{ field|capfirst }}
+                            <span class="sort-icon"></span>
+                        </a>
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>
+                        <div class="mc-username-cell">
+                            <img src="https://mc-heads.net/avatar/{{ order.created_by.mc_username }}/20"
+                                 alt="MC Head"
+                                 class="mc-avatar">
+                            {{ order.created_by.mc_username }}
+                        </div>
+                    </td>
+                    <td>{{ order.material }}</td>
+                    <td>{{ order.price }}</td>
+                    <td>{{ order.quantity }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if not orders %}
+        <p>No orders found for this item type.</p>
+    {% endif %}
+</div>
+{% endblock %}

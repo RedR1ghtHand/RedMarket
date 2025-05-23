@@ -1,0 +1,124 @@
+.market-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 2rem;
+    font-family: 'Minecraft', monospace;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #ff5555;
+}
+
+/* Search */
+.search-wrapper {
+    position: relative;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+
+}
+
+.sb {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.search-wrapper input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
+    border: 2px solid #444;
+    background-color: #2b2b2b;
+    color: #f5f5f5;
+    box-sizing: border-box;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+
+.input-container input {
+    text-transform: capitalize;
+    font-family: 'Minecraft', monospace;
+    text-shadow: 0 0 20px rgba(0,0,0,0.6);py
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.clear-button {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #FF5555;
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.clear-button:hover {
+    color: #fff;
+}
+
+.suggestions-list {
+    position: absolute;
+    text-transform: capitalize;
+    width: 100%;
+    background-color: #1a1a1a;
+    border: 1px solid #444;
+    border-top: none;
+    max-height: 400px;
+    overflow-y: auto;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+    border-radius: 0 0 8px 8px;
+}
+
+.suggestions-list li {
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    color: #f5f5f5;
+}
+
+.suggestions-list li:hover {
+    background-color: #333;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Table */
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #2b2b2b;
+    color: #eee;
+    border: 2px solid #444;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+
+.orders-table th, .orders-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+.orders-table th {
+    background-color: #1a1a1a;
+    font-size: 1.1rem;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+}
+
+.orders-table tr:hover {
+    background-color: #333;
+}

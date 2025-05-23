@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/market.css' %}">
+<div class="market-container">
+    <div class="search-wrapper">
+        <input id="item-search" type="text" placeholder="Search Item Type..." autocomplete="off">
+        <ul id="suggestions" class="suggestions-list hidden"></ul>
+    </div>
+
+    <table class="orders-table">
+        <h1>Recent Orders</h1>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.material }} {{ order.item_type }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.price }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">No orders found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("item-search");
+    const suggestions = document.getElementById("suggestions");
+
+    const items = [
+        {% for type in item_types %}
+            { name: "{{ type.name }}", url: "{% url 'order_detail' type.slug %}" },
+        {% endfor %}
+    ];
+
+    function showSuggestions(query) {
+        suggestions.innerHTML = "";
+
+        let filtered = items;
+        if (query) {
+            const lower = query.toLowerCase();
+            filtered = items.filter(item => item.name.toLowerCase().includes(lower));
+        }
+
+        filtered.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item.name;
+            li.addEventListener("click", () => {
+                window.location.href = item.url;
+            });
+            suggestions.appendChild(li);
+        });
+
+        if (filtered.length > 0) {
+            suggestions.classList.remove("hidden");
+        } else {
+            suggestions.classList.add("hidden");
+        }
+    }
+
+    // Open suggestions on focus or input
+    searchInput.addEventListener("focus", () => showSuggestions(searchInput.value));
+    searchInput.addEventListener("input", () => showSuggestions(searchInput.value));
+
+    // Close suggestions on click outside
+    document.addEventListener("click", (e) => {
+        if (!searchInput.contains(e.target) && !suggestions.contains(e.target)) {
+            suggestions.classList.add("hidden");
+        }
+    });
+});
+</script>
+
+{% endblock %}

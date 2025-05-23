@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'social_django',
+    'django_extensions',
+    'formtools',
     'app_item',
     'app_account',
-    'django_extensions',
+    'app_order',
 ]
 
 MIDDLEWARE = [
@@ -123,6 +125,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -135,7 +142,8 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'app_account.User'
-
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'account'
 
 LOGGING = {
     'version': 1,
