@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from rest_framework import generics
@@ -14,6 +15,16 @@ class UserRegisterView(generics.CreateAPIView):
 
 
 def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('user')  # redirect to account page
+        else:
+            messages.error(request, 'Invalid email or password.')
+
     return render(request, 'account/login.html')
 
 

@@ -49,7 +49,7 @@ class ItemType(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="item_types")
 
     def __str__(self):
-        return f"{self.name} ({self.category.name})"
+        return f"{self.name}"
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -81,6 +81,9 @@ class Material(models.Model):
 
 
 class Enchantment(models.Model):
+    """
+    Specific Enchantments can be applied to certain item types to maintain a full variety of those
+    """
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True)
     max_level = models.PositiveIntegerField(default=1)
@@ -110,5 +113,3 @@ class BaseItem(models.Model):
         return self.item_type.category
 
 
-class EnchantableItem(BaseItem):
-    pass
