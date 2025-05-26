@@ -21,7 +21,7 @@
         <tbody>
             {% for order in orders %}
                 <tr>
-                    <td>{{ order.material }} {{ order.item_type }}</td>
+                    <td>{% if order.material %}{{ order.material }}{% endif %} {{ order.item_type }}</td>
                     <td>{{ order.quantity }}</td>
                     <td>{{ order.price }}</td>
                 </tr>

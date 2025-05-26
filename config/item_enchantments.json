@@ -120,7 +120,7 @@
     "name": "Breach",
     "description": "Negate the effectiveness of enemy armor by 15% per level.",
     "max_lvl": 4,
-    "applicable_to": ["sword", "mace"]
+    "applicable_to": ["mace"]
   },
   {
     "name": "Density",

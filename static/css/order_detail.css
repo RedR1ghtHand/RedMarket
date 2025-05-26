@@ -5,7 +5,32 @@
     font-family: 'Minecraft', monospace;
 }
 
-.item-title {
+.item-type-block {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 4rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.item-type-image {
+    width: 30%;
+    max-width: 100px; /* optional: to avoid stretching */
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}
+
+.item-type-title {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.item-type-title h1 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
     text-transform: capitalize;
@@ -13,7 +38,7 @@
     color: #ff5555;
 }
 
-.item-description {
+.item-type-title p {
     font-size: 1.1rem;
     text-align: center;
     margin-bottom: 2rem;
@@ -39,20 +64,24 @@
 
 .order-table thead {
     border: 2px solid #444;
+    height: 60px;
 }
 
-
+.order-table tr:hover {
+    background-color: #3a3a3a;
+}
 
 .order-table th {
     padding: 1px 16px 1px 16px;
     text-align: left;
-    width: 25%;
+    width: auto;
+    height: 100%;
     border-bottom: 1px solid #444;
     font-family: 'Minecraft', monospace;
 }
 
 .order-table td {
-    width: 25%;
+    width: auto;
     padding: 0.75rem 1rem;
     text-align: left;
     border-bottom: 1px solid #444;
@@ -68,11 +97,6 @@
     background-color: #333;
 }
 
-.order-table tr:hover {
-    background-color: #3a3a3a;
-}
-
-
 .order-table th a:hover {
     opacity: 1;
     color: #55FFFF;
@@ -84,11 +108,14 @@
     gap: 0.5rem;
 }
 
+.mc-username-cell {
+    display: inline-flex;
+    gap: 4px;
+}
+
 .mc-avatar {
     width: 20px;
     height: 20px;
-    border-radius: 4px;
-    box-shadow: 0 0 3px #0006;
 }
 
 .no-orders-msg {
@@ -170,4 +197,53 @@
 .material-select:hover {
     color: #55FFFF;
     background-color: #3a3a3a;
+}
+
+.enchant-toggle-btn {
+    width: 50%;
+    background: transparent;
+    border: none;
+    color: #FFFF55;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 4px 8px;
+}
+
+.enchants-expand-btn:hover,
+.enchant-toggle-btn:hover {
+    color: #FF55FF;
+
+}
+
+.enchant-list {
+    list-style: none;
+    margin-top: 4px;
+    padding-left: 0;
+    border-left: 1px solid #555;
+    padding: 0px 10px;
+    font-size: 0.9em;
+
+}
+
+.enchant-list li {
+    padding: 2px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.enchants-expand-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+    font-size: 100%;
+    font-weight: bold;
+    font-family: 'Minecraft', monospace;
+}
+
+.price-column {
+    color: #9A5CC6;
 }

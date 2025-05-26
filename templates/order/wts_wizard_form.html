@@ -108,7 +108,6 @@
                 </fieldset>
             {% endif %}
         {% endif %}
-
         <div class="form-buttons {% if not wizard.steps.prev %}single-button{% endif %}">
             {% if wizard.steps.prev %}
                 <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn-back">

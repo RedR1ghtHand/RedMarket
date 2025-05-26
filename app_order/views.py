@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Prefetch
 from formtools.wizard.views import SessionWizardView
 
 from .models import Order, OrderEnchantment, ItemType, Material
@@ -38,16 +39,12 @@ class CreateOrderWizard(SessionWizardView):
             price=step_1_data['price']
         )
 
-        selected_enchantments = step_1_data.get('enchantments', [])
-        for enchantment in selected_enchantments:
-            level_field_name = f'enchantment_level_{enchantment.id}'
-            level = int(self.request.POST.get(level_field_name, 1))
+        for enchantment, level in step_1_data.get('enchantments', []):
             OrderEnchantment.objects.create(
                 order=order,
                 enchantment=enchantment,
                 level=level
             )
-
         return redirect('order_success')
 
 
@@ -70,6 +67,12 @@ def orders_view(request):
 def order_detail_view(request, slug):
     item_type = get_object_or_404(ItemType, slug=slug)
     orders = Order.objects.filter(item_type=item_type).order_by('-created_at')
+    orders = orders.prefetch_related(
+        Prefetch(
+            'orderenchantment_set',
+            queryset=OrderEnchantment.objects.select_related('enchantment')
+        )
+    )
 
     sort_fields = ['price', 'quantity']
     sort = request.GET.get('sort')
