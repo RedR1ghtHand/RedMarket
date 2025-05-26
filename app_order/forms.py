@@ -1,6 +1,6 @@
 from django import forms
 
-from app_item.models import ItemType, Material
+from app_item.models import ItemType, Material, Enchantment
 from .models import Order
 
 
@@ -25,9 +25,9 @@ class CreateOrderForm(forms.ModelForm):
             if materials_qs.exists():
                 self.fields['material'] = forms.ModelChoiceField(
                     queryset=materials_qs,
-                    required=False,
+                    required=True,
                     label="Material",
-                    widget=forms.Select(attrs={'placeholder': 'Select Material'})
+                    empty_label=None
                 )
             else:
                 self.fields.pop('material', None)
@@ -40,8 +40,24 @@ class CreateOrderForm(forms.ModelForm):
                     min_value=1,
                     max_value=enchantment.max_level,
                     required=False,
-                    widget=forms.NumberInput(attrs={
-                        'placeholder': f'1-{enchantment.max_level}'
-                    })
+                    widget=forms.NumberInput(attrs={'placeholder': f'1-{enchantment.max_level}'})
                 )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        enchantments = []
+
+        for field_name in self.fields:
+            if field_name.startswith('enchantment_'):
+                level = cleaned_data.get(field_name)
+                if level:
+                    enchantment_id = int(field_name.replace('enchantment_', ''))
+                    try:
+                        enchantment = Enchantment.objects.get(id=enchantment_id)
+                        enchantments.append((enchantment, level))
+                    except Enchantment.DoesNotExist:
+                        pass
+
+        cleaned_data['enchantments'] = enchantments
+        return cleaned_data
 
