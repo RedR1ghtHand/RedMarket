@@ -168,3 +168,6 @@ LOGGING = {
         },
     },
 }
+
+# Minecraft-server-settings aka
+MC_SERVER_WISPER_COMMAND = '/m'  # /msg, /tell, /w

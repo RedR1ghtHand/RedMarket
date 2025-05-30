@@ -24,7 +24,7 @@
                             <div class="material-label">Material</div>
                             <div class="material-select-wrapper">
                                 <select name="material" onchange="document.getElementById('material-filter-form').submit()" class="material-select">
-                                    <option value="">{% if not selected_material %}any{% else %}any{% endif %}</option>
+                                    <option value="">any</option>
                                     {% for id, name in materials %}
                                         <option value="{{ id }}" {% if selected_material == id %}selected{% endif %}>{{ name }}</option>
                                     {% endfor %}
@@ -54,6 +54,7 @@
                         </a>
                     </th>
                 {% endfor %}
+                <th class="buy-button-container">-</th>
             </tr>
         </thead>
         <tbody>
@@ -103,6 +104,20 @@
                     {% endif %}
                     <td class="price-column">{{ order.price }}</td>
                     <td>{{ order.quantity }}</td>
+                    <td class="buy-button-container">
+                        <div class="buy-button-wrapper">
+                            <button class="buy-button" onclick="handleBuy(this)"
+                                    data-clipboard="{{ mc_server_wisper_command }} {{ order.created_by.mc_username }} Hi! I want to buy - {{ item_type.name|capfirst }}[{{ order.material }}] x1 for {{ order.price }}. RedMarket">
+                                Buy
+                            </button>
+                            <button class="close-button hidden" onclick="handleClose(this)">
+                                Close
+                            </button>
+                        </div>
+                        <div class="buy-clipboard-wrapper hidden">
+                            <span class="buy-clipboard-message"></span>
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -135,5 +150,32 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+function handleBuy(button) {
+    const wrapper = button.closest(".buy-button-container");
+    const messageWrapper = wrapper.querySelector(".buy-clipboard-wrapper");
+    const message = wrapper.querySelector(".buy-clipboard-message");
+    const closeButton = wrapper.querySelector(".close-button");
+
+    const textToCopy = button.dataset.clipboard;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        message.textContent = `Copied: ${textToCopy}`;
+        messageWrapper.classList.remove("hidden");
+        button.classList.add("hidden");
+        closeButton.classList.remove("hidden");
+    }).catch(err => {
+        console.error("Copy failed", err);
+    });
+}
+
+function handleClose(button) {
+    const wrapper = button.closest(".buy-button-container");
+    const buyButton = wrapper.querySelector(".buy-button");
+    const messageWrapper = wrapper.querySelector(".buy-clipboard-wrapper");
+
+    messageWrapper.classList.add("hidden");
+    buyButton.classList.remove("hidden");
+    button.classList.add("hidden");
+}
 </script>
 {% endblock %}

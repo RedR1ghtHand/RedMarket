@@ -1,11 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.db.models import Prefetch
 
 from rest_framework import generics
 
 from .models import User
+from app_order.models import Order, OrderEnchantment
+from .forms import MCUsernameUpdateForm, OrderManagerForm
+from app_order.forms import CreateOrderForm
 from .serializers import UserRegisterSerializer
 
 
@@ -38,3 +43,73 @@ def account_view(request):
     return render(request, 'account/account.html', {'user': request.user})
 
 
+@login_required
+def account_settings_view(request):
+    user = request.user
+
+    mc_username_form = MCUsernameUpdateForm(request.POST or None, instance=user)
+    pwd_form = PasswordChangeForm(user, request.POST or None)
+
+    if 'update_mc_username' in request.POST and mc_username_form.is_valid():
+        mc_username_form.save()
+        messages.success(request, 'Minecraft username updated.')
+        return redirect('user')
+
+    if 'update_password' in request.POST and pwd_form.is_valid():
+        pwd_form.save()
+        update_session_auth_hash(request, pwd_form.user)
+        messages.success(request, 'Password updated.')
+        return redirect('user')
+
+    return render(request, 'account/settings.html', {
+        'mc_username_form': mc_username_form,
+        'pwd_form': pwd_form,
+    })
+
+
+def account_order_manager_view(request):
+    user = request.user
+    orders = Order.objects.filter(created_by=user).order_by('-created_at')
+    orders = orders.prefetch_related(
+        Prefetch(
+            'orderenchantment_set',
+            queryset=OrderEnchantment.objects.select_related('enchantment')
+        )
+    )
+    order_to_edit = None
+    form = None
+
+    if request.method == 'POST':
+        if 'edit_order' in request.POST:
+            order_id = request.POST.get('edit_order')
+            order_to_edit = get_object_or_404(Order, id=order_id, created_by=user)
+            form = OrderManagerForm(instance=order_to_edit, item_type=order_to_edit.item_type)
+
+        elif 'update_order' in request.POST:
+            order_id = request.POST.get('order_id')
+            order_to_edit = get_object_or_404(Order, id=order_id, created_by=user)
+            form = OrderManagerForm(request.POST, instance=order_to_edit, item_type=order_to_edit.item_type)
+            if form.is_valid():
+                cleaned = form.cleaned_data
+                form.save()
+                # order_to_edit.enchantments.clear()
+                # for enchantment, level in cleaned.get('enchantments', []):
+                #     OrderEnchantment.objects.create(order=order_to_edit, enchantment=enchantment, level=level)
+            return redirect('order_manager')
+
+        elif 'delete_order' in request.POST:
+            order_id = request.POST.get('order_id')
+            order_to_delete = get_object_or_404(Order, id=order_id, created_by=user)
+            order_to_delete.delete()
+            messages.success(request, 'Order deleted.')
+            return redirect('order_manager')
+
+        else:
+            form = None
+
+    return render(request, 'account/order_manager.html', {
+        'user': request.user,
+        'orders': orders,
+        'edit_form': form,
+        'order_to_edit': order_to_edit
+    })

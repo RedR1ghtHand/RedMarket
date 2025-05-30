@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% load static %}
+    {% load custom_tags %}
+    <link rel="stylesheet" href="{% static 'css/account_order_manager.css' %}">
+
+    <div class="account-layout">
+        {% include "account/account_nav.html" %}
+
+        <div class="main-content">
+            <div class="orders-container">
+                {% for order in orders %}
+                    <div class="order-card" data-order-id="{{ order.id }}">
+                        <div class="order-card-header">
+                            <div class="order-card-header-top">
+                                <p>{{ order.item_type|capfirst }}</p>
+
+                                {% if order.material.icon %}
+                                    <img src="{{ order.material.icon.url }}"
+                                         alt="material"
+                                         class="order-card-material-icon"
+                                         title="{{ order.material }}">
+                                {% endif %}
+
+                                {% with enchant_count=order.orderenchantment_set.count %}
+                                    {% if enchant_count > 0 %}
+                                        <button class="enchant-toggle-btn" title="Click to toggle enchantments">
+                                            {{ "★"|repeat:enchant_count }}
+                                        </button>
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+
+                            {% with enchant_count=order.orderenchantment_set.count %}
+                                {% if enchant_count > 0 %}
+                                    <div class="enchant-list-wrapper hidden">
+                                        <ul class="enchant-list">
+                                            {% for oe in order.orderenchantment_set.all %}
+                                                <li>{{ oe.enchantment.name }} <span>{{ oe.level|romanize }}</span></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="order_id" value="{{ order.id }}">
+
+                            <p class="order-card-price">
+                                <span class="label">price:</span>
+                                <span class="value" id="price-value-{{ order.id }}">{{ order.price }}</span>
+                                <input type="number"
+                                       name="price"
+                                       class="edit-input"
+                                       id="price-input-{{ order.id }}"
+                                       value="{{ order.price }}"
+                                       style="display: none;">
+                            </p>
+
+                            <p class="order-card-quantity">
+                                <span class="label">quantity:</span>
+                                <span class="value" id="quantity-value-{{ order.id }}">{{ order.quantity }}</span>
+                                <input type="number"
+                                       name="quantity"
+                                       class="edit-input"
+                                       id="quantity-input-{{ order.id }}"
+                                       value="{{ order.quantity }}"
+                                       style="display: none;">
+                            </p>
+
+                            <span class="confirm-label hidden"
+                                  id="confirm-label-{{ order.id }}">
+                                Please confirm deleting
+                            </span>
+
+                            <div class="button-group" id="buttons-{{ order.id }}">
+                                <button type="button"
+                                        onclick="enableEdit({{ order.id }})"
+                                        id="edit-btn-{{ order.id }}">
+                                    Edit
+                                </button>
+
+                                <button type="button"
+                                        class="button-cancel"
+                                        onclick="deleteOrder({{ order.id }})"
+                                        id="delete-btn-{{ order.id }}">
+                                    Delete
+                                </button>
+
+                                <button type="submit"
+                                        class="button-save hidden"
+                                        name="delete_order"
+                                        value="{{ order.id }}"
+                                        id="confirm-btn-{{ order.id }}">
+                                    Confirm
+                                </button>
+
+                                <button type="button"
+                                        class="button-cancel hidden"
+                                        onclick="cancelDelete({{ order.id }})"
+                                        id="cancel-btn-{{ order.id }}">
+                                    Cancel
+                                </button>
+                            </div>
+
+                            <div class="button-group" id="save-cancel-{{ order.id }}" style="display: none;">
+                                <button class="button-save" type="submit" name="update_order">Save</button>
+                                <button class="button-cancel" type="button" onclick="cancelEdit({{ order.id }})">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                {% empty %}
+                    <p>No orders available.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+<script>
+function showElement(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "flex";
+}
+
+function hideElement(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+}
+
+function showInlineElement(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "inline-flex";
+}
+
+function hideInlineElement(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+}
+
+function enableEdit(orderId) {
+    // Reset delete mode if active
+    cancelDelete(orderId);
+
+    hideElement(`price-value-${orderId}`);
+    hideElement(`quantity-value-${orderId}`);
+    showInlineElement(`price-input-${orderId}`);
+    showInlineElement(`quantity-input-${orderId}`);
+
+    hideElement(`buttons-${orderId}`);
+    showElement(`save-cancel-${orderId}`);
+}
+
+function cancelEdit(orderId) {
+    // Reset input values to original
+    const priceSpan = document.getElementById(`price-value-${orderId}`);
+    const quantitySpan = document.getElementById(`quantity-value-${orderId}`);
+    document.getElementById(`price-input-${orderId}`).value = priceSpan.innerText;
+    document.getElementById(`quantity-input-${orderId}`).value = quantitySpan.innerText;
+
+    hideElement(`price-input-${orderId}`);
+    hideElement(`quantity-input-${orderId}`);
+    showElement(`price-value-${orderId}`);
+    showElement(`quantity-value-${orderId}`);
+
+    hideElement(`save-cancel-${orderId}`);
+    showElement(`buttons-${orderId}`);
+}
+
+function deleteOrder(orderId) {
+    hideElement(`edit-btn-${orderId}`);
+    hideElement(`delete-btn-${orderId}`);
+    showElement(`confirm-label-${orderId}`);
+    showElement(`confirm-btn-${orderId}`);
+    showElement(`cancel-btn-${orderId}`);
+}
+
+function cancelDelete(orderId) {
+    showElement(`edit-btn-${orderId}`);
+    showElement(`delete-btn-${orderId}`);
+    hideElement(`confirm-label-${orderId}`);
+    hideElement(`confirm-btn-${orderId}`);
+    hideElement(`cancel-btn-${orderId}`);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".enchant-toggle-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            // Find the closest .order-card-header, then its .enchant-list-wrapper
+            const header = this.closest(".order-card-header");
+            const list = header.querySelector(".enchant-list-wrapper");
+
+            if (list) {
+                list.classList.toggle("hidden");
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

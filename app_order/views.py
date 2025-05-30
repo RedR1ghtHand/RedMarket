@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.db.models import Prefetch
 from formtools.wizard.views import SessionWizardView
 
@@ -50,7 +51,17 @@ class CreateOrderWizard(SessionWizardView):
 
 def orders_view(request):
     item_type_id = request.GET.get('item_type')
-    item_types = ItemType.objects.all()
+    item_types = ItemType.objects.all().prefetch_related('materials')
+
+    # Build searchable dataset
+    enriched_item_types = []
+    for item in item_types:
+        material_names = [mat.name.lower() for mat in item.materials.all()]
+        enriched_item_types.append({
+            'name': item.name,
+            'slug': item.slug,
+            'aliases': material_names  # extra aliases for JS filter
+        })
 
     if item_type_id:
         orders = Order.objects.filter(item_type_id=item_type_id).order_by('-created_at')[:10]
@@ -60,13 +71,14 @@ def orders_view(request):
     return render(request, 'market.html', {
         'orders': orders,
         'item_types': item_types,
+        'enriched_types': enriched_item_types,
         'selected_type': int(item_type_id) if item_type_id else None
     })
 
 
 def order_detail_view(request, slug):
     item_type = get_object_or_404(ItemType, slug=slug)
-    orders = Order.objects.filter(item_type=item_type).order_by('-created_at')
+    orders = Order.objects.filter(item_type=item_type).order_by('-updated_at')
     orders = orders.prefetch_related(
         Prefetch(
             'orderenchantment_set',
@@ -99,6 +111,7 @@ def order_detail_view(request, slug):
         'materials': materials,
         'selected_material': int(material_filter) if material_filter else None,
         'item_types': item_types,
-        'selected_type': selected_type
+        'selected_type': selected_type,
+        'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND
     }
     return render(request, 'order/order_detail.html', context)

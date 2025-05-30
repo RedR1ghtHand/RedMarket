@@ -1,0 +1,156 @@
+.orders-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 1200px) {
+    .orders-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .orders-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .orders-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.order-card {
+    border: 1px solid #444;
+    box-shadow: 0 0 8px #0008;
+    padding: 1rem;
+    background-color: #222;
+    font-family: 'Minecraft', monospace;
+}
+
+.order-card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #FFAA00;
+    gap: 0.25rem;
+}
+
+.order-card-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.order-card-material-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.order-card-quantity,
+.order-card-price {
+    margin: 4px 16px 4px 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-card-quantity .value{
+    color: #FFAA00;
+}
+
+.order-card-price .value{
+    color: #9A5CC6;
+}
+
+.edit-input {
+    background-color: #2a2a2a;
+    color: #e0e0ff;
+    border: 1px solid #555;
+    padding: 4px 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    width: auto;
+
+}
+
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+    margin: 16px 16px 0;
+    justify-content: space-between;
+}
+
+.button-group button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    background-color: #333;
+    color: #eee;
+    border: 1px solid #555;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.button-group button:hover {
+    background-color: #555;
+    color: #FFAA00;
+    border-color: #FFAA00;
+}
+
+.button-group .button-cancel:hover {
+    background-color: #555;
+    color: #ff5555;
+    border-color: #ff5555;
+}
+
+.button-group .button-save:hover {
+    background-color: #555;
+    color: #1f8f4c;
+    border-color: #1f8f4c;
+}
+
+.enchant-toggle-btn {
+    background: none;
+    border: none;
+    color: #f9d423;
+    cursor: pointer;
+    margin-bottom: 2px;
+    font-size: 16px;
+    padding: 0;
+}
+
+.enchant-toggle-btn:hover {
+    color: #FFAA00;
+}
+
+.enchant-list-wrapper.hidden {
+    display: none;
+}
+
+.enchant-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+    color: #ddd;
+}
+
+.enchant-list li span {
+    color: #FFAA00;
+    margin-left: 4px;
+}
+
+.confirm-label {
+    color: #f88;
+    margin: 16px 0 0 16px;
+
+}
+
+.hidden {
+    display: none;
+}

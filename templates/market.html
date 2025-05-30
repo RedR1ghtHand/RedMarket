@@ -40,19 +40,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const suggestions = document.getElementById("suggestions");
 
     const items = [
-        {% for type in item_types %}
-            { name: "{{ type.name }}", url: "{% url 'order_detail' type.slug %}" },
+        {% for type in enriched_types %}
+            {
+                name: "{{ type.name }}",
+                url: "{% url 'order_detail' type.slug %}",
+                aliases: {{ type.aliases|safe }}
+            },
         {% endfor %}
     ];
 
     function showSuggestions(query) {
         suggestions.innerHTML = "";
+        const lower = query.toLowerCase();
 
-        let filtered = items;
-        if (query) {
-            const lower = query.toLowerCase();
-            filtered = items.filter(item => item.name.toLowerCase().includes(lower));
-        }
+        const filtered = items.filter(item =>
+            item.name.toLowerCase().includes(lower) ||
+            (item.aliases && item.aliases.some(alias => alias.includes(lower)))
+        );
 
         filtered.forEach(item => {
             const li = document.createElement("li");
@@ -63,11 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
             suggestions.appendChild(li);
         });
 
-        if (filtered.length > 0) {
-            suggestions.classList.remove("hidden");
-        } else {
-            suggestions.classList.add("hidden");
-        }
+        suggestions.classList.toggle("hidden", filtered.length === 0);
     }
 
     // Open suggestions on focus or input

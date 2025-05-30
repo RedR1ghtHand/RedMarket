@@ -27,16 +27,22 @@
     {"name": "trident", "description": "A weapon that can be thrown or used in melee."},
     {"name": "mace", "description": "Thor?."}
   ],
-  "ammunition": [
+  "arrows and projectiles": [
     {"name": "arrow", "description": "A projectile shot from a bow or crossbow."},
     {"name": "tipped arrow", "description": "An arrow with special effects."},
-    {"name": "firework rocket", "description": "An item used for fireworks or propulsion."}
+    {"name": "firework rocket", "description": "An item used for fireworks or propulsion."},
+    {"name": "ender pearl", "description": "description."},
+    {"name": "eye of ender", "description": "description."}
   ],
   "utilities": [
     {"name": "bucket", "description": "A container used for carrying liquids."},
     {"name": "bottle", "description": "A container used for carrying potions or liquids."},
-    {"name": "informational", "description": "An items used to give us some information."},
-    {"name": "other", "description": "Some other items that could be used in different situations."}
+    {"name": "bone meal", "description": "description."},
+    {"name": "bowl", "description": "A soup?"},
+    {"name": "lead", "description": "description."},
+    {"name": "bundle", "description": "description."},
+    {"name": "saddle", "description": "description."},
+    {"name": "totem of undying", "description": "Goal reached: Postmortal."}
   ],
   "wooden": [
     {"name": "wood", "description": "A basic building material from trees."},
@@ -53,11 +59,21 @@
     {"name": "stairs", "description": "disc"},
     {"name": "trapdoor", "description": "disc"}
   ],
+  "ingots and materials": [
+    {"name": "ingot", "description": "description."},
+    {"name": "material", "description": "description."},
+    {"name": "blocks of materials", "description": "When the block of flint?."}
+  ],
+  "ores": [
+    {"name": "ore block", "description": "description."},
+    {"name": "raw ore block", "description": "description."},
+    {"name": "ore", "description": "description."}
+  ],
   "structural": [
     {"name": "stone blocks", "description": "A common building material."},
-    {"name": "overworld blocks", "description": "A block made from iron ingots."},
-    {"name": "the nether blocks", "description": "Blocks from the Nether."},
-    {"name": "the end blocks", "description": "Blocks from the End."},
+    {"name": "overworld blocks", "description": "A blocks from the Overworld."},
+    {"name": "nether blocks", "description": "Blocks from the Nether."},
+    {"name": "end blocks", "description": "Blocks from the End."},
     {"name": "blocks of materials", "description": "When the block of flint?."}
   ],
   "decorative": [

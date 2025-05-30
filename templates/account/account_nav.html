@@ -1,0 +1,11 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/account_nav.css' %}">
+
+<div class="account-nav">
+    <ul>
+        <li title="My Profile"><a href="{% url 'user' %}">🏠︎</a></li>
+        <li title="My Orders"><a href="{% url 'order_manager' %}">☲</a></li>
+        <li title="Settings"><a href="{% url 'settings' %}">🛠</a></li>
+    </ul>
+</div>
+

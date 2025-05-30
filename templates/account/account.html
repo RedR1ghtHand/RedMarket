@@ -1,20 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Account - RedMarket</title>
-</head>
-<body>
-    <h2>Welcome, {{ user.username }}</h2>
-    <p>Email: {{ user.email }}</p>
-    {% if user.mc_username %}
-        <p>Minecraft Username: {{ user.mc_username }}</p>
-        <img src="https://mc-heads.net/body/{{ user.mc_username }}/right" alt="MC Head">
-    {% endif %}
+    <div class="account-layout">
+        {% include "account/account_nav.html" %}
 
-    <p><a href="{% url 'logout' %}">Logout</a></p>
-</body>
-</html>
+        <div class="main-content">
+            <h2>Welcome, {{ user.username }}</h2>
+            <p>Email: {{ user.email }}</p>
+            {% if user.mc_username %}
+                <p>Minecraft Username: {{ user.mc_username }}</p>
+                <img src="https://mc-heads.net/body/{{ user.mc_username }}/right" alt="MC Head">
+            {% endif %}
+
+            <p><a href="{% url 'logout' %}">Logout</a></p>
+        </div>
+    </div>
 {% endblock %}
