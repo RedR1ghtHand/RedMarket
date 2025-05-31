@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.db.models import Prefetch
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from formtools.wizard.views import SessionWizardView
 
 from .models import Order, OrderEnchantment, ItemType, Material
@@ -77,8 +78,8 @@ def orders_view(request):
 
 def order_detail_view(request, slug):
     item_type = get_object_or_404(ItemType, slug=slug)
-    orders = Order.objects.filter(item_type=item_type, deleted_at__isnull=True).order_by('-updated_at')
-    orders = orders.prefetch_related(
+    all_orders = Order.objects.filter(item_type=item_type, deleted_at__isnull=True).order_by('-updated_at')
+    all_orders = all_orders.prefetch_related(
         Prefetch(
             'orderenchantment_set',
             queryset=OrderEnchantment.objects.select_related('enchantment')
@@ -94,12 +95,22 @@ def order_detail_view(request, slug):
 
     if sort in sort_fields:
         ordering = sort if direction == 'asc' else f"-{sort}"
-        orders = orders.order_by(ordering)
+        all_orders = all_orders.order_by(ordering)
 
     if material_filter:
-        orders = orders.filter(material__id=material_filter)
+        all_orders = all_orders.filter(material__id=material_filter)
 
     materials = Material.objects.filter(applicable_to=item_type).values_list('id', 'name')
+
+    paginator = Paginator(all_orders, 5)
+    page = request.GET.get('page')
+
+    try:
+        orders = paginator.page(page)
+    except PageNotAnInteger:
+        orders = paginator.page(1)
+    except EmptyPage:
+        orders = paginator.page(paginator.num_pages)
 
     context = {
         'item_type': item_type,
@@ -111,6 +122,7 @@ def order_detail_view(request, slug):
         'selected_material': int(material_filter) if material_filter else None,
         'item_types': item_types,
         'selected_type': selected_type,
-        'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND
+        'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
+        'paginator': paginator
     }
     return render(request, 'order/order_detail.html', context)

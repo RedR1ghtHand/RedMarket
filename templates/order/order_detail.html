@@ -125,6 +125,27 @@
     {% if not orders %}
         <p>No orders found for this item type.</p>
     {% endif %}
+    <div class="pagination">
+        <span class="page-info">Page {{ orders.number }} of {{ orders.paginator.num_pages }}</span>
+
+        <div class="pagination-links">
+            {% if orders.has_previous %}
+                <a href="?{% if selected_material %}material={{ selected_material }}&{% endif %}{% if current_sort %}sort={{ current_sort }}&direction={{ current_direction }}&{% endif %}page={{ orders.previous_page_number }}">« Previous</a>
+            {% endif %}
+
+            {% for num in orders.paginator.page_range %}
+                {% if orders.number == num %}
+                    <span class="current">{{ num }}</span>
+                {% elif num > orders.number|add:'-3' and num < orders.number|add:'3' %}
+                    <a href="?{% if selected_material %}material={{ selected_material }}&{% endif %}{% if current_sort %}sort={{ current_sort }}&direction={{ current_direction }}&{% endif %}page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if orders.has_next %}
+                <a href="?{% if selected_material %}material={{ selected_material }}&{% endif %}{% if current_sort %}sort={{ current_sort }}&direction={{ current_direction }}&{% endif %}page={{ orders.next_page_number }}">Next »</a>
+            {% endif %}
+        </div>
+    </div>
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
