@@ -12,7 +12,6 @@ h1 {
     color: #ff5555;
 }
 
-/* Search */
 .search-wrapper {
     position: relative;
     padding-top: 8rem;
@@ -39,7 +38,7 @@ h1 {
 .input-container input {
     text-transform: capitalize;
     font-family: 'Minecraft', monospace;
-    text-shadow: 0 0 20px rgba(0,0,0,0.6);py
+    text-shadow: 0 0 20px rgba(0,0,0,0.6);
 }
 
 .input-container {
@@ -95,7 +94,6 @@ h1 {
     display: none;
 }
 
-/* Table */
 .orders-table {
     width: 100%;
     border-collapse: collapse;

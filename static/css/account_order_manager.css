@@ -51,6 +51,11 @@
     height: 20px;
 }
 
+.order-form {
+    display: flex;
+    flex-direction: column;
+}
+
 .order-card-quantity,
 .order-card-price {
     margin: 4px 16px 4px 16px;
@@ -71,10 +76,7 @@
     color: #e0e0ff;
     border: 1px solid #555;
     padding: 4px 8px;
-    font-size: 1rem;
     font-family: inherit;
-    width: auto;
-
 }
 
 .button-group {
@@ -147,7 +149,7 @@
 
 .confirm-label {
     color: #f88;
-    margin: 16px 0 0 16px;
+    margin: 34px 0 0 16px;
 
 }
 
