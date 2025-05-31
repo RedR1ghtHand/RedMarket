@@ -53,20 +53,19 @@ def orders_view(request):
     item_type_id = request.GET.get('item_type')
     item_types = ItemType.objects.all().prefetch_related('materials')
 
-    # Build searchable dataset
     enriched_item_types = []
     for item in item_types:
         material_names = [mat.name.lower() for mat in item.materials.all()]
         enriched_item_types.append({
             'name': item.name,
             'slug': item.slug,
-            'aliases': material_names  # extra aliases for JS filter
+            'aliases': material_names
         })
 
     if item_type_id:
-        orders = Order.objects.filter(item_type_id=item_type_id).order_by('-created_at')[:10]
+        orders = Order.objects.filter(item_type_id=item_type_id, deleted_at__isnull=True).order_by('-created_at')[:10]
     else:
-        orders = Order.objects.all().order_by('-created_at')[:10]
+        orders = Order.objects.filter(deleted_at__isnull=True).order_by('-created_at')[:10]
 
     return render(request, 'market.html', {
         'orders': orders,
@@ -78,7 +77,7 @@ def orders_view(request):
 
 def order_detail_view(request, slug):
     item_type = get_object_or_404(ItemType, slug=slug)
-    orders = Order.objects.filter(item_type=item_type).order_by('-updated_at')
+    orders = Order.objects.filter(item_type=item_type, deleted_at__isnull=True).order_by('-updated_at')
     orders = orders.prefetch_related(
         Prefetch(
             'orderenchantment_set',

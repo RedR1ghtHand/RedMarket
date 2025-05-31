@@ -69,7 +69,7 @@ def account_settings_view(request):
 
 def account_order_manager_view(request):
     user = request.user
-    orders = Order.objects.filter(created_by=user).order_by('-created_at')
+    orders = Order.objects.filter(created_by=user, deleted_at__isnull=True).order_by('-created_at')
     orders = orders.prefetch_related(
         Prefetch(
             'orderenchantment_set',
@@ -100,7 +100,7 @@ def account_order_manager_view(request):
         elif 'delete_order' in request.POST:
             order_id = request.POST.get('order_id')
             order_to_delete = get_object_or_404(Order, id=order_id, created_by=user)
-            order_to_delete.delete()
+            order_to_delete.soft_delete()
             messages.success(request, 'Order deleted.')
             return redirect('order_manager')
 

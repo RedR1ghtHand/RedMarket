@@ -12,10 +12,19 @@ class Order(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
     def __str__(self):
         return f"{self.created_by.mc_username} Selling: {self.material.name} {self.item_type.name} for {self.price} (x{self.quantity})"
+
+    def soft_delete(self):
+        """Mark order as deleted instead of removing it from database"""
+        self.deleted_at = timezone.now()
+        self.save()
+
+    def is_deleted(self):
+        return self.deleted_at is not None
 
 
 class OrderEnchantment(models.Model):
