@@ -45,11 +45,11 @@
                             {% endwith %}
                         </div>
 
-                        <form method="post">
+                        <form method="post" class="order-form">
                             {% csrf_token %}
                             <input type="hidden" name="order_id" value="{{ order.id }}">
 
-                            <p class="order-card-price">
+                            <p class="order-card-price" id="order-card-price-{{ order.id }}">
                                 <span class="label">price:</span>
                                 <span class="value" id="price-value-{{ order.id }}">{{ order.price }}</span>
                                 <input type="number"
@@ -60,7 +60,7 @@
                                        style="display: none;">
                             </p>
 
-                            <p class="order-card-quantity">
+                            <p class="order-card-quantity" id="order-card-quantity-{{ order.id }}">
                                 <span class="label">quantity:</span>
                                 <span class="value" id="quantity-value-{{ order.id }}">{{ order.quantity }}</span>
                                 <input type="number"
@@ -72,8 +72,8 @@
                             </p>
 
                             <span class="confirm-label hidden"
-                                  id="confirm-label-{{ order.id }}">
-                                Please confirm deleting
+                                      id="confirm-label-{{ order.id }}">
+                                    Are you sure?
                             </span>
 
                             <div class="button-group" id="buttons-{{ order.id }}">
@@ -90,19 +90,18 @@
                                     Delete
                                 </button>
 
-                                <button type="submit"
-                                        class="button-save hidden"
+                                <button class="button-save hidden"
                                         name="delete_order"
                                         value="{{ order.id }}"
                                         id="confirm-btn-{{ order.id }}">
-                                    Confirm
+                                    Yes
                                 </button>
 
                                 <button type="button"
                                         class="button-cancel hidden"
                                         onclick="cancelDelete({{ order.id }})"
                                         id="cancel-btn-{{ order.id }}">
-                                    Cancel
+                                    No
                                 </button>
                             </div>
 
@@ -169,6 +168,8 @@ function cancelEdit(orderId) {
 }
 
 function deleteOrder(orderId) {
+    hideElement(`order-card-price-${orderId}`);
+    hideElement(`order-card-quantity-${orderId}`);
     hideElement(`edit-btn-${orderId}`);
     hideElement(`delete-btn-${orderId}`);
     showElement(`confirm-label-${orderId}`);
@@ -177,6 +178,8 @@ function deleteOrder(orderId) {
 }
 
 function cancelDelete(orderId) {
+    showElement(`order-card-price-${orderId}`);
+    showElement(`order-card-quantity-${orderId}`);
     showElement(`edit-btn-${orderId}`);
     showElement(`delete-btn-${orderId}`);
     hideElement(`confirm-label-${orderId}`);
