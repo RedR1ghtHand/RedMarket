@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.db.models import Prefetch
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from formtools.wizard.views import SessionWizardView
+from django.views.generic import ListView
 
 from .models import Order, OrderEnchantment, ItemType, Material
 from .forms import CreateOrderForm, SelectItemTypeForm
@@ -64,9 +64,9 @@ def orders_view(request):
         })
 
     if item_type_id:
-        orders = Order.objects.filter(item_type_id=item_type_id, deleted_at__isnull=True).order_by('-created_at')[:10]
+        orders = Order.objects.filter(item_type_id=item_type_id, deleted_at__isnull=True)[:10]
     else:
-        orders = Order.objects.filter(deleted_at__isnull=True).order_by('-created_at')[:10]
+        orders = Order.objects.filter(deleted_at__isnull=True)[:10]
 
     return render(request, 'market.html', {
         'orders': orders,
@@ -76,53 +76,58 @@ def orders_view(request):
     })
 
 
-def order_detail_view(request, slug):
-    item_type = get_object_or_404(ItemType, slug=slug)
-    all_orders = Order.objects.filter(item_type=item_type, deleted_at__isnull=True).order_by('-updated_at')
-    all_orders = all_orders.prefetch_related(
-        Prefetch(
-            'orderenchantment_set',
-            queryset=OrderEnchantment.objects.select_related('enchantment')
+class OrderDetailView(ListView):
+    model = Order
+    template_name = 'order/order_detail.html'
+    paginate_by = 5
+
+    def dispatch(self, request, *args, **kwargs):
+        self.slug = kwargs.get('slug')
+        self.item_type = get_object_or_404(ItemType, slug=self.slug)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = (
+            Order.objects
+            .filter(item_type=self.item_type, deleted_at__isnull=True)
+            .prefetch_related(
+                Prefetch('orderenchantment_set', queryset=OrderEnchantment.objects.select_related('enchantment'))
+            )
+            .order_by('-updated_at')
         )
-    )
 
-    sort_fields = ['price', 'quantity']
-    sort = request.GET.get('sort')
-    direction = request.GET.get('direction', 'asc')
-    material_filter = request.GET.get('material')
-    item_types = ItemType.objects.all()
-    selected_type = get_object_or_404(ItemType, slug=slug)
+        # Sorting
+        sort_fields = ['price', 'quantity']
+        sort = self.request.GET.get('sort', 'price')
+        direction = self.request.GET.get('direction', 'asc')
 
-    if sort in sort_fields:
-        ordering = sort if direction == 'asc' else f"-{sort}"
-        all_orders = all_orders.order_by(ordering)
+        if sort in sort_fields:
+            ordering = sort if direction == 'asc' else f'-{sort}'
+            queryset = queryset.order_by(ordering)
 
-    if material_filter:
-        all_orders = all_orders.filter(material__id=material_filter)
+        # Material Filter
+        material_filter = self.request.GET.get('material')
+        if material_filter:
+            queryset = queryset.filter(material__id=material_filter)
 
-    materials = Material.objects.filter(applicable_to=item_type).values_list('id', 'name')
+        return queryset
 
-    paginator = Paginator(all_orders, 5)
-    page = request.GET.get('page')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    try:
-        orders = paginator.page(page)
-    except PageNotAnInteger:
-        orders = paginator.page(1)
-    except EmptyPage:
-        orders = paginator.page(paginator.num_pages)
+        material_filter = self.request.GET.get('material')
+        sort = self.request.GET.get('sort', 'price')
+        direction = self.request.GET.get('direction', 'asc')
 
-    context = {
-        'item_type': item_type,
-        'orders': orders,
-        'current_sort': sort,
-        'current_direction': direction,
-        'sort_fields': sort_fields,
-        'materials': materials,
-        'selected_material': int(material_filter) if material_filter else None,
-        'item_types': item_types,
-        'selected_type': selected_type,
-        'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
-        'paginator': paginator
-    }
-    return render(request, 'order/order_detail.html', context)
+        context.update({
+            'item_type': self.item_type,
+            'materials': Material.objects.filter(applicable_to=self.item_type).values_list('id', 'name'),
+            'selected_material': int(material_filter) if material_filter else None,
+            'sort_fields': ['price', 'quantity'],
+            'current_sort': sort,
+            'current_direction': direction,
+            'item_types': ItemType.objects.all(),
+            'selected_type': self.item_type,
+            'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
+        })
+        return context

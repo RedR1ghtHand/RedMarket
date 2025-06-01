@@ -1,152 +1,153 @@
 {% extends "base.html" %}
 {% load static %}
 {% load custom_tags %}
+
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
-<div class="market-container">
-    {% include "market_sb.html" %}
-    <div class="item-type-block">
-        <img src="{% static 'media/item_types/axe.png' %}" alt="material" class="item-type-image">
-        <div class="item-type-title">
-            <h1>{{ item_type.name }}</h1>
-            <p>{{ item_type.description }}</p>
+    <link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
+    <div class="market-container">
+        {% include "market_sb.html" %}
+        <div class="item-type-block">
+            <img src="{% static 'media/item_types/axe.png' %}" alt="material" class="item-type-image">
+
+            <div class="item-type-title">
+                <h1>{{ item_type.name }}</h1>
+                <p>{{ item_type.description }}</p>
+            </div>
         </div>
 
-    </div>
-    <h3>Orders:</h3>
-    <table class="order-table">
-        <thead>
-            <tr>
-                <th>Seller</th>
-                {% if selected_type.materials.exists %}
-                    <th>
-                        <form method="get" id="material-filter-form">
-                            <div class="material-label">Material</div>
-                            <div class="material-select-wrapper">
-                                <select name="material" onchange="document.getElementById('material-filter-form').submit()" class="material-select">
-                                    <option value="">any</option>
-                                    {% for id, name in materials %}
-                                        <option value="{{ id }}" {% if selected_material == id %}selected{% endif %}>{{ name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                            {% if current_sort %}
-                                <input type="hidden" name="sort" value="{{ current_sort }}">
-                            {% endif %}
-                            {% if current_direction %}
-                                <input type="hidden" name="direction" value="{{ current_direction }}">
-                            {% endif %}
-                        </form>
-                {% endif %}
-                {% if selected_type.enchantments.exists %}
-                    <th>
-                        <button type="button" class="enchants-expand-btn">Enchants ⬇</button>
-                    </th>
-                {% endif %}
-                {% for field in sort_fields %}
-                    <th>
-                        <a href="?material={% if selected_material %}{{selected_material}}{% else %}{% endif %}&sort={{ field }}&direction={% if current_sort == field and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
-                           class="sortable {% if current_sort == field %}sorted {{ current_direction }}{% endif %}"
-                           data-field="{{ field }}">
-                            {{ field|capfirst }}
-                            <span class="sort-icon"></span>
-                        </a>
-                    </th>
-                {% endfor %}
-                <th class="buy-button-container">-</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for order in orders %}
+        <h3>Orders:</h3>
+        <table class="order-table">
+            <thead>
                 <tr>
-                    <td>
-                        <div class="mc-username-cell">
-                            <img src="https://mc-heads.net/avatar/{{ order.created_by.mc_username }}/20"
-                                 alt="MC Head"
-                                 class="mc-avatar">
-                            <span>{{ order.created_by.mc_username }}</span>
-                        </div>
-                    </td>
-                    {% if order.material %}
-                        <td>
-                            <div class="mc-username-cell">
-                                {% if order.material.icon %}
-                                    <img src="{{ order.material.icon.url }}"
-                                         alt="material"
-                                         class="mc-avatar">
+                    <th>Seller</th>
+                    {% if selected_type.materials.exists %}
+                        <th>
+                            <form method="get" id="material-filter-form">
+                                <div class="material-label">Material</div>
+                                <div class="material-select-wrapper">
+                                    <select name="material" onchange="document.getElementById('material-filter-form').submit()" class="material-select">
+                                        <option value="">any</option>
+                                        {% for id, name in materials %}
+                                            <option value="{{ id }}" {% if selected_material == id %}selected{% endif %}>{{ name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                {% if current_sort %}
+                                    <input type="hidden" name="sort" value="{{ current_sort }}">
                                 {% endif %}
-                                {{ order.material }}
+                                {% if current_direction %}
+                                    <input type="hidden" name="direction" value="{{ current_direction }}">
+                                {% endif %}
+                            </form>
+                    {% endif %}
+                    {% if selected_type.enchantments.exists %}
+                        <th>
+                            <button type="button" class="enchants-expand-btn">Enchants ⬇</button>
+                        </th>
+                    {% endif %}
+                    {% for field in sort_fields %}
+                        <th>
+                            <a href="?material={% if selected_material %}{{selected_material}}{% else %}{% endif %}&sort={{ field }}&direction={% if current_sort == field and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                               class="sortable {% if current_sort == field %}sorted {{ current_direction }}{% endif %}"
+                               data-field="{{ field }}">
+                                {{ field|capfirst }}
+                                <span class="sort-icon"></span>
+                            </a>
+                        </th>
+                    {% endfor %}
+                    <th class="buy-button-container">-</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for order in object_list %}
+                    <tr>
+                        <td>
+                            <a class="mc-username-link-cell" href="{% url 'public_profile' order.created_by.mc_username %}">
+                                <img src="https://mc-heads.net/avatar/{{ order.created_by.mc_username }}/20"
+                                     alt="MC Head"
+                                     class="mc-avatar">
+
+                                <span>{{ order.created_by.mc_username }}</span>
+                            </a>
+                        </td>
+
+                        {% if order.material %}
+                            <td>
+                                <div class="mc-username-cell">
+                                    {% if order.material.icon %}
+                                        <img src="{{ order.material.icon.url }}"
+                                             alt="material"
+                                             class="mc-avatar">
+                                    {% endif %}
+                                    {{ order.material }}
+                                </div>
+                            </td>
+                        {% endif %}
+
+                        {% if order.enchantments.exists or selected_type.enchantments.exists %}
+                            <td>
+                                {% with enchant_count=order.orderenchantment_set.count %}
+                                    <button class="enchant-toggle-btn">
+                                        {% if enchant_count > 0 %}
+                                            {{ "★"|repeat:enchant_count }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </button>
+                                    {% if enchant_count > 0 %}
+                                    <div class="enchant-list-wrapper hidden">
+                                        <ul class="enchant-list ">
+                                            {% for oe in order.orderenchantment_set.all %}
+                                                <li>{{ oe.enchantment.name }} <span>{{ oe.level|romanize }}</span></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                        {% endif %}
+
+                        <td class="price-column">{{ order.price }}</td>
+
+                        <td>{{ order.quantity }}</td>
+
+                        <td class="buy-button-container">
+                            <div class="buy-button-wrapper">
+                                <button class="buy-button" onclick="handleBuy(this)"
+                                        data-clipboard="{{ mc_server_wisper_command }} {{ order.created_by.mc_username }} Hi! I want to buy - {{ item_type.name|capfirst }}[{{ order.material }}] x1 for {{ order.price }}. RedMarket">
+                                    Buy
+                                </button>
+                                <button class="close-button hidden" onclick="handleClose(this)">
+                                    Close
+                                </button>
+                            </div>
+                            <div class="buy-clipboard-wrapper hidden">
+                                <span class="buy-clipboard-message"></span>
                             </div>
                         </td>
-                    {% endif %}
-                    {% if order.enchantments.exists or selected_type.enchantments.exists %}
-                        <td>
-                            {% with enchant_count=order.orderenchantment_set.count %}
-                                <button class="enchant-toggle-btn">
-                                    {% if enchant_count > 0 %}
-                                        {{ "★"|repeat:enchant_count }}
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                </button>
-                                {% if enchant_count > 0 %}
-                                <div class="enchant-list-wrapper hidden">
-                                    <ul class="enchant-list ">
-                                        {% for oe in order.orderenchantment_set.all %}
-                                            <li>{{ oe.enchantment.name }} <span>{{ oe.level|romanize }}</span></li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                                {% endif %}
-                            {% endwith %}
-                        </td>
-                    {% endif %}
-                    <td class="price-column">{{ order.price }}</td>
-                    <td>{{ order.quantity }}</td>
-                    <td class="buy-button-container">
-                        <div class="buy-button-wrapper">
-                            <button class="buy-button" onclick="handleBuy(this)"
-                                    data-clipboard="{{ mc_server_wisper_command }} {{ order.created_by.mc_username }} Hi! I want to buy - {{ item_type.name|capfirst }}[{{ order.material }}] x1 for {{ order.price }}. RedMarket">
-                                Buy
-                            </button>
-                            <button class="close-button hidden" onclick="handleClose(this)">
-                                Close
-                            </button>
-                        </div>
-                        <div class="buy-clipboard-wrapper hidden">
-                            <span class="buy-clipboard-message"></span>
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% if not orders %}
-        <p>No orders found for this item type.</p>
-    {% endif %}
-    <div class="pagination">
-        <span class="page-info">Page {{ orders.number }} of {{ orders.paginator.num_pages }}</span>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-        <div class="pagination-links">
-            {% if orders.has_previous %}
-                <a href="?{% if selected_material %}material={{ selected_material }}&{% endif %}{% if current_sort %}sort={{ current_sort }}&direction={{ current_direction }}&{% endif %}page={{ orders.previous_page_number }}">« Previous</a>
+        {% if not orders %}
+            <p>No orders found for this item type.</p>
+        {% endif %}
+
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&sort={{ current_sort }}&direction={{ current_direction }}{% if selected_material %}&material={{ selected_material }}{% endif %}">Previous</a>
             {% endif %}
 
-            {% for num in orders.paginator.page_range %}
-                {% if orders.number == num %}
-                    <span class="current">{{ num }}</span>
-                {% elif num > orders.number|add:'-3' and num < orders.number|add:'3' %}
-                    <a href="?{% if selected_material %}material={{ selected_material }}&{% endif %}{% if current_sort %}sort={{ current_sort }}&direction={{ current_direction }}&{% endif %}page={{ num }}">{{ num }}</a>
-                {% endif %}
-            {% endfor %}
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
-            {% if orders.has_next %}
-                <a href="?{% if selected_material %}material={{ selected_material }}&{% endif %}{% if current_sort %}sort={{ current_sort }}&direction={{ current_direction }}&{% endif %}page={{ orders.next_page_number }}">Next »</a>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&sort={{ current_sort }}&direction={{ current_direction }}{% if selected_material %}&material={{ selected_material }}{% endif %}">Next</a>
             {% endif %}
         </div>
     </div>
-</div>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const toggleAllBtn = document.querySelector(".enchants-expand-btn");
