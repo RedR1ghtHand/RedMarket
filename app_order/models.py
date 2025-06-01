@@ -15,6 +15,9 @@ class Order(models.Model):
     deleted_at = models.DateTimeField(null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
+    class Meta:
+        ordering = ['-created_at']
+
     def __str__(self):
         return f"{self.created_by.mc_username} Selling: {self.material.name} {self.item_type.name} for {self.price} (x{self.quantity})"
 
