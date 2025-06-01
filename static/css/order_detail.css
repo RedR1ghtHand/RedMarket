@@ -119,6 +119,19 @@ td.buy-button-container {
     gap: 4px;
 }
 
+.mc-username-link-cell {
+    display: inline-flex;
+    gap: 4px;
+    text-decoration: none;
+    color: #fff;
+    transition: transform 0.2s ease;
+}
+
+.mc-username-link-cell:hover {
+    color: #9A5CC6;
+    transform: scale(1.15);
+}
+
 .mc-avatar {
     width: 20px;
     height: 20px;

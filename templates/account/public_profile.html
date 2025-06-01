@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block content %}
+    <div class="public-profile-container">
+        <h1>{{ public_user.mc_username }}'s Market Orders</h1>
+
+        <ul>
+          {% for order in orders %}
+            <li>{{ order.item_type }} x{{ order.quantity }} for {{ order.price }}</li>
+          {% empty %}
+            <li>No orders found.</li>
+          {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

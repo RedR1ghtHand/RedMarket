@@ -69,7 +69,7 @@ def account_settings_view(request):
 
 def account_order_manager_view(request):
     user = request.user
-    orders = Order.objects.filter(created_by=user, deleted_at__isnull=True).order_by('-created_at')
+    orders = Order.objects.filter(created_by=user, deleted_at__isnull=True)
     orders = orders.prefetch_related(
         Prefetch(
             'orderenchantment_set',
@@ -112,4 +112,14 @@ def account_order_manager_view(request):
         'orders': orders,
         'edit_form': form,
         'order_to_edit': order_to_edit
+    })
+
+
+def account_public_profile_view(request, mc_username):
+    public_user = get_object_or_404(User, mc_username=mc_username)
+    orders = Order.objects.filter(created_by=public_user, deleted_at__isnull=True)
+
+    return render(request, 'account/public_profile.html', {
+        'public_user': public_user,
+        'orders': orders
     })
