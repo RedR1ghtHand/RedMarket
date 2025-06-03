@@ -109,9 +109,21 @@
                             </td>
                         {% endif %}
 
-                        <td class="price-column">{{ order.price }}</td>
+                        <td class="price-column">
+                            <div class="mc-username-cell">
+                                <span>{{ order.price }}</span>
 
-                        <td>{{ order.quantity }}</td>
+                                <img src="{% static 'media/price-icon.png' %}" alt="#" class="mc-avatar">
+                            </div>
+                        </td>
+
+                        <td class="quantity-column">
+                            <div class="mc-username-cell">
+                                <span>{{ order.quantity }}</span>
+
+                                <img src="{% static 'media/quantity-icon.png' %}" alt="#" class="mc-avatar-q">
+                            </div>
+                        </td>
 
                         <td class="buy-button-container">
                             <div class="buy-button-wrapper">
@@ -132,7 +144,7 @@
             </tbody>
         </table>
 
-        {% if not orders %}
+        {% if not object_list %}
             <p>No orders found for this item type.</p>
         {% endif %}
 

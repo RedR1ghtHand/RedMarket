@@ -3,15 +3,122 @@
 {% load custom_tags %}
 
 {% block content %}
-    <div class="public-profile-container">
-        <h1>{{ public_user.mc_username }}'s Market Orders</h1>
+<link rel="stylesheet" href="{% static 'css/account_public_profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
+<script src="{% static 'js/order_detail.js' %}"></script>
 
-        <ul>
-          {% for order in orders %}
-            <li>{{ order.item_type }} x{{ order.quantity }} for {{ order.price }}</li>
-          {% empty %}
-            <li>No orders found.</li>
-          {% endfor %}
-        </ul>
+<div class="public-profile-container">
+    <div class="player-profile-block">
+        <img src="https://mc-heads.net/head/{{ public_user.mc_username }}/128" alt="{{ public_user.mc_username }}" class="item-type-image">
+
+        <div class="item-type-title">
+            <h1>{{ public_user.mc_username }}</h1>
+            <p>additional user info (rating, links, rank)</p>
+        </div>
     </div>
+
+    <div class="pp-orders-section">
+        <p class="pp-subtitle">Market Orders</p>
+
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>item</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>price</th>
+                    <th>quantity</th>
+                    <th class="buy-button-container">-</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% if orders %}
+                    {% for order in orders %}
+
+                    <tr>
+                        <td>
+                            <a class="mc-username-link-cell" href="{% url 'order_detail' order.item_type.slug %}">
+                                <img src="{% static 'media/item_types/axe.png' %}" alt="material" class="mc-item-avatar">
+
+                                <span>{{ order.item_type }}</span>
+                            </a>
+                        </td>
+                        <td>
+                            {% if order.material %}
+                                <div class="mc-username-cell">
+                                    {% if order.material.icon %}
+                                        <img src="{{ order.material.icon.url }}"
+                                             alt="material"
+                                             class="mc-avatar">
+                                    {% endif %}
+                                    <span>{{ order.material }}</span>
+                                </div>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if order.enchantments.exists or selected_type.enchantments.exists %}
+                                {% with enchant_count=order.orderenchantment_set.count %}
+                                    <button class="enchant-toggle-btn">
+                                        {% if enchant_count > 0 %}
+                                            {{ "★"|repeat:enchant_count }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </button>
+                                    {% if enchant_count > 0 %}
+                                    <div class="enchant-list-wrapper hidden">
+                                        <ul class="enchant-list ">
+                                            {% for oe in order.orderenchantment_set.all %}
+                                                <li>{{ oe.enchantment.name }} <span>{{ oe.level|romanize }}</span></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                        </td>
+                        <td class="price-column">
+                            <div class="mc-username-cell">
+                                <span>{{ order.price }}</span>
+
+                                <img src="{% static 'media/price-icon.png' %}" alt="#" class="mc-avatar"></div>
+                        </td>
+
+                        <td class="quantity-column">
+                            <div class="mc-username-cell">
+                                <span>{{ order.quantity }}</span>
+
+                                <img src="{% static 'media/quantity-icon.png' %}" alt="#" class="mc-avatar-q">
+                            </div>
+                        </td>
+
+                        <td class="buy-button-container">
+                            <div class="buy-button-wrapper">
+                                <button class="buy-button" onclick="handleBuy(this)"
+                                        data-clipboard="{{ mc_server_wisper_command }} {{ order.created_by.mc_username }} Hi! I want to buy - {{ order.item_type.name|capfirst }}[{{ order.material }}] x1 for {{ order.price }}. RedMarket">
+                                    Buy
+                                </button>
+                                <button class="close-button hidden" onclick="handleClose(this)">
+                                    Close
+                                </button>
+                            </div>
+                            <div class="buy-clipboard-wrapper hidden">
+                                <span class="buy-clipboard-message"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <p>This user has no orders yet</p>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pp-info-footer">
+        <p>More features coming soon: messaging, likes, etc.</p>
+    </div>
+</div>
 {% endblock %}

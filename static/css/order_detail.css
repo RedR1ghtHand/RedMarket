@@ -2,6 +2,8 @@
     max-width: 900px;
     margin: auto;
     padding: 2rem;
+    background: #1a1a1a;
+    color: #f5f5f5;
     font-family: 'Minecraft', monospace;
 }
 
@@ -65,6 +67,7 @@
 .order-table thead {
     border: 2px solid #444;
     height: 60px;
+    background-color: #333;
 }
 
 .order-table tr:hover {
@@ -77,7 +80,6 @@
     width: auto;
     height: 100%;
     border-bottom: 1px solid #444;
-    font-family: 'Minecraft', monospace;
 }
 
 .order-table td {
@@ -85,7 +87,6 @@
     padding: 0.75rem 1rem;
     text-align: left;
     border-bottom: 1px solid #444;
-    font-family: 'Minecraft', monospace;
 }
 
 .order-table th.buy-button-container,
@@ -99,28 +100,24 @@ td.buy-button-container {
     top: 8px;
 }
 
-.order-table thead {
-    background-color: #333;
-}
-
 .order-table th a:hover {
     opacity: 1;
     color: #55FFFF;
 }
 
-.seller-cell {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
 .mc-username-cell {
     display: inline-flex;
+    align-items: center;
     gap: 4px;
+}
+
+.mc-username-cell span {
+    margin-top: 2px;
 }
 
 .mc-username-link-cell {
     display: inline-flex;
+    align-items: center;
     gap: 4px;
     text-decoration: none;
     color: #fff;
@@ -135,6 +132,12 @@ td.buy-button-container {
 .mc-avatar {
     width: 20px;
     height: 20px;
+}
+
+.mc-avatar-q {
+    width: 25px;
+    height: 18px;
+    margin-bottom: 4px;
 }
 
 .no-orders-msg {
@@ -263,8 +266,17 @@ td.buy-button-container {
     font-family: 'Minecraft', monospace;
 }
 
-.price-column {
+td.price-column {
+    align-items: center;
+    text-align: right;
+    padding-right: 3rem;
     color: #9A5CC6;
+}
+
+td.quantity-column {
+    align-items: center;
+    text-align: right;
+    padding-right: 3rem;
 }
 
 .buy-button-container {

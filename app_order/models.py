@@ -19,7 +19,7 @@ class Order(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.created_by.mc_username} Selling: {self.material.name} {self.item_type.name} for {self.price} (x{self.quantity})"
+        return f"{self.created_by.mc_username} Selling: {self.material.name if self.material else None} {self.item_type.name} for {self.price} (x{self.quantity})"
 
     def soft_delete(self):
         """Mark order as deleted instead of removing it from database"""
