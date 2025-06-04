@@ -1,8 +1,7 @@
 .public-profile-container {
     max-width: 900px;
-    margin: 16rem auto;
+    margin: 7.5rem auto;
     padding: 2rem;
-    background: #1a1a1a;
     color: #f5f5f5;
     font-family: 'Minecraft', monospace;
 }
@@ -31,4 +30,7 @@
     width: 25px;
     height: 25px;
 }
+
+
+
 
