@@ -10,6 +10,7 @@ from rest_framework import generics
 
 from .models import User
 from app_order.models import Order, OrderEnchantment
+from app_item.models import Category
 from .forms import MCUsernameUpdateForm, OrderManagerForm
 from app_order.forms import CreateOrderForm
 from .serializers import UserRegisterSerializer
@@ -120,8 +121,26 @@ def account_public_profile_view(request, mc_username):
     public_user = get_object_or_404(User, mc_username=mc_username)
     orders = Order.objects.filter(created_by=public_user, deleted_at__isnull=True)
 
+    sort_fields = ['price', 'quantity']
+    sort = request.GET.get('sort', 'price')
+    direction = request.GET.get('direction', 'asc')
+
+    if sort in sort_fields:
+        ordering = sort if direction == 'asc' else f'-{sort}'
+        orders = orders.order_by(ordering)
+
+    category_id = request.GET.get('category')
+    categories = Category.objects.all()
+
+    if category_id:
+        orders = orders.filter(item_type__category_id=category_id)
+
     return render(request, 'account/public_profile.html', {
         'public_user': public_user,
         'orders': orders,
+        'categories': categories,
+        'selected_category': int(category_id) if category_id else None,
+        'current_sort': sort,
+        'current_direction': direction,
         'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
     })

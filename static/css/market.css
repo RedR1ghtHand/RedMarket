@@ -36,9 +36,7 @@ h1 {
 }
 
 .input-container input {
-    text-transform: capitalize;
     font-family: 'Minecraft', monospace;
-    text-shadow: 0 0 20px rgba(0,0,0,0.6);
 }
 
 .input-container {

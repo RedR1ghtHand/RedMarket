@@ -23,11 +23,46 @@
         <table class="order-table">
             <thead>
                 <tr>
-                    <th>item</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>price</th>
-                    <th>quantity</th>
+                    <th>
+                        <form method="get" class="filter-form">
+                            <div class="material-label">Category</div>
+
+                            <div class="material-select-wrapper">
+                                <select id="category-select" name="category" onchange="this.form.submit()" class="material-select">
+                                    <option value="">all</option>
+                                    {% for cat in categories %}
+                                        <option value="{{ cat.id }}" {% if selected_category == cat.id %}selected{% endif %}>
+                                            {{ cat.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            {% if current_sort %}
+                                <input type="hidden" name="sort" value="{{ current_sort }}">
+                            {% endif %}
+                            {% if current_direction %}
+                                <input type="hidden" name="direction" value="{{ current_direction }}">
+                            {% endif %}
+                        </form>
+                    </th>
+                    <th></th>
+                    <th></th>
+
+                    <th>
+                        <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}sort=price&direction={% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                           class="sortable {% if current_sort == 'price' %}sorted {{ current_direction }}{% endif %}">
+                            Price
+                            <span class="sort-icon"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}sort=quantity&direction={% if current_sort == 'quantity' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                           class="sortable {% if current_sort == 'quantity' %}sorted {{ current_direction }}{% endif %}">
+                            Quantity
+                            <span class="sort-icon"></span>
+                        </a>
+                    </th>
                     <th class="buy-button-container">-</th>
                 </tr>
             </thead>
@@ -35,7 +70,6 @@
             <tbody>
                 {% if orders %}
                     {% for order in orders %}
-
                     <tr>
                         <td>
                             <a class="mc-username-link-cell" href="{% url 'order_detail' order.item_type.slug %}">
