@@ -1,7 +1,8 @@
 {% load static %}
+
 <link rel="stylesheet" href="{% static 'css/market.css' %}">
 
-<div class="search-wrapper sb">
+<div class="search-wrapper">
     <div class="input-container">
         <input id="item-search" type="text"
             placeholder="Search Item Type..."
@@ -11,78 +12,13 @@
     <ul id="suggestions" class="suggestions-list hidden"></ul>
 </div>
 
-
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const searchInput = document.getElementById("item-search");
-    const suggestions = document.getElementById("suggestions");
-
-    const items = [
+    window.itemTypes = [
         {% for type in item_types %}
             { name: "{{ type.name }}", url: "{% url 'order_detail' type.slug %}" },
         {% endfor %}
     ];
-
-    function showSuggestions(query) {
-        suggestions.innerHTML = "";
-
-        let filtered = items;
-        if (query) {
-            const lower = query.toLowerCase();
-            filtered = items.filter(item => item.name.toLowerCase().includes(lower));
-        }
-
-        filtered.forEach(item => {
-            const li = document.createElement("li");
-            li.textContent = item.name;
-            li.addEventListener("click", () => {
-                window.location.href = item.url;
-            });
-            suggestions.appendChild(li);
-        });
-
-        if (filtered.length > 0) {
-            suggestions.classList.remove("hidden");
-        } else {
-            suggestions.classList.add("hidden");
-        }
-    }
-
-    // Show suggestions on focus or input
-    searchInput.addEventListener("focus", () => showSuggestions(searchInput.value));
-    searchInput.addEventListener("input", () => showSuggestions(searchInput.value));
-
-    // Close suggestions when clicking outside
-    document.addEventListener("click", (e) => {
-        if (!searchInput.contains(e.target) && !suggestions.contains(e.target)) {
-            suggestions.classList.add("hidden");
-        }
-    });
-    const clearBtn = document.getElementById("clear-btn");
-
-    // Show or hide clear button based on input
-    function updateClearButton() {
-        if (searchInput.value.trim() !== "") {
-            clearBtn.classList.remove("hidden");
-        } else {
-            clearBtn.classList.add("hidden");
-        }
-    }
-
-    searchInput.addEventListener("input", () => {
-        showSuggestions(searchInput.value);
-        updateClearButton();
-    });
-
-    // Initial check (in case prefilled with selected_type)
-    updateClearButton();
-
-    clearBtn.addEventListener("click", () => {
-        searchInput.value = "";
-        showSuggestions(""); // show all suggestions again
-        updateClearButton();
-        searchInput.focus();
-    });
-});
-
 </script>
+
+<script src="{% static 'js/market_search_bar.js' %}"></script>
+

@@ -15,13 +15,13 @@ h1 {
 .search-wrapper {
     position: relative;
     padding-top: 8rem;
-    padding-bottom: 8rem;
+    padding-bottom: 2rem;
 
 }
 
-.sb {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+.market-search-bar {
+    margin-top: 10rem;
+    padding-bottom: 8rem;
 }
 
 .search-wrapper input {
