@@ -122,7 +122,7 @@ def account_public_profile_view(request, mc_username):
     orders = Order.objects.filter(created_by=public_user, deleted_at__isnull=True)
 
     sort_fields = ['price', 'quantity']
-    sort = request.GET.get('sort', 'price')
+    sort = request.GET.get('sort')
     direction = request.GET.get('direction', 'asc')
 
     if sort in sort_fields:
