@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Prefetch
+from django.conf import settings
 
 from rest_framework import generics
 
@@ -121,5 +122,6 @@ def account_public_profile_view(request, mc_username):
 
     return render(request, 'account/public_profile.html', {
         'public_user': public_user,
-        'orders': orders
+        'orders': orders,
+        'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
     })
