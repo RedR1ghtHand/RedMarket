@@ -6,6 +6,7 @@ from django.views.generic import ListView
 
 from .models import Order, OrderEnchantment, ItemType, Material
 from .forms import CreateOrderForm, SelectItemTypeForm
+from .mixins import OrdersSortingMixin
 
 
 class CreateOrderWizard(SessionWizardView):
@@ -76,10 +77,11 @@ def orders_view(request):
     })
 
 
-class OrderDetailView(ListView):
+class OrderDetailView(OrdersSortingMixin, ListView):
     model = Order
     template_name = 'order/order_detail.html'
     paginate_by = 5
+    allowed_sort_fields = ['price', 'quantity']
 
     def dispatch(self, request, *args, **kwargs):
         self.slug = kwargs.get('slug')
@@ -96,38 +98,28 @@ class OrderDetailView(ListView):
             .order_by('-updated_at')
         )
 
-        # Sorting
-        sort_fields = ['price', 'quantity']
-        sort = self.request.GET.get('sort', 'price')
-        direction = self.request.GET.get('direction', 'asc')
-
-        if sort in sort_fields:
-            ordering = sort if direction == 'asc' else f'-{sort}'
-            queryset = queryset.order_by(ordering)
-
         # Material Filter
         material_filter = self.request.GET.get('material')
         if material_filter:
             queryset = queryset.filter(material__id=material_filter)
 
-        return queryset
+        return self.apply_ordering(queryset)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         material_filter = self.request.GET.get('material')
-        sort = self.request.GET.get('sort', 'price')
-        direction = self.request.GET.get('direction', 'asc')
 
         context.update({
             'item_type': self.item_type,
             'materials': Material.objects.filter(applicable_to=self.item_type).values_list('id', 'name'),
             'selected_material': int(material_filter) if material_filter else None,
-            'sort_fields': ['price', 'quantity'],
-            'current_sort': sort,
-            'current_direction': direction,
+            'sort_fields': self.allowed_sort_fields,
             'item_types': ItemType.objects.all(),
             'selected_type': self.item_type,
             'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
         })
+
+        context.update(self.get_sort_context())
+
         return context
