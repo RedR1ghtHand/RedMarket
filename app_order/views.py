@@ -80,6 +80,7 @@ def orders_view(request):
 class OrderDetailView(OrdersSortingMixin, ListView):
     model = Order
     template_name = 'order/order_detail.html'
+    context_object_name = 'orders'
     paginate_by = 5
     allowed_sort_fields = ['price', 'quantity']
 

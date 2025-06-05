@@ -63,7 +63,7 @@
             </thead>
 
             <tbody>
-                {% for order in object_list %}
+                {% for order in orders %}
                     <tr>
                         <td>
                             <a class="mc-username-link-cell" href="{% url 'public_profile' order.created_by.mc_username %}">
