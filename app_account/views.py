@@ -3,17 +3,20 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.views.generic import ListView
 from django.db.models import Prefetch
 from django.conf import settings
 
 from rest_framework import generics
 
 from .models import User
+from .forms import MCUsernameUpdateForm, OrderManagerForm
+from .serializers import UserRegisterSerializer
+
 from app_order.models import Order, OrderEnchantment
 from app_item.models import Category
-from .forms import MCUsernameUpdateForm, OrderManagerForm
-from app_order.forms import CreateOrderForm
-from .serializers import UserRegisterSerializer
+from app_social.views import ReputationMixin
+from app_order.mixins import OrdersSortingMixin
 
 
 class UserRegisterView(generics.CreateAPIView):
@@ -69,34 +72,54 @@ def account_settings_view(request):
     })
 
 
-def account_order_manager_view(request):
-    user = request.user
-    orders = Order.objects.filter(created_by=user, deleted_at__isnull=True)
-    orders = orders.prefetch_related(
-        Prefetch(
-            'orderenchantment_set',
-            queryset=OrderEnchantment.objects.select_related('enchantment')
+class AccountOrderManagerView(ListView):
+    model = Order
+    template_name = 'account/order_manager.html'
+    context_object_name = 'orders'
+    paginate_by = 100
+
+    def get_queryset(self):
+        user = self.request.user
+        return (
+            Order.objects.filter(created_by=user, deleted_at__isnull=True)
+            .prefetch_related(
+                Prefetch(
+                    'orderenchantment_set',
+                    queryset=OrderEnchantment.objects.select_related('enchantment')
+                )
+            )
         )
-    )
-    order_to_edit = None
-    form = None
 
-    if request.method == 'POST':
-        if 'edit_order' in request.POST:
-            order_id = request.POST.get('edit_order')
-            order_to_edit = get_object_or_404(Order, id=order_id, created_by=user)
+    def get(self, request, *args, **kwargs):
+        order_id = request.GET.get('edit_order')
+        if order_id:
+            order_to_edit = get_object_or_404(Order, id=order_id, created_by=request.user)
             form = OrderManagerForm(instance=order_to_edit, item_type=order_to_edit.item_type)
+            self.extra_context = {
+                'order_to_edit': order_to_edit,
+                'edit_form': form,
+            }
+        else:
+            self.extra_context = {}
+        return super().get(request, *args, **kwargs)
 
-        elif 'update_order' in request.POST:
+    def post(self, request, *args, **kwargs):
+        user = request.user
+
+        if 'update_order' in request.POST:
             order_id = request.POST.get('order_id')
             order_to_edit = get_object_or_404(Order, id=order_id, created_by=user)
             form = OrderManagerForm(request.POST, instance=order_to_edit, item_type=order_to_edit.item_type)
             if form.is_valid():
                 cleaned = form.cleaned_data
                 form.save()
+                # Handle enchantments logic if needed
                 # order_to_edit.enchantments.clear()
                 # for enchantment, level in cleaned.get('enchantments', []):
                 #     OrderEnchantment.objects.create(order=order_to_edit, enchantment=enchantment, level=level)
+                messages.success(request, 'Order updated.')
+            else:
+                messages.error(request, 'Failed to update order.')
             return redirect('order_manager')
 
         elif 'delete_order' in request.POST:
@@ -106,41 +129,55 @@ def account_order_manager_view(request):
             messages.success(request, 'Order deleted.')
             return redirect('order_manager')
 
-        else:
-            form = None
+        return redirect('order_manager')
 
-    return render(request, 'account/order_manager.html', {
-        'user': request.user,
-        'orders': orders,
-        'edit_form': form,
-        'order_to_edit': order_to_edit
-    })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        context.update(self.extra_context)
+        return context
 
 
-def account_public_profile_view(request, mc_username):
-    public_user = get_object_or_404(User, mc_username=mc_username)
-    orders = Order.objects.filter(created_by=public_user, deleted_at__isnull=True)
+class PublicProfileView(ReputationMixin, OrdersSortingMixin, ListView):
+    model = Order
+    template_name = 'account/public_profile.html'
+    context_object_name = 'orders'
+    paginate_by = 5
+    allowed_sort_fields = ['price', 'quantity']
 
-    sort_fields = ['price', 'quantity']
-    sort = request.GET.get('sort')
-    direction = request.GET.get('direction', 'asc')
+    def dispatch(self, request, *args, **kwargs):
+        self.public_user = get_object_or_404(User, mc_username=self.kwargs['mc_username'])
+        return super().dispatch(request, *args, **kwargs)
 
-    if sort in sort_fields:
-        ordering = sort if direction == 'asc' else f'-{sort}'
-        orders = orders.order_by(ordering)
+    def get_queryset(self):
+        queryset = (
+            Order.objects
+            .filter(created_by=self.public_user, deleted_at__isnull=True)
+            .prefetch_related(
+                Prefetch('orderenchantment_set', queryset=OrderEnchantment.objects.select_related('enchantment'))
+            )
+            .order_by('-updated_at')
+        )
 
-    category_id = request.GET.get('category')
-    categories = Category.objects.all()
+        category_id = self.request.GET.get('category')
+        if category_id:
+            queryset = queryset.filter(item_type__category_id=category_id)
 
-    if category_id:
-        orders = orders.filter(item_type__category_id=category_id)
+        return self.apply_ordering(queryset)
 
-    return render(request, 'account/public_profile.html', {
-        'public_user': public_user,
-        'orders': orders,
-        'categories': categories,
-        'selected_category': int(category_id) if category_id else None,
-        'current_sort': sort,
-        'current_direction': direction,
-        'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
-    })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        category_id = self.request.GET.get('category')
+
+        context.update({
+            'public_user': self.public_user,
+            'categories': Category.objects.all(),
+            'selected_category': int(category_id) if category_id else None,
+            'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
+        })
+
+        context.update(self.get_sort_context())
+        context.update(self.get_reputation_context(self.request, self.public_user))
+
+        return context

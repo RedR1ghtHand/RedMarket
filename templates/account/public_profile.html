@@ -5,6 +5,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
 <link rel="stylesheet" href="{% static 'css/account_public_profile.css' %}">
+
 <script src="{% static 'js/order_buy_button.js' %}"></script>
 
 <div class="public-profile-container">
@@ -15,6 +16,27 @@
             <h1>{{ public_user.mc_username }}</h1>
             <p>additional user info (rating, links, rank)</p>
         </div>
+
+        {% if can_repute and not already_repped %}
+            <div id="reputation-box">
+              <p>Want to rate {{ public_user.mc_username }}?</p>
+
+              <button id="like-button" class="rep-button">👍 Like</button>
+              <button id="report-button" class="rep-button">⚠️ Report</button>
+
+              <form method="POST" id="reputation-form" style="display: none;">
+                {% csrf_token %}
+                <input type="hidden" name="rep_type" id="rep_type_input">
+
+                <label for="badge-select">Choose a badge:</label>
+                <select name="badge" id="badge-select" required></select>
+
+                <button type="submit">Submit</button>
+              </form>
+            </div>
+            {% elif already_repped %}
+            <p>You have already given reputation to this user.</p>
+            {% endif %}
     </div>
 
     <div class="pp-orders-section">
@@ -68,8 +90,7 @@
             </thead>
 
             <tbody>
-                {% if orders %}
-                    {% for order in orders %}
+                {% for order in orders %}
                     <tr>
                         <td>
                             <a class="mc-username-link-cell" href="{% url 'order_detail' order.item_type.slug %}">
@@ -144,15 +165,62 @@
                         </td>
                     </tr>
                     {% endfor %}
-                {% else %}
-                    <p>This user has no orders yet</p>
-                {% endif %}
             </tbody>
         </table>
+
+        {% if not object_list %}
+            <p>No orders found.</p>
+        {% endif %}
+
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&sort={{ current_sort }}&direction={{ current_direction }}{% if selected_material %}&material={{ selected_material }}{% endif %}">Previous</a>
+            {% endif %}
+
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&sort={{ current_sort }}&direction={{ current_direction }}{% if selected_material %}&material={{ selected_material }}{% endif %}">Next</a>
+            {% endif %}
+        </div>
     </div>
 
     <div class="pp-info-footer">
         <p>More features coming soon: messaging, likes, etc.</p>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const likeBtn = document.getElementById('like-button');
+  const reportBtn = document.getElementById('report-button');
+  const form = document.getElementById('reputation-form');
+  const badgeSelect = document.getElementById('badge-select');
+  const repTypeInput = document.getElementById('rep_type_input');
+
+  const POSITIVE_BADGES = {{ positive_badges|safe }};
+  const NEGATIVE_BADGES = {{ negative_badges|safe }};
+
+  function populateBadges(badges) {
+    badgeSelect.innerHTML = ''; // Clear current
+    badges.forEach(badge => {
+      const option = document.createElement('option');
+      option.value = badge;
+      option.textContent = badge;
+      badgeSelect.appendChild(option);
+    });
+  }
+
+  likeBtn?.addEventListener('click', function () {
+    populateBadges(POSITIVE_BADGES);
+    repTypeInput.value = 'like';
+    form.style.display = 'block';
+  });
+
+  reportBtn?.addEventListener('click', function () {
+    populateBadges(NEGATIVE_BADGES);
+    repTypeInput.value = 'report';
+    form.style.display = 'block';
+  });
+});
+</script>
 {% endblock %}
