@@ -22,6 +22,7 @@
             <thead>
                 <tr>
                     <th>Seller</th>
+                    <th>Reputation</th>
                     {% if selected_type.materials.exists %}
                         <th>
                             <form method="get" id="material-filter-form">
@@ -73,6 +74,14 @@
 
                                 <span>{{ order.created_by.mc_username }}</span>
                             </a>
+                        </td>
+
+                        <td>
+                            <div class="reputation-info">
+                                <span>{{ order.created_by.reputation_score }}</span>
+                                <img src="{% static order.created_by.reputation_score|rep_icon %}"
+                                     alt="Reputation icon">
+                            </div>
                         </td>
 
                         {% if order.material %}

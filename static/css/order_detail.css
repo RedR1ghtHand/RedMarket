@@ -76,7 +76,7 @@
 
 .order-table th {
     padding: 1px 16px 1px 16px;
-    text-align: left;
+    text-align: center;
     width: auto;
     height: 100%;
     border-bottom: 1px solid #444;
@@ -268,14 +268,13 @@ td.buy-button-container {
 td.price-column {
     align-items: center;
     text-align: right;
-    padding-right: 3rem;
     color: #9A5CC6;
 }
 
 td.quantity-column {
     align-items: center;
     text-align: right;
-    padding-right: 3rem;
+    padding-right: 2rem;
 }
 
 .buy-button-container {
@@ -366,4 +365,20 @@ td.quantity-column {
     box-shadow: 0 0 20px rgba(0,0,0,0.6);
 
     z-index: -1;
+}
+
+.reputation-info {
+    display: flex;
+    gap: 1px;
+    justify-content: center;
+}
+
+.reputation-info img {
+    width: 18px;
+    height: 18px;
+}
+
+.reputation-info span {
+    color: #1f8f4c;
+    font-size: 16px;
 }
