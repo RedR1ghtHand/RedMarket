@@ -31,6 +31,20 @@ class Reputation(models.Model):
     class Meta:
         unique_together = ('giver', 'receiver')
 
+    @staticmethod
+    def get_score_for_user(user):
+        """
+        Calculate the net reputation score for the given user.
+
+        :param user: A user model instance whose reputation score is to be calculated.
+        :return: The reputation score as (positive count) - (negative count).
+        """
+        agg = Reputation.objects.filter(receiver=user).aggregate(
+            pos=models.Count('id', filter=models.Q(is_negative=False)),
+            neg=models.Count('id', filter=models.Q(is_negative=True)),
+        )
+        return (agg['pos'] or 0) - (agg['neg'] or 0)
+
     def clean(self):
         if self.giver == self.receiver:
             raise ValidationError("You cannot give reputation to yourself.")

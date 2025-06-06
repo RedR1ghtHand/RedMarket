@@ -2,6 +2,8 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
+from app_social.models import Reputation
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password, **extra):
@@ -32,6 +34,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
+
+    @property
+    def reputation_score(self):
+        return Reputation.get_score_for_user(self)
 
     def __str__(self):
         return self.username
