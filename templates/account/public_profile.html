@@ -3,7 +3,7 @@
 {% load custom_tags %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/order_detail.css' %}" xmlns="http://www.w3.org/1999/html">
 <link rel="stylesheet" href="{% static 'css/account_public_profile.css' %}">
 
 <script src="{% static 'js/order_buy_button.js' %}"></script>
@@ -18,25 +18,49 @@
         </div>
 
         {% if can_repute and not already_repped %}
-            <div id="reputation-box">
-              <p>Want to rate {{ public_user.mc_username }}?</p>
+            <div id="reputation-box" class="reputation-box">
 
-              <button id="like-button" class="rep-button">👍 Like</button>
-              <button id="report-button" class="rep-button">⚠️ Report</button>
+                <div id="like-button" class="reputation-button-like">
+                    <input type="image"
+                           src="{% static 'media/like-icon.png' %}"
+                           alt="#"
+                           class="reputation-box-icon">
+                    <span>like</span>
+                </div>
 
-              <form method="POST" id="reputation-form" style="display: none;">
-                {% csrf_token %}
-                <input type="hidden" name="rep_type" id="rep_type_input">
+                <div id="report-button" class="reputation-button-report">
+                    <input type="image"
+                           src="{% static 'media/report-icon.png' %}"
+                           alt="#"
+                           class="reputation-box-icon">
+                    <span>report</span>
+                </div>
 
-                <label for="badge-select">Choose a badge:</label>
-                <select name="badge" id="badge-select" required></select>
+                <form method="POST" id="reputation-form" style="display: none;">
+                    {% csrf_token %}
+                    <input type="hidden" name="rep_type" id="rep_type_input">
 
-                <button type="submit">Submit</button>
-              </form>
+                    <label for="badge-select">Choose a badge:</label>
+                    <select name="badge" id="badge-select" required></select>
+
+                    <div class="reputation-actions">
+                        <button type="submit" id="submit-button">Submit</button>
+                        <button type="button" id="cancel-button">Cancel</button>
+                    </div>
+                </form>
+
             </div>
-            {% elif already_repped %}
-            <p>You have already given reputation to this user.</p>
-            {% endif %}
+        {% elif already_repped %}
+            <div>
+                <img src="{% static 'media/already-repped-icon.png' %}" alt="#" class="reputation-box-icon">
+                <p>You have already given reputation to this user.</p>
+            </div>
+        {% elif not can_repute %}
+            <div>
+                <img src="{% static 'media/not-can-repute.png' %}" alt="#" class="reputation-box-icon">
+                <p>You cannot give reputation to this user.</p>
+            </div>
+        {% endif %}
     </div>
 
     <div class="pp-orders-section">
@@ -196,12 +220,14 @@ document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('reputation-form');
   const badgeSelect = document.getElementById('badge-select');
   const repTypeInput = document.getElementById('rep_type_input');
+  const submitButton = document.getElementById('submit-button');
+  const cancelButton = document.getElementById('cancel-button');
 
   const POSITIVE_BADGES = {{ positive_badges|safe }};
   const NEGATIVE_BADGES = {{ negative_badges|safe }};
 
   function populateBadges(badges) {
-    badgeSelect.innerHTML = ''; // Clear current
+    badgeSelect.innerHTML = '';
     badges.forEach(badge => {
       const option = document.createElement('option');
       option.value = badge;
@@ -210,16 +236,33 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  function showForm(type) {
+    likeBtn.style.display = 'none';
+    reportBtn.style.display = 'none';
+    form.style.display = 'block';
+    repTypeInput.value = type;
+  }
+
+  function resetForm() {
+    form.style.display = 'none';
+    likeBtn.style.display = 'flex';
+    reportBtn.style.display = 'flex';
+    repTypeInput.value = '';
+    badgeSelect.innerHTML = '';
+  }
+
   likeBtn?.addEventListener('click', function () {
     populateBadges(POSITIVE_BADGES);
-    repTypeInput.value = 'like';
-    form.style.display = 'block';
+    showForm('like');
   });
 
   reportBtn?.addEventListener('click', function () {
     populateBadges(NEGATIVE_BADGES);
-    repTypeInput.value = 'report';
-    form.style.display = 'block';
+    showForm('report');
+  });
+
+  cancelButton?.addEventListener('click', function () {
+    resetForm();
   });
 });
 </script>

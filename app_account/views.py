@@ -175,6 +175,7 @@ class PublicProfileView(ReputationMixin, OrdersSortingMixin, ListView):
             'categories': Category.objects.all(),
             'selected_category': int(category_id) if category_id else None,
             'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
+            'reputation_list': self.get_reputation_queryset(self.public_user),
         })
 
         context.update(self.get_sort_context())

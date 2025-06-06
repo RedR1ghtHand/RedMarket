@@ -15,6 +15,7 @@ class ReputationMixin:
 
     Features:
         - Provides context for showing reputation form/buttons in views (`get_reputation_context`).
+        - Returns all Reputation entries received by the given user (`get_reputation_queryset`).
         - Validates whether a user can give reputation (must be authenticated, not self, and account age >= 7 days).
         - Handles POST requests for reputation submissions (positive or negative badges).
         - Injects positive and negative badge lists from Django settings.
@@ -57,6 +58,9 @@ class ReputationMixin:
             'positive_badges': getattr(settings, 'REPUTATION_BADGES_POSITIVE', []),
             'negative_badges': getattr(settings, 'REPUTATION_BADGES_NEGATIVE', []),
         }
+
+    def get_reputation_queryset(self, user):
+        return Reputation.objects.filter(receiver=user).select_related('giver').order_by('-created_at')
 
     def dispatch(self, request, *args, **kwargs):
         """Override dispatch to intercept POST if it's a rep submission."""

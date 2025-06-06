@@ -31,6 +31,92 @@
     height: 25px;
 }
 
+.reputation-box {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: #ccc;
+    width: 20%;
+    max-width: 30%;
+}
 
+.reputation-button-like,
+.reputation-button-report {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.reputation-button-like:hover {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    gap: 8px;
+    cursor: pointer;
+    color: #fc5d5d;
+}
+
+.reputation-button-report:hover {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    gap: 8px;
+    cursor: pointer;
+    color: #aa0000;
+}
+
+.reputation-box-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.reputation-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+#badge-select {
+    padding: 6px 12px;
+    background-color: #1e1e1e;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 4px;
+    font-size: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+#badge-select:hover {
+    border-color: #888;
+    background-color: #2a2a2a;
+}
+
+#badge-select:focus {
+    outline: none;
+    border-color: #66afe9;
+    background-color: #2f2f2f;
+}
+
+#submit-button, #cancel-button {
+    padding: 6px 12px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#submit-button:hover {
+    background-color: #28a745;
+}
+
+#cancel-button:hover {
+    background-color: #a94442;
+}
 
 
