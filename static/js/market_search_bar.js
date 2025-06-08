@@ -9,12 +9,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function showSuggestions(query) {
         suggestions.innerHTML = "";
+        const lower = query.toLowerCase();
 
-        let filtered = items;
-        if (query) {
-            const lower = query.toLowerCase();
-            filtered = items.filter(item => item.name.toLowerCase().includes(lower));
-        }
+        const filtered = items.filter(item => {
+            if (item.name.toLowerCase().includes(lower)) return true;
+
+            if (Array.isArray(item.aliases)) {
+                if (item.aliases.some(alias => alias.toLowerCase().includes(lower))) return true;
+            }
+
+            if (item.material_map) {
+                return Object.keys(item.material_map).some(mat =>
+                    mat.toLowerCase().includes(lower)
+                );
+            }
+
+            return false;
+        });
 
         filtered.forEach(item => {
             const li = document.createElement("li");
@@ -25,21 +36,12 @@ document.addEventListener("DOMContentLoaded", function () {
             suggestions.appendChild(li);
         });
 
-        if (filtered.length > 0) {
-            suggestions.classList.remove("hidden");
-        } else {
-            suggestions.classList.add("hidden");
-        }
+        suggestions.classList.toggle("hidden", filtered.length === 0);
     }
 
     function updateClearButton() {
-        if (searchInput.value.trim() !== "") {
-            clearBtn.classList.remove("hidden");
-        } else {
-            clearBtn.classList.add("hidden");
-        }
+        clearBtn.classList.toggle("hidden", searchInput.value.trim() === "");
     }
-
 
     searchInput.addEventListener("input", () => {
         showSuggestions(searchInput.value);
@@ -51,13 +53,13 @@ document.addEventListener("DOMContentLoaded", function () {
         updateClearButton();
     });
 
-
     document.addEventListener("click", (e) => {
-        if (!searchInput.contains(e.target) && !suggestions.contains(e.target) && !clearBtn.contains(e.target)) {
+        if (!searchInput.contains(e.target) &&
+            !suggestions.contains(e.target) &&
+            !clearBtn.contains(e.target)) {
             suggestions.classList.add("hidden");
         }
     });
-
 
     clearBtn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -65,12 +67,11 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
             searchInput.value = "";
             updateClearButton();
-            showSuggestions(""); // Refresh suggestions
+            showSuggestions(""); // Show all again
             suggestions.classList.remove("hidden");
-            searchInput.focus(); // Bring focus back
+            searchInput.focus();
         }, 10);
     });
 
     updateClearButton();
 });
-

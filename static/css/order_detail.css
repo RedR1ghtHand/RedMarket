@@ -84,7 +84,7 @@
 
 .order-table td {
     width: auto;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 0.5rem;
     text-align: left;
     border-bottom: 1px solid #444;
 }
@@ -218,6 +218,12 @@ td.buy-button-container {
 .material-select:hover {
     color: #55FFFF;
     background-color: #3a3a3a;
+}
+
+.enchantments-info {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .enchant-toggle-btn {
@@ -381,4 +387,8 @@ td.quantity-column {
 .reputation-info span {
     color: #1f8f4c;
     font-size: 16px;
+}
+
+td.reputation-column, th.reputation-column {
+    width: 5%;
 }

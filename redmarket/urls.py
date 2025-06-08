@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from app_order.views import orders_view
+from app_order.views import MarketView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,6 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("account/", include("app_account.urls")),
     path("order/", include("app_order.urls")),
-    path('', orders_view, name='home'),
+    path('', MarketView.as_view(), name='home'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.db.models import Prefetch
 from formtools.wizard.views import SessionWizardView
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
+from django.urls import reverse
+import json
 
 from .models import Order, OrderEnchantment, ItemType, Material
 from .forms import CreateOrderForm, SelectItemTypeForm
-from .mixins import OrdersSortingMixin
+from .mixins import OrdersSortingMixin, EnrichedItemTypeMixin
 
 
 class CreateOrderWizard(SessionWizardView):
@@ -51,33 +53,23 @@ class CreateOrderWizard(SessionWizardView):
         return redirect('order_success')
 
 
-def orders_view(request):
-    item_type_id = request.GET.get('item_type')
-    item_types = ItemType.objects.all().prefetch_related('materials')
+class MarketView(EnrichedItemTypeMixin, TemplateView):
+    template_name = 'market.html'
 
-    enriched_item_types = []
-    for item in item_types:
-        material_names = [mat.name.lower() for mat in item.materials.all()]
-        enriched_item_types.append({
-            'name': item.name,
-            'slug': item.slug,
-            'aliases': material_names
-        })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    if item_type_id:
-        orders = Order.objects.filter(item_type_id=item_type_id, deleted_at__isnull=True)[:10]
-    else:
         orders = Order.objects.filter(deleted_at__isnull=True)[:10]
 
-    return render(request, 'market.html', {
-        'orders': orders,
-        'item_types': item_types,
-        'enriched_types': enriched_item_types,
-        'selected_type': int(item_type_id) if item_type_id else None
-    })
+        context.update({
+            'orders': orders,
+            'item_types': ItemType.objects.all(),
+            'enriched_types_json': json.dumps(self.get_enriched_item_types()),
+        })
+        return context
 
 
-class OrderDetailView(OrdersSortingMixin, ListView):
+class OrderDetailView(OrdersSortingMixin, EnrichedItemTypeMixin, ListView):
     model = Order
     template_name = 'order/order_detail.html'
     context_object_name = 'orders'
@@ -119,6 +111,7 @@ class OrderDetailView(OrdersSortingMixin, ListView):
             'item_types': ItemType.objects.all(),
             'selected_type': self.item_type,
             'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
+            'enriched_types_json': json.dumps(self.get_enriched_item_types())
         })
 
         context.update(self.get_sort_context())

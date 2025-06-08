@@ -3,10 +3,11 @@
 {% load custom_tags %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/order_detail.css' %}" xmlns="http://www.w3.org/1999/html">
+<link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
 <link rel="stylesheet" href="{% static 'css/account_public_profile.css' %}">
 
 <script src="{% static 'js/order_buy_button.js' %}"></script>
+<script src="{% static 'js/enchantments_button.js' %}"></script>
 
 <div class="public-profile-container">
     <div class="player-profile-block">
@@ -101,8 +102,10 @@
                                 {% endif %}
                             </form>
                         </th>
+
                         <th></th>
-                        <th></th>
+
+                        <th><button type="button" class="enchants-expand-btn">Enchants ⬇</button></th>
 
                         <th>
                             <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}sort=price&direction={% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
@@ -146,6 +149,7 @@
                             </td>
 
                             <td>
+                                <div class="enchantments-info">
                                 {% if order.enchantments.exists or selected_type.enchantments.exists %}
                                     {% with enchant_count=order.orderenchantment_set.count %}
                                         <button class="enchant-toggle-btn">
@@ -165,6 +169,7 @@
                                         </div>
                                         {% endif %}
                                     {% endwith %}
+                                    </div>
                                 {% endif %}
                             </td>
                             <td class="price-column">

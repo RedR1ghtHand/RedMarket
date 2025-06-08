@@ -13,11 +13,7 @@
 </div>
 
 <script>
-    window.itemTypes = [
-        {% for type in item_types %}
-            { name: "{{ type.name }}", url: "{% url 'order_detail' type.slug %}" },
-        {% endfor %}
-    ];
+    window.itemTypes = {{ enriched_types_json|safe }};
 </script>
 
 <script src="{% static 'js/market_search_bar.js' %}"></script>

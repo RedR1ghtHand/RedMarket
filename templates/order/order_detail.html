@@ -3,8 +3,10 @@
 {% load custom_tags %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
-    <script src="{% static 'js/order_buy_button.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
+
+<script src="{% static 'js/order_buy_button.js' %}"></script>
+<script src="{% static 'js/enchantments_button.js' %}"></script>
 
     <div class="market-container">
         {% include "market_sb.html" %}
@@ -22,7 +24,7 @@
             <thead>
                 <tr>
                     <th>Seller</th>
-                    <th>Reputation</th>
+                    <th class="reputation-column"></th>
                     {% if selected_type.materials.exists %}
                         <th>
                             <form method="get" id="material-filter-form">
@@ -76,7 +78,7 @@
                             </a>
                         </td>
 
-                        <td>
+                        <td class="reputation-column">
                             <div class="reputation-info">
                                 <span>{{ order.created_by.reputation_score }}</span>
                                 <img src="{% static order.created_by.reputation_score|rep_icon %}"
@@ -99,6 +101,7 @@
 
                         {% if order.enchantments.exists or selected_type.enchantments.exists %}
                             <td>
+                                <div class="enchantments-info">
                                 {% with enchant_count=order.orderenchantment_set.count %}
                                     <button class="enchant-toggle-btn">
                                         {% if enchant_count > 0 %}
@@ -117,6 +120,7 @@
                                     </div>
                                     {% endif %}
                                 {% endwith %}
+                                </div>
                             </td>
                         {% endif %}
 
@@ -171,30 +175,4 @@
             {% endif %}
         </div>
     </div>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const toggleAllBtn = document.querySelector(".enchants-expand-btn");
-    const enchantSections = document.querySelectorAll(".enchant-list-wrapper");
-    let expanded = false;
-
-    toggleAllBtn.addEventListener("click", function () {
-        expanded = !expanded;
-        enchantSections.forEach(section => {
-            section.classList.toggle("hidden", !expanded);
-        });
-        toggleAllBtn.textContent = expanded ? "Enchants ⬆" : "Enchants ⬇";
-    });
-
-    // Correct way: toggle class instead of style
-    document.querySelectorAll(".enchant-toggle-btn").forEach(btn => {
-        btn.addEventListener("click", function () {
-            const list = this.nextElementSibling;
-            if (list) {
-                list.classList.toggle("hidden");
-            }
-        });
-    });
-});
-</script>
-
 {% endblock %}
