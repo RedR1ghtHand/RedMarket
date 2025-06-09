@@ -107,14 +107,14 @@
 
                         <th><button type="button" class="enchants-expand-btn">Enchants ⬇</button></th>
 
-                        <th>
+                        <th class="price-column">
                             <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}sort=price&direction={% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
                                class="sortable {% if current_sort == 'price' %}sorted {{ current_direction }}{% endif %}">
                                 Price
                                 <span class="sort-icon"></span>
                             </a>
                         </th>
-                        <th>
+                        <th class="quantity-column">
                             <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}sort=quantity&direction={% if current_sort == 'quantity' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
                                class="sortable {% if current_sort == 'quantity' %}sorted {{ current_direction }}{% endif %}">
                                 Quantity
@@ -172,14 +172,14 @@
                                     </div>
                                 {% endif %}
                             </td>
-                            <td class="price-column">
+                            <td class="price-info">
                                 <div class="mc-username-cell">
                                     <span>{{ order.price }}</span>
 
                                     <img src="{% static 'media/price-icon.png' %}" alt="#" class="mc-avatar"></div>
                             </td>
 
-                            <td class="quantity-column">
+                            <td class="quantity-info">
                                 <div class="mc-username-cell">
                                     <span>{{ order.quantity }}</span>
 

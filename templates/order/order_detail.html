@@ -51,16 +51,22 @@
                             <button type="button" class="enchants-expand-btn">Enchants ⬇</button>
                         </th>
                     {% endif %}
-                    {% for field in sort_fields %}
-                        <th>
-                            <a href="?material={% if selected_material %}{{selected_material}}{% else %}{% endif %}&sort={{ field }}&direction={% if current_sort == field and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
-                               class="sortable {% if current_sort == field %}sorted {{ current_direction }}{% endif %}"
-                               data-field="{{ field }}">
-                                {{ field|capfirst }}
+                    <th class="price-column">
+                            <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}sort=price&direction={% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                               class="sortable {% if current_sort == 'price' %}sorted {{ current_direction }}{% endif %}">
+                                Price
                                 <span class="sort-icon"></span>
                             </a>
-                        </th>
-                    {% endfor %}
+                    </th>
+
+                    <th class="quantity-column">
+                        <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}sort=quantity&direction={% if current_sort == 'quantity' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                           class="sortable {% if current_sort == 'quantity' %}sorted {{ current_direction }}{% endif %}">
+                            Quantity
+                            <span class="sort-icon"></span>
+                        </a>
+                    </th>
+
                     <th class="buy-button-container">-</th>
                 </tr>
             </thead>
@@ -124,7 +130,7 @@
                             </td>
                         {% endif %}
 
-                        <td class="price-column">
+                        <td class="price-info">
                             <div class="mc-username-cell">
                                 <span>{{ order.price }}</span>
 
@@ -132,7 +138,7 @@
                             </div>
                         </td>
 
-                        <td class="quantity-column">
+                        <td class="quantity-info">
                             <div class="mc-username-cell">
                                 <span>{{ order.quantity }}</span>
 

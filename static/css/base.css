@@ -1,3 +1,31 @@
+@font-face {
+    font-family: 'Minecraft';
+    src: url('/static/fonts/minecraft/MinecraftRegular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Minecraft';
+    src: url('/static/fonts/minecraft/MinecraftItalic.otf') format('opentype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Minecraft';
+    src: url('/static/fonts/minecraft/MinecraftBold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Minecraft';
+    src: url('/static/fonts/minecraft/MinecraftBoldItalic.otf') format('opentype');
+    font-weight: bold;
+    font-style: italic;
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -38,19 +66,9 @@ body.dark-theme {
     align-items: center;
 }
 
-.site-name-red,
-.site-name-rest {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-shadow: 0 0 8px #00AA00;
-}
-
-.site-name-red {
-    color: #00AA00;
-}
-
-.site-name-rest {
-    color: white;
+.site-name-link img{
+    width: 200px;
+    height: 55px;
 }
 
 .header-right {
@@ -110,7 +128,6 @@ body.dark-theme {
     z-index: 0;
 }
 
-/* draw the 580px background behind the content */
 .market-back-wrapper::before {
     content: '';
     position: absolute;

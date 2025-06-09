@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}RedMarket{% endblock %}</title>
+
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
 </head>
 <body class="dark-theme">
     <div class="site-wrapper">
         <header class="site-header">
             <div  class="header-left">
                 <a href="{% url 'home' %}" class="site-name-link">
-                    <span class="site-name-red">Red</span>
-                    <span class="site-name-rest">Market</span>
+                    <img src="{% static 'media/logo.png' %}" alt="#">
                 </a>
             </div>
             <nav class="header-right">

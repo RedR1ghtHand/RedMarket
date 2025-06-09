@@ -227,7 +227,6 @@ td.buy-button-container {
 }
 
 .enchant-toggle-btn {
-    width: 50%;
     background: transparent;
     border: none;
     color: #FFFF55;
@@ -271,13 +270,13 @@ td.buy-button-container {
     font-family: 'Minecraft', monospace;
 }
 
-td.price-column {
+td.price-info {
     align-items: center;
     text-align: right;
     color: #9A5CC6;
 }
 
-td.quantity-column {
+td.quantity-info {
     align-items: center;
     text-align: right;
     padding-right: 2rem;
@@ -391,4 +390,9 @@ td.quantity-column {
 
 td.reputation-column, th.reputation-column {
     width: 5%;
+}
+
+td.price-column, th.price-column,
+td.quantity-column, th.quantity-column {
+    max-width: 20%;
 }
