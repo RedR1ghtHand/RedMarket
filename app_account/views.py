@@ -15,7 +15,7 @@ from .serializers import UserRegisterSerializer
 
 from app_order.models import Order, OrderEnchantment
 from app_item.models import Category
-from app_social.views import ReputationMixin
+from app_social.mixins import ReputationMixin
 from app_order.mixins import OrdersSortingMixin
 
 

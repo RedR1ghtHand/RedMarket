@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (
     UserRegisterView,
     login_view,
@@ -17,4 +17,5 @@ urlpatterns = [
     path('settings/', account_settings_view, name='settings'),
     path('order_management', AccountOrderManagerView.as_view(), name='order_manager'),
     path('profile/<str:mc_username>/', PublicProfileView.as_view(), name='public_profile'),
+    path('', include("app_social.urls"))
 ]

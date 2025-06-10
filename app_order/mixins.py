@@ -5,10 +5,10 @@ from app_item.models import ItemType
 
 class OrdersSortingMixin:
     """
-   Mixin to provide reusable ordering (sorting) logic for Django class-based views.
-   Allows views to define `allowed_sort_fields` and automatically apply sorting
-   based on GET parameters: ?sort=field&direction=asc|desc.
-   """
+    Mixin to provide reusable ordering (sorting) logic for Django class-based views.
+    Allows views to define `allowed_sort_fields` and automatically apply sorting
+    based on GET parameters: ?sort=field&direction=asc|desc.
+    """
     allowed_sort_fields = []
 
     def get_ordering_params(self):

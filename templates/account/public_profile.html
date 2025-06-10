@@ -14,9 +14,19 @@
         <img src="https://mc-heads.net/head/{{ public_user.mc_username }}/128" alt="{{ public_user.mc_username }}" class="item-type-image">
 
         <div class="item-type-title">
-            <h1>{{ public_user.mc_username }}</h1>
+            <div class="pp-user-title">
+                <h1>{{ public_user.mc_username }}</h1>
+
+                {% if public_user != request.user %}
+                    <a title="Message user" href="{% url 'start_message' public_user.mc_username %}">
+                        <img class="message-icon" src="{% static 'media/message-icon.png' %}" alt="✉">
+                    </a>
+                {% endif %}
+            </div>
+
             <div class="reputation-info">
                 <span>{{ public_user.reputation_score }}</span>
+
                 <img class="rep-icon"
                      src="{% static public_user.reputation_score|rep_icon %}"
                      alt="Reputation icon">

@@ -1,97 +1,94 @@
-from django.contrib import messages
+from django.views.generic import View, TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
-from django.utils import timezone
-from django.conf import settings
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.db.models import Q
 
-from datetime import timedelta
-
-from .models import Reputation
+from .models import Thread, Message
 from app_account.models import User
-from .forms import ReputationForm
 
 
-class ReputationMixin:
+class MessageRedirectView(LoginRequiredMixin, View):
     """
-    Mixin to handle user-to-user reputation interactions.
-
-    Features:
-        - Provides context for showing reputation form/buttons in views (`get_reputation_context`).
-        - Returns all Reputation entries received by the given user (`get_reputation_queryset`).
-        - Validates whether a user can give reputation (must be authenticated, not self, and account age >= 7 days).
-        - Handles POST requests for reputation submissions (positive or negative badges).
-        - Injects positive and negative badge lists from Django settings.
-
-    Integration:
-        - Use this mixin in views (e.g., DetailView) where public user profiles are shown.
-        - Assumes the URL kwargs include 'mc_username' to identify the public profile's user.
-
-    Expected settings:
-        - REPUTATION_BADGES_POSITIVE: List of allowed positive badge strings.
-        - REPUTATION_BADGES_NEGATIVE: List of allowed negative badge strings.
+    Redirects the logged-in user to an existing private message thread
+    with the target user (by mc_username), or creates one if it doesn't exist.
     """
-    def get_reputation_context(self, request, public_user):
-        """Returns context dict for reputation logic."""
-        current_user = request.user
-        now = timezone.now()
-        can_repute = (
-            current_user.is_authenticated
-            and current_user != public_user
-            and hasattr(current_user, 'created_at')
-            and current_user.created_at < now - timedelta(days=7)
+    def get_or_create_thread(self, request_user, target_user):
+        """
+        Returns an existing thread between two users or creates a new one if none exists.
+        Returns None if the user tries to message themselves.
+        """
+        if request_user == target_user:
+            return None
+
+        thread = (
+            Thread.objects.filter(
+                Q(user1=request_user, user2=target_user) |
+                Q(user1=target_user, user2=request_user)
+            ).first()
         )
 
-        already_repped = False
-        existing_rep = None
-        rep_form = None
+        if not thread:
+            thread = Thread.objects.create(user1=request_user, user2=target_user)
 
-        if can_repute:
-            existing_rep = Reputation.objects.filter(giver=current_user, receiver=public_user).first()
-            already_repped = bool(existing_rep)
+        return thread
 
-            if not already_repped:
-                rep_form = ReputationForm()
+    def get(self, request, *args, **kwargs):
+        target_user = get_object_or_404(User, mc_username=kwargs['mc_username'])
+        thread = self.get_or_create_thread(request.user, target_user)
+        if thread:
+            return HttpResponseRedirect(reverse('thread_detail', args=[thread.pk]))
+        return HttpResponseRedirect(reverse('thread_detail'))
 
-        return {
-            'can_repute': can_repute,
-            'already_repped': already_repped,
-            'rep_form': rep_form,
-            'existing_rep': existing_rep,
-            'positive_badges': getattr(settings, 'REPUTATION_BADGES_POSITIVE', []),
-            'negative_badges': getattr(settings, 'REPUTATION_BADGES_NEGATIVE', []),
-        }
 
-    def get_reputation_queryset(self, user):
-        return Reputation.objects.filter(receiver=user).select_related('giver').order_by('-created_at')
+class ThreadDetailView(TemplateView):
+    template_name = "social/thread_detail.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        """Override dispatch to intercept POST if it's a rep submission."""
-        if request.method == 'POST' and 'rep_type' in request.POST:
-            return self.handle_reputation_post(request, *args, **kwargs)
-        return super().dispatch(request, *args, **kwargs)
-
-    def handle_reputation_post(self, request, *args, **kwargs):
-        """Handles the submission of a reputation form (positive or negative)."""
-        rep_type = request.POST.get('rep_type')
-        is_negative = rep_type == 'report'
-        public_user = get_object_or_404(User, mc_username=kwargs.get('mc_username'))
-        current_user = request.user
-
-        if not current_user.is_authenticated or current_user == public_user:
-            messages.error(request, "Invalid reputation action.")
-            return redirect(request.path)
-
-        form = ReputationForm(request.POST, is_negative=is_negative)
-
-        if form.is_valid():
-            badge = form.cleaned_data['badge']
-            Reputation.objects.create(
-                giver=current_user,
-                receiver=public_user,
-                badge=badge,
-                is_negative=is_negative,
-            )
-            messages.success(request, "Reputation submitted successfully.")
+    @staticmethod
+    def get_thread(request, thread_id=None):
+        if thread_id:
+            try:
+                thread = Thread.objects.get(id=thread_id)
+                if request.user not in thread.participants():
+                    return None
+            except Thread.DoesNotExist:
+                return None
         else:
-            messages.error(request, "Error submitting reputation.")
+            thread = Thread.threads_for_user(request.user).order_by("-updated_at").first()
+        return thread
 
-        return redirect(request.path)
+    def get(self, request, *args, **kwargs):
+        thread_id = kwargs.get('thread_id')
+        thread = self.get_thread(request, thread_id)
+        if thread is None:
+            return redirect("thread_detail")
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, thread_id=None):
+        thread = self.get_thread(request, thread_id)
+        if thread is None:
+            return redirect("thread_detail")
+
+        if "delete" in request.POST:
+            if request.user in thread.participants():
+                thread.delete()
+                return redirect("thread_detail")
+            else:
+                return redirect("thread_detail", thread_id=thread.id)
+
+        content = request.POST.get("content", "").strip()
+        if content:
+            Message.objects.create(thread=thread, sender=request.user, content=content)
+        return redirect("thread_detail", thread_id=thread.id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        request = self.request
+        thread_id = self.kwargs.get("thread_id")
+        thread = self.get_thread(request, thread_id)
+
+        context["thread"] = thread
+        context["messages"] = thread.messages.order_by("created_at")
+        context["threads"] = Thread.threads_for_user(request.user).order_by("-updated_at")
+        return context
