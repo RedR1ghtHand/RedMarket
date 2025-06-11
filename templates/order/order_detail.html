@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
+
+<script src="{% static 'js/order_buy_button.js' %}"></script>
+<script src="{% static 'js/enchantments_button.js' %}"></script>
+
+    <div class="market-container">
+        {% include "market_sb.html" %}
+        <div class="item-type-block">
+            <img src="{% static 'media/item_types/axe.png' %}" alt="material" class="item-type-image">
+
+            <div class="item-type-title">
+                <h1>{{ item_type.name }}</h1>
+                <p>{{ item_type.description }}</p>
+            </div>
+        </div>
+
+        <h3>Orders:</h3>
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Seller</th>
+                    <th class="reputation-column"></th>
+                    {% if selected_type.materials.exists %}
+                        <th>
+                            <form method="get" id="material-filter-form">
+                                <div class="material-label">Material</div>
+                                <div class="material-select-wrapper">
+                                    <select name="material" onchange="document.getElementById('material-filter-form').submit()" class="material-select">
+                                        <option value="">any</option>
+                                        {% for id, name in materials %}
+                                            <option value="{{ id }}" {% if selected_material == id %}selected{% endif %}>{{ name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                {% if current_sort %}
+                                    <input type="hidden" name="sort" value="{{ current_sort }}">
+                                {% endif %}
+                                {% if current_direction %}
+                                    <input type="hidden" name="direction" value="{{ current_direction }}">
+                                {% endif %}
+                            </form>
+                    {% endif %}
+                    {% if selected_type.enchantments.exists %}
+                        <th>
+                            <button type="button" class="enchants-expand-btn">Enchants ⬇</button>
+                        </th>
+                    {% endif %}
+                    <th class="price-column">
+                            <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}sort=price&direction={% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                               class="sortable {% if current_sort == 'price' %}sorted {{ current_direction }}{% endif %}">
+                                Price
+                                <span class="sort-icon"></span>
+                            </a>
+                    </th>
+
+                    <th class="quantity-column">
+                        <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}sort=quantity&direction={% if current_sort == 'quantity' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                           class="sortable {% if current_sort == 'quantity' %}sorted {{ current_direction }}{% endif %}">
+                            Quantity
+                            <span class="sort-icon"></span>
+                        </a>
+                    </th>
+
+                    <th class="buy-button-container">-</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>
+                            <a class="mc-username-link-cell" href="{% url 'public_profile' order.created_by.mc_username %}">
+                                <img src="https://mc-heads.net/avatar/{{ order.created_by.mc_username }}/20"
+                                     alt="MC Head"
+                                     class="mc-avatar">
+
+                                <span>{{ order.created_by.mc_username }}</span>
+                            </a>
+                        </td>
+
+                        <td class="reputation-column">
+                            <div class="reputation-info">
+                                <span>{{ order.created_by.reputation_score }}</span>
+                                <img src="{% static order.created_by.reputation_score|rep_icon %}"
+                                     alt="Reputation icon">
+                            </div>
+                        </td>
+
+                        {% if order.material %}
+                            <td>
+                                <div class="mc-username-cell">
+                                    {% if order.material.icon %}
+                                        <img src="{{ order.material.icon.url }}"
+                                             alt="material"
+                                             class="mc-avatar">
+                                    {% endif %}
+                                    {{ order.material }}
+                                </div>
+                            </td>
+                        {% endif %}
+
+                        {% if order.enchantments.exists or selected_type.enchantments.exists %}
+                            <td>
+                                <div class="enchantments-info">
+                                {% with enchant_count=order.orderenchantment_set.count %}
+                                    <button class="enchant-toggle-btn">
+                                        {% if enchant_count > 0 %}
+                                            {{ "★"|repeat:enchant_count }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </button>
+                                    {% if enchant_count > 0 %}
+                                    <div class="enchant-list-wrapper hidden">
+                                        <ul class="enchant-list ">
+                                            {% for oe in order.orderenchantment_set.all %}
+                                                <li>{{ oe.enchantment.name }} <span>{{ oe.level|romanize }}</span></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                {% endwith %}
+                                </div>
+                            </td>
+                        {% endif %}
+
+                        <td class="price-info">
+                            <div class="mc-username-cell">
+                                <span>{{ order.price }}</span>
+
+                                <img src="{% static 'media/price-icon.png' %}" alt="#" class="mc-avatar">
+                            </div>
+                        </td>
+
+                        <td class="quantity-info">
+                            <div class="mc-username-cell">
+                                <span>{{ order.quantity }}</span>
+
+                                <img src="{% static 'media/quantity-icon.png' %}" alt="#" class="mc-avatar-q">
+                            </div>
+                        </td>
+
+                        <td class="buy-button-container">
+                            <div class="buy-button-wrapper">
+                                <button class="buy-button" onclick="handleBuy(this)"
+                                        data-clipboard="{{ mc_server_wisper_command }} {{ order.created_by.mc_username }} Hi! I want to buy - {{ item_type.name|capfirst }}[{{ order.material }}] x1 for {{ order.price }}. RedMarket">
+                                    Buy
+                                </button>
+                                <button class="close-button hidden" onclick="handleClose(this)">
+                                    Close
+                                </button>
+                            </div>
+                            <div class="buy-clipboard-wrapper hidden">
+                                <span class="buy-clipboard-message"></span>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if not object_list %}
+            <p>No orders found for this item type.</p>
+        {% endif %}
+
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&sort={{ current_sort }}&direction={{ current_direction }}{% if selected_material %}&material={{ selected_material }}{% endif %}">Previous</a>
+            {% endif %}
+
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&sort={{ current_sort }}&direction={{ current_direction }}{% if selected_material %}&material={{ selected_material }}{% endif %}">Next</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

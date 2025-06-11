@@ -1,0 +1,148 @@
+@font-face {
+    font-family: 'Minecraft';
+    src: url('/static/fonts/minecraft/MinecraftRegular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Minecraft';
+    src: url('/static/fonts/minecraft/MinecraftItalic.otf') format('opentype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Minecraft';
+    src: url('/static/fonts/minecraft/MinecraftBold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Minecraft';
+    src: url('/static/fonts/minecraft/MinecraftBoldItalic.otf') format('opentype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.site-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+body.dark-theme {
+    background-color: #1a1a1a;
+    color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2b2b2b;
+    padding: 1rem 2rem;
+    height: 60px;
+    box-sizing: border-box;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.site-name-link img{
+    width: 200px;
+    height: 55px;
+}
+
+.header-right {
+  font-family: 'Minecraft', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+.header-right a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-left: 1rem;
+    border-left: 1px solid transparent;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.header-right a:not(:first-child) {
+  border-left-color: #888;
+}
+
+.header-right a:hover {
+  color: #2CBAA8;
+}
+
+.site-main {
+    flex: 1;
+    padding-top: 60px;
+    box-sizing: border-box;
+}
+
+.site-footer {
+    background-color: #2b2b2b;
+    text-align: center;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    border-top: 2px solid #444;
+    font-size: 1rem;
+    color: #aaa;
+}
+
+.mc-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+
+}
+
+.market-back-wrapper {
+    position: relative;
+    z-index: 0;
+}
+
+.market-back-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 560px;
+    width: 100%;
+
+    background-image: url("/static/media/market-back-580.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center top;
+
+    border-bottom: 2px solid #444;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+
+    z-index: -1;
+}

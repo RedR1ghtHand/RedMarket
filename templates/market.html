@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/market.css' %}">
+
+<div class="market-container">
+    <div class="market-search-bar">
+        {% include "market_sb.html" %}
+    </div>
+
+
+    <table class="orders-table">
+        <h1>Recent Orders</h1>
+        <thead>
+            <tr>
+                <th>Item</th>
+
+                <th>Price</th>
+
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{% if order.material %}{{ order.material }}{% endif %} {{ order.item_type }}</td>
+
+                    <td>{{ order.price }}</td>
+
+                    <td>{{ order.quantity }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">No orders found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

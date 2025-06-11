@@ -1,0 +1,398 @@
+.order-detail-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 2rem;
+    background: #1a1a1a;
+    color: #f5f5f5;
+    font-family: 'Minecraft', monospace;
+}
+
+.item-type-block {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 4rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.item-type-image {
+    width: 30%;
+    max-width: 100px; /* optional: to avoid stretching */
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}
+
+.item-type-title {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.item-type-title h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    text-transform: capitalize;
+    text-align: center;
+    color: #FFAA00;
+}
+
+.item-type-title p {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #ccc;
+}
+
+.order-section-title {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: #88ff88;
+    text-align: center;
+}
+
+.order-table {
+    width: 100%;
+    table-layout: fixed;
+    max-width: 900px;
+    border-collapse: collapse;
+    color: #eee;
+    box-shadow: 0 0 8px #0008;
+    overflow: hidden;
+}
+
+.order-table thead {
+    border: 2px solid #444;
+    height: 60px;
+    background-color: #333;
+}
+
+.order-table tr:hover {
+    background-color: #3a3a3a;
+}
+
+.order-table th {
+    padding: 1px 16px 1px 16px;
+    text-align: center;
+    width: auto;
+    height: 100%;
+    border-bottom: 1px solid #444;
+}
+
+.order-table td {
+    width: auto;
+    padding: 0.75rem 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+.order-table th.buy-button-container,
+td.buy-button-container {
+    width: 8%;
+    padding: 4px;
+}
+
+.order-table form {
+    position: relative;
+    top: 8px;
+}
+
+.order-table th a:hover {
+    opacity: 1;
+    color: #55FFFF;
+}
+
+.mc-username-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mc-username-cell span {
+    margin-top: 2px;
+}
+
+.mc-username-link-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #fff;
+    transition: transform 0.2s ease;
+}
+
+.mc-username-link-cell:hover {
+    color: #9A5CC6;
+    transform: scale(1.15);
+}
+
+.mc-avatar {
+    width: 20px;
+    height: 20px;
+}
+
+.mc-avatar-q {
+    width: 25px;
+    height: 18px;
+    margin-bottom: 4px;
+}
+
+.no-orders-msg {
+    text-align: center;
+    color: #aaa;
+    font-style: italic;
+    margin-top: 2rem;
+}
+
+.order-table th a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'Minecraft', monospace;
+}
+
+.sortable {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    position: relative;
+    padding-right: 16px;
+}
+
+.sortable .sort-icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    font-size: 0.8rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 1;
+    display: inline-block;
+}
+
+.sortable .sort-icon.hidden {
+    opacity: 0;
+    transform: translateY(-50%) rotate(90deg);
+}
+
+.sortable.sorted.asc .sort-icon::before {
+    content: "▲";
+}
+
+.sortable.sorted.desc .sort-icon::before {
+    content: "▼";
+}
+
+.material-label {
+    border-bottom: 1px solid #555;
+    margin-bottom: 0.2rem;
+    display: inline-block;
+}
+.material-select-wrapper select {
+    font-family: 'Minecraft', monospace;
+}
+
+
+.material-select-wrapper option {
+    background-color: #1e1e1e;
+    color: #f5f5f5;
+}
+
+.material-select {
+    text-align: center;
+    background: transparent;
+    color: #fff;
+    border: none;
+    font-size: 1rem;
+    appearance: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.material-select:hover {
+    color: #55FFFF;
+    background-color: #3a3a3a;
+}
+
+.enchantments-info {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.enchant-toggle-btn {
+    background: transparent;
+    border: none;
+    color: #FFFF55;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 4px 8px;
+}
+
+.enchants-expand-btn:hover,
+.enchant-toggle-btn:hover {
+    color: #FF55FF;
+
+}
+
+.enchant-list {
+    list-style: none;
+    margin-top: 4px;
+    padding-left: 0;
+    border-left: 1px solid #555;
+    padding: 0px 10px;
+    font-size: 0.9em;
+
+}
+
+.enchant-list li {
+    padding: 2px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.enchants-expand-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+    font-size: 100%;
+    font-weight: bold;
+    font-family: 'Minecraft', monospace;
+}
+
+td.price-info {
+    align-items: center;
+    text-align: right;
+    color: #9A5CC6;
+}
+
+td.quantity-info {
+    align-items: center;
+    text-align: right;
+    padding-right: 2rem;
+}
+
+.buy-button-container {
+    position: relative;
+}
+
+.buy-button-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.buy-button {
+    padding: 0.4rem 1rem;
+    background-color: transparent;
+    border: 0px solid #555;
+    cursor: pointer;
+    color: #9A5CC6;
+    border-left: 1px solid #9A5CC6;
+    font-family: 'Minecraft', monospace;
+    font-size: 14px;
+}
+
+.buy-button:hover {
+    background-color: #444;
+}
+
+.buy-clipboard-wrapper {
+    position: absolute;
+    right: 100%; /* Position to the left of the parent */
+    top: 50%; /* Vertically center */
+    transform: translateY(-50%);
+    margin-right: 1rem;
+    background-color: #222;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.buy-clipboard-wrapper.hidden {
+    display: none;
+}
+
+.buy-clipboard-message {
+    font-size: 0.9rem;
+}
+
+.close-button {
+    padding: 0.4rem 1rem;
+    background-color: transparent;
+    color: #ff5555;
+    border: 0px solid #555;
+    cursor: pointer;
+    border-left: 1px solid #ff5555;
+    font-family: 'Minecraft', monospace;
+    font-size: 14px;
+}
+
+.close-button:hover {
+    background-color: #444;
+}
+
+.market-back-wrapper {
+    position: relative;
+    z-index: 0;
+}
+
+.market-back-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 340px;
+    width: 100%;
+
+    background-image: url("/static/media/market-back-580.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center top;
+
+    border-bottom: 2px solid #444;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+
+    z-index: -1;
+}
+
+.reputation-info {
+    display: flex;
+    gap: 1px;
+    justify-content: center;
+}
+
+.reputation-info img {
+    width: 18px;
+    height: 18px;
+}
+
+.reputation-info span {
+    color: #1f8f4c;
+    font-size: 16px;
+}
+
+td.reputation-column, th.reputation-column {
+    width: 5%;
+}
+
+td.price-column, th.price-column,
+td.quantity-column, th.quantity-column {
+    max-width: 20%;
+}

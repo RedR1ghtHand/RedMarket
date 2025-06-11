@@ -1,0 +1,87 @@
+{
+  "tools": [
+    {"name": "axe", "description": "A tool used for chopping."},
+    {"name": "pickaxe", "description": "A tool used for mining."},
+    {"name": "shovel", "description": "A tool used for digging."},
+    {"name": "hoe", "description": "A tool used for farming."},
+    {"name": "carrot on a stick", "description": "A tool for controlling pigs."},
+    {"name": "fishing rod", "description": "A tool for fishing."},
+    {"name": "warped fungus on a stick", "description": "A tool for controlling."},
+    {"name": "flind and steel", "description": "A tool used for making fire"},
+    {"name": "shears", "description": "A tools required to obtain some organic blocks"},
+    {"name": "shield", "description": "A tool used for protecting the player against attacks."}
+  ],
+  "armor": [
+    {"name": "helmet", "description": "A piece of armor for the head."},
+    {"name": "chestplate", "description": "A piece of armor for the torso."},
+    {"name": "leggings", "description": "A piece of armor for the legs."},
+    {"name": "boots", "description": "A piece of armor for the feet."},
+    {"name": "elytra", "description": "A set of wings that allow gliding."},
+    {"name": "horse armor", "description": "Armor for the horses."},
+    {"name": "wolf armor", "description": "Armor for the wolfs."}
+  ],
+  "weapons": [
+    {"name": "sword", "description": "A melee weapon used for attacking."},
+    {"name": "bow", "description": "A ranged weapon for shooting arrows."},
+    {"name": "crossbow", "description": "A ranged weapon that shoots bolts."},
+    {"name": "trident", "description": "A weapon that can be thrown or used in melee."},
+    {"name": "mace", "description": "Thor?."}
+  ],
+  "arrows and projectiles": [
+    {"name": "arrow", "description": "A projectile shot from a bow or crossbow."},
+    {"name": "tipped arrow", "description": "An arrow with special effects."},
+    {"name": "firework rocket", "description": "An item used for fireworks or propulsion."},
+    {"name": "ender pearl", "description": "description."},
+    {"name": "eye of ender", "description": "description."}
+  ],
+  "utilities": [
+    {"name": "bucket", "description": "A container used for carrying liquids."},
+    {"name": "bottle", "description": "A container used for carrying potions or liquids."},
+    {"name": "bone meal", "description": "description."},
+    {"name": "bowl", "description": "A soup?"},
+    {"name": "lead", "description": "description."},
+    {"name": "bundle", "description": "description."},
+    {"name": "saddle", "description": "description."},
+    {"name": "totem of undying", "description": "Goal reached: Postmortal."}
+  ],
+  "wooden": [
+    {"name": "wood", "description": "A basic building material from trees."},
+    {"name": "logs", "description": "A raw form of wood that can be crafted into planks."},
+    {"name": "planks", "description": "Wood that has been crafted into flat pieces for building."},
+    {"name": "boat", "description": "A small vehicle used to travel on water."},
+    {"name": "fence gate", "description": "disc"},
+    {"name": "sign", "description": "disc"},
+    {"name": "button", "description": "disc"},
+    {"name": "door", "description": "disc"},
+    {"name": "fence", "description": "disc"},
+    {"name": "pressure plate", "description": "disc"},
+    {"name": "slab", "description": "disc"},
+    {"name": "stairs", "description": "disc"},
+    {"name": "trapdoor", "description": "disc"}
+  ],
+  "ingots and materials": [
+    {"name": "ingot", "description": "description."},
+    {"name": "material", "description": "description."},
+    {"name": "blocks of materials", "description": "When the block of flint?."}
+  ],
+  "ores": [
+    {"name": "ore block", "description": "description."},
+    {"name": "raw ore block", "description": "description."},
+    {"name": "ore", "description": "description."}
+  ],
+  "structural": [
+    {"name": "stone blocks", "description": "A common building material."},
+    {"name": "overworld blocks", "description": "A blocks from the Overworld."},
+    {"name": "nether blocks", "description": "Blocks from the Nether."},
+    {"name": "end blocks", "description": "Blocks from the End."},
+    {"name": "blocks of materials", "description": "When the block of flint?."}
+  ],
+  "decorative": [
+    {"name": "terracotta", "description": "A block made from clay, useful for decoration."},
+    {"name": "wool", "description": "A block made from sheep wool, used for decoration."},
+    {"name": "concrete powder", "description": "Just add some water."},
+    {"name": "concrete", "description": "Solid. Colored. Brutal."},
+    {"name": "glass stained", "description": "A transparent block used for windows and decoration."},
+    {"name": "glass pane stained", "description": "A transparent block used for windows and decoration."}
+  ]
+}

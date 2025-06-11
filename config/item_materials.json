@@ -1,0 +1,319 @@
+[
+  {
+    "name":"wood",
+    "description": "Just a wood, nothing special",
+    "applicable_to": [
+      "sword",
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe"
+    ]
+  },
+  {
+    "name":"stone",
+    "description": "Solid.",
+    "applicable_to": [
+      "sword",
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe"
+    ]
+  },
+  {
+    "name":"iron",
+    "description": "Metal.",
+    "applicable_to": [
+      "sword",
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "horse armor"
+    ]
+  },
+  {
+    "name":"gold",
+    "description": "Shiny. ",
+    "applicable_to": [
+      "sword",
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "horse armor"
+    ]
+  },
+  {
+    "name":"diamond",
+    "description": "Shiny. Solid.",
+    "applicable_to": [
+      "sword",
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "horse armor"
+    ]
+  },
+  {
+    "name":"netherite",
+    "description": "GOAT",
+    "applicable_to": [
+      "sword",
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ]
+  },
+  {
+    "name":"leather",
+    "description": "Comfort.",
+    "applicable_to": [
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "horse armor"
+    ]
+  },
+  {
+    "name":"chainmail",
+    "description": "Metal with venting",
+    "applicable_to": [
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ]
+  },
+  {
+    "name":"turtle",
+    "description": "Turtle Master",
+    "applicable_to": [
+      "helmet"
+    ]
+  },
+  {
+    "name":"oak",
+    "description": "oak wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  },
+  {
+    "name":"spruce",
+    "description": "spruce wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  },
+  {
+    "name":"birch",
+    "description": "birch wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  },
+  {
+    "name":"jungle",
+    "description": "jungle wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  },
+  {
+    "name":"acacia",
+    "description": "acacia wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  },
+  {
+    "name":"dark oak",
+    "description": "dark oak wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  },
+  {
+    "name":"mangrove",
+    "description": "mangrove wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  },
+  {
+    "name":"cherry",
+    "description": "cherry wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  },
+  {
+    "name":"pale oak",
+    "description": "pale oak wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  },
+  {
+    "name":"crimson",
+    "description": "crimson wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  },
+  {
+    "name":"warped",
+    "description": "warped wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  },
+  {
+    "name":"bamboo",
+    "description": "bamboo wood",
+    "applicable_to": [
+      "wood",
+      "logs",
+      "planks",
+      "boat",
+      "fence gate",
+      "sign",
+      "door",
+      "fence",
+      "slab",
+      "stairs",
+      "trapdoor"
+    ]
+  }
+]

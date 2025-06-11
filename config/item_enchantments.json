@@ -1,0 +1,269 @@
+[
+  {
+    "name": "Mending",
+    "description": "Repairs the item when gaining XP orbs.",
+    "max_lvl": 1,
+    "applicable_to": [
+      "sword", "bow", "crossbow", "trident", "mace",
+      "axe", "pickaxe", "shovel", "hoe",
+      "helmet", "chestplate", "leggings", "boots",
+      "elytra", "fishing rod", "flind and steel", "shears", "shield"
+    ]
+  },
+  {
+    "name": "Unbreaking",
+    "description": "Increases item durability.",
+    "max_lvl": 3,
+    "applicable_to": [
+      "sword", "bow", "crossbow", "trident", "mace",
+      "axe", "pickaxe", "shovel", "hoe",
+      "helmet", "chestplate", "leggings", "boots",
+      "elytra", "fishing rod", "flind and steel", "shears", "shield"
+    ]
+  },
+  {
+    "name": "Curse of Vanishing",
+    "description": "Item destroyed upon death.",
+    "max_lvl": 1,
+    "applicable_to": [
+      "sword", "bow", "crossbow", "trident", "mace",
+      "axe", "pickaxe", "shovel", "hoe",
+      "helmet", "chestplate", "leggings", "boots",
+      "elytra", "fishing rod", "flind and steel", "shears", "shield"
+    ]
+  },
+  {
+    "name": "Aqua Affinity",
+    "description": "Increase the rate of underwater mining speed.",
+    "max_lvl": 1,
+    "applicable_to": ["helmet"]
+  },
+  {
+    "name": "Blast Protection",
+    "description": "Reduces explosion damage and knockback.",
+    "max_lvl": 4,
+    "applicable_to": ["helmet", "chestplate", "leggings", "boots"]
+  },
+  {
+    "name": "Curse of Binding",
+    "description": "Items cannot be removed from armor slots unless the cause is death or breaking.",
+    "max_lvl": 1,
+    "applicable_to": ["helmet", "chestplate", "leggings", "boots", "elytra"]
+  },
+  {
+    "name": "Depth Strider",
+    "description": "Increases underwater movement speed.",
+    "max_lvl": 3,
+    "applicable_to": ["boots"]
+  },
+  {
+    "name": "Feather Falling",
+    "description": "Reduces fall damage.",
+    "max_lvl": 4,
+    "applicable_to": ["boots"]
+  },
+  {
+    "name": "Fire Protection",
+    "description": "Reduces fire damage and burn time.",
+    "max_lvl": 4,
+    "applicable_to": ["helmet", "chestplate", "leggings", "boots"]
+  },
+  {
+    "name": "Frost Walker",
+    "description": "Changes water blocks to frosted ice and prevents damage from magma blocks.",
+    "max_lvl": 2,
+    "applicable_to": ["boots"]
+  },
+  {
+    "name": "Projectile Protection",
+    "description": "Reduces projectile damage.",
+    "max_lvl": 4,
+    "applicable_to": ["helmet", "chestplate", "leggings", "boots"]
+  },
+  {
+    "name": "Protection",
+    "description": "Reduces most types of damage by 4% per level.",
+    "max_lvl": 4,
+    "applicable_to": ["helmet", "chestplate", "leggings", "boots"]
+  },
+  {
+    "name": "Respiration",
+    "description": "Extends underwater breathing time.",
+    "max_lvl": 3,
+    "applicable_to": ["helmet"]
+  },
+  {
+    "name": "Soul Speed",
+    "description": "Increases walking speed on soul sand and soul soil.",
+    "max_lvl": 3,
+    "applicable_to": ["boots"]
+  },
+  {
+    "name": "Thorns",
+    "description": "Reflects some of the damage taken when hit.",
+    "max_lvl": 3,
+    "applicable_to": ["helmet", "chestplate", "leggings", "boots"]
+  },
+  {
+    "name": "Swift Sneak",
+    "description": "Increased player speed when crouching.",
+    "max_lvl": 3,
+    "applicable_to": ["leggings"]
+  },
+  {
+    "name": "Bane of Arthropods",
+    "description": "Increases damage and applies Slowness IV to arthropod mobs.",
+    "max_lvl": 5,
+    "applicable_to": ["sword", "axe", "mace"]
+  },
+  {
+    "name": "Breach",
+    "description": "Negate the effectiveness of enemy armor by 15% per level.",
+    "max_lvl": 4,
+    "applicable_to": ["mace"]
+  },
+  {
+    "name": "Density",
+    "description": "Boosts the rate at which mace multiplies damage while falling.",
+    "max_lvl": 5,
+    "applicable_to": ["mace"]
+  },
+  {
+    "name": "Efficiency",
+    "description": "Increases mining speed.",
+    "max_lvl": 5,
+    "applicable_to": ["axe", "pickaxe", "shovel", "hoe"]
+  },
+  {
+    "name": "Fire Aspect",
+    "description": "Sets target on fire.",
+    "max_lvl": 2,
+    "applicable_to": ["sword", "mace"]
+  },
+  {
+    "name": "Looting",
+    "description": "Increases amount of loot earned from mobs.",
+    "max_lvl": 3,
+    "applicable_to": ["sword"]
+  },
+  {
+    "name": "Impaling",
+    "description": "Trident deals additional damage to mobs that spawn naturally in the ocean.",
+    "max_lvl": 5,
+    "applicable_to": ["trident"]
+  },
+  {
+    "name": "Knockback",
+    "description": "Knocks back mobs away from you when hit.",
+    "max_lvl": 2,
+    "applicable_to": ["sword", "mace"]
+  },
+  {
+    "name": "Sharpness",
+    "description": "Increases weapon damage.",
+    "max_lvl": 5,
+    "applicable_to": ["sword", "axe", "mace"]
+  },
+  {
+    "name": "Smite",
+    "description": "Increases damage to undead mobs.",
+    "max_lvl": 5,
+    "applicable_to": ["sword", "axe", "mace"]
+  },
+  {
+    "name": "Sweeping Edge",
+    "description": "Increases sweeping attack damage. Java only.",
+    "max_lvl": 3,
+    "applicable_to": ["sword"]
+  },
+  {
+    "name": "Wind Burst",
+    "description": "Allows the player to bounce up into the air following a successful hit.",
+    "max_lvl": 3,
+    "applicable_to": ["mace"]
+  },
+  {
+    "name": "Channeling",
+    "description": "Trident channels a bolt of lightning toward a hit entity during thunderstorms.",
+    "max_lvl": 1,
+    "applicable_to": ["trident"]
+  },
+  {
+    "name": "Flame",
+    "description": "Arrows set targets on fire.",
+    "max_lvl": 1,
+    "applicable_to": ["bow"]
+  },
+  {
+    "name": "Infinity",
+    "description": "Shooting does not consume arrows.",
+    "max_lvl": 1,
+    "applicable_to": ["bow"]
+  },
+  {
+    "name": "Loyalty",
+    "description": "Trident returns after being thrown.",
+    "max_lvl": 3,
+    "applicable_to": ["trident"]
+  },
+  {
+    "name": "Riptide",
+    "description": "Trident launches player with itself when thrown.",
+    "max_lvl": 3,
+    "applicable_to": ["trident"]
+  },
+  {
+    "name": "Multishot",
+    "description": "Shoot 3 arrows at the cost of one.",
+    "max_lvl": 1,
+    "applicable_to": ["crossbow"]
+  },
+  {
+    "name": "Piercing",
+    "description": "Arrows pass through multiple entities.",
+    "max_lvl": 4,
+    "applicable_to": ["crossbow"]
+  },
+  {
+    "name": "Power",
+    "description": "Increases arrow damage.",
+    "max_lvl": 5,
+    "applicable_to": ["bow"]
+  },
+  {
+    "name": "Punch",
+    "description": "Increases arrow knockback.",
+    "max_lvl": 2,
+    "applicable_to": ["bow"]
+  },
+  {
+    "name": "Quick Charge",
+    "description": "Decreases crossbow charging time.",
+    "max_lvl": 3,
+    "applicable_to": ["crossbow"]
+  },
+  {
+    "name": "Fortune",
+    "description": "Increases certain item drop chances from blocks.",
+    "max_lvl": 3,
+    "applicable_to": ["pickaxe", "axe", "shovel", "hoe"]
+  },
+  {
+    "name": "Luck of the Sea",
+    "description": "Increases rate of fishing rare loot.",
+    "max_lvl": 3,
+    "applicable_to": ["fishing rod"]
+  },
+  {
+    "name": "Lure",
+    "description": "Decreases wait time until fish bite.",
+    "max_lvl": 3,
+    "applicable_to": ["fishing rod"]
+  },
+  {
+    "name": "Silk Touch",
+    "description": "Mined blocks will drop as blocks instead of breaking into other items.",
+    "max_lvl": 1,
+    "applicable_to": ["pickaxe", "axe", "shovel", "hoe"]
+  }
+]

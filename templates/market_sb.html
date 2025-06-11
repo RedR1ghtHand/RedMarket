@@ -1,0 +1,20 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/market.css' %}">
+
+<div class="search-wrapper">
+    <div class="input-container">
+        <input id="item-search" type="text"
+            placeholder="Search Item Type..."
+            value="{{ selected_type|default:'' }}" autocomplete="off">
+        <button type="button" id="clear-btn" class="clear-button hidden">&times;</button>
+    </div>
+    <ul id="suggestions" class="suggestions-list hidden"></ul>
+</div>
+
+<script>
+    window.itemTypes = {{ enriched_types_json|safe }};
+</script>
+
+<script src="{% static 'js/market_search_bar.js' %}"></script>
+

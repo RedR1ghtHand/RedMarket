@@ -1,0 +1,43 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}RedMarket{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+</head>
+<body class="dark-theme">
+    <div class="site-wrapper">
+        <header class="site-header">
+            <div  class="header-left">
+                <a href="{% url 'home' %}" class="site-name-link">
+                    <img src="{% static 'media/logo.png' %}" alt="#">
+                </a>
+            </div>
+            <nav class="header-right">
+                <a href="{% url 'orders' %}">🛒 Market</a>
+                <a href="{% url 'create_order' %}">➕ Order</a>
+                <a href="{% url 'user' %}">
+                    {% if user.is_authenticated and user.mc_username %}
+                        <img src="https://mc-heads.net/avatar/{{ user.mc_username }}/20"
+                             alt="MC Head"
+                             class="mc-avatar">
+                    {% endif %}
+                    Profile
+                </a>
+            </nav>
+        </header>
+
+        <main class="site-main market-back-wrapper">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2025 RedMarket. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
+

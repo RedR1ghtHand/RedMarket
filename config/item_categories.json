@@ -1,0 +1,43 @@
+[
+  {
+    "name": "armor",
+    "description": "Items worn for protection."
+  },
+  {
+    "name": "weapons",
+    "description": "Offensive equipment."
+  },
+  {
+    "name": "tools",
+    "description": "Useful instruments."
+  },
+  {
+    "name": "arrows and projectiles",
+    "description": "Consumables for ranged weapons and projectiles."
+  },
+  {
+    "name": "utilities",
+    "description": "Miscellaneous helpful items."
+  },
+  {
+    "name": "wooden",
+    "description": "Wood-based items."
+  },
+  {
+    "name": "structural",
+    "description": "Blocks used in construction."
+  },
+  {
+    "name": "decorative",
+    "description": "Aesthetic blocks and items."
+  },
+  {
+    "name": "ingots and materials",
+    "description": "Ingots, raw materials and minerals obtained from ores, blocks mobs or farming."
+  },
+  {
+    "name": "ores",
+    "description": "Ore and stone, Steve... Ore and stone!"
+  }
+
+]

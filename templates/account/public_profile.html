@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/account_public_profile.css' %}">
+
+<script src="{% static 'js/order_buy_button.js' %}"></script>
+<script src="{% static 'js/enchantments_button.js' %}"></script>
+
+<div class="public-profile-container">
+    <div class="player-profile-block">
+        <img src="https://mc-heads.net/head/{{ public_user.mc_username }}/128" alt="{{ public_user.mc_username }}" class="item-type-image">
+
+        <div class="item-type-title">
+            <div class="pp-user-title">
+                <h1>{{ public_user.mc_username }}</h1>
+
+                {% if public_user != request.user %}
+                    <a title="Message user" href="{% url 'start_message' public_user.mc_username %}">
+                        <img class="message-icon" src="{% static 'media/message-icon.png' %}" alt="✉">
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="reputation-info">
+                <span>{{ public_user.reputation_score }}</span>
+
+                <img class="rep-icon"
+                     src="{% static public_user.reputation_score|rep_icon %}"
+                     alt="Reputation icon">
+            </div>
+        </div>
+
+        {% if can_repute and not already_repped %}
+            <div id="reputation-box" class="reputation-box">
+
+                <div id="like-button" class="reputation-button-like">
+                    <input type="image"
+                           src="{% static 'media/like-icon.png' %}"
+                           alt="#"
+                           class="reputation-box-icon">
+                    <span>like</span>
+                </div>
+
+                <div id="report-button" class="reputation-button-report">
+                    <input type="image"
+                           src="{% static 'media/report-icon.png' %}"
+                           alt="#"
+                           class="reputation-box-icon">
+                    <span>report</span>
+                </div>
+
+                <form method="POST" id="reputation-form" style="display: none;">
+                    {% csrf_token %}
+                    <input type="hidden" name="rep_type" id="rep_type_input">
+
+                    <label for="badge-select">Choose a badge:</label>
+                    <select name="badge" id="badge-select" required></select>
+
+                    <div class="reputation-actions">
+                        <button type="submit" id="submit-button">Submit</button>
+                        <button type="button" id="cancel-button">Cancel</button>
+                    </div>
+                </form>
+
+            </div>
+        {% elif already_repped %}
+            <div>
+                <img src="{% static 'media/already-repped-icon.png' %}" alt="#" class="reputation-box-icon">
+                <p>You have already given reputation to this user.</p>
+            </div>
+        {% elif not can_repute %}
+            <div>
+                <img src="{% static 'media/not-can-repute.png' %}" alt="#" class="reputation-box-icon">
+                <p>You cannot give reputation to this user.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="pp-orders-section">
+        <div class="pp-tabs">
+            <button id="tab-orders" class="pp-tab-button active">Market Orders</button>
+            <button id="tab-reputation" class="pp-tab-button">Reputation</button>
+        </div>
+
+        <div id="orders-table-wrapper">
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <form method="get" class="filter-form">
+                                <div class="material-label">Category</div>
+
+                                <div class="material-select-wrapper">
+                                    <select id="category-select" name="category" onchange="this.form.submit()" class="material-select">
+                                        <option value="">all</option>
+                                        {% for cat in categories %}
+                                            <option value="{{ cat.id }}" {% if selected_category == cat.id %}selected{% endif %}>
+                                                {{ cat.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                {% if current_sort %}
+                                    <input type="hidden" name="sort" value="{{ current_sort }}">
+                                {% endif %}
+                                {% if current_direction %}
+                                    <input type="hidden" name="direction" value="{{ current_direction }}">
+                                {% endif %}
+                            </form>
+                        </th>
+
+                        <th></th>
+
+                        <th><button type="button" class="enchants-expand-btn">Enchants ⬇</button></th>
+
+                        <th class="price-column">
+                            <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}sort=price&direction={% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                               class="sortable {% if current_sort == 'price' %}sorted {{ current_direction }}{% endif %}">
+                                Price
+                                <span class="sort-icon"></span>
+                            </a>
+                        </th>
+                        <th class="quantity-column">
+                            <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}sort=quantity&direction={% if current_sort == 'quantity' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                               class="sortable {% if current_sort == 'quantity' %}sorted {{ current_direction }}{% endif %}">
+                                Quantity
+                                <span class="sort-icon"></span>
+                            </a>
+                        </th>
+                        <th class="buy-button-container">-</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>
+                                <a class="mc-username-link-cell" href="{% url 'order_detail' order.item_type.slug %}">
+                                    <img src="{% static 'media/item_types/axe.png' %}" alt="material" class="mc-item-avatar">
+
+                                    <span>{{ order.item_type }}</span>
+                                </a>
+                            </td>
+                            <td>
+                                {% if order.material %}
+                                    <div class="mc-username-cell">
+                                        {% if order.material.icon %}
+                                            <img src="{{ order.material.icon.url }}"
+                                                 alt="material"
+                                                 class="mc-avatar">
+                                        {% endif %}
+                                        <span>{{ order.material }}</span>
+                                    </div>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <div class="enchantments-info">
+                                {% if order.enchantments.exists or selected_type.enchantments.exists %}
+                                    {% with enchant_count=order.orderenchantment_set.count %}
+                                        <button class="enchant-toggle-btn">
+                                            {% if enchant_count > 0 %}
+                                                {{ "★"|repeat:enchant_count }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </button>
+                                        {% if enchant_count > 0 %}
+                                        <div class="enchant-list-wrapper hidden">
+                                            <ul class="enchant-list ">
+                                                {% for oe in order.orderenchantment_set.all %}
+                                                    <li>{{ oe.enchantment.name }} <span>{{ oe.level|romanize }}</span></li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td class="price-info">
+                                <div class="mc-username-cell">
+                                    <span>{{ order.price }}</span>
+
+                                    <img src="{% static 'media/price-icon.png' %}" alt="#" class="mc-avatar"></div>
+                            </td>
+
+                            <td class="quantity-info">
+                                <div class="mc-username-cell">
+                                    <span>{{ order.quantity }}</span>
+
+                                    <img src="{% static 'media/quantity-icon.png' %}" alt="#" class="mc-avatar-q">
+                                </div>
+                            </td>
+
+                            <td class="buy-button-container">
+                                <div class="buy-button-wrapper">
+                                    <button class="buy-button" onclick="handleBuy(this)"
+                                            data-clipboard="{{ mc_server_wisper_command }} {{ order.created_by.mc_username }} Hi! I want to buy - {{ order.item_type.name|capfirst }}[{{ order.material }}] x1 for {{ order.price }}. RedMarket">
+                                        Buy
+                                    </button>
+                                    <button class="close-button hidden" onclick="handleClose(this)">
+                                        Close
+                                    </button>
+                                </div>
+                                <div class="buy-clipboard-wrapper hidden">
+                                    <span class="buy-clipboard-message"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
+
+            {% if not object_list %}
+                <p>No orders found.</p>
+            {% endif %}
+
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}&sort={{ current_sort }}&direction={{ current_direction }}{% if selected_material %}&material={{ selected_material }}{% endif %}">Previous</a>
+                {% endif %}
+
+                <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}&sort={{ current_sort }}&direction={{ current_direction }}{% if selected_material %}&material={{ selected_material }}{% endif %}">Next</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="reputation-table-wrapper" style="display: none;">
+            <table class="order-table reputation-table">
+                <thead>
+                <tr class="">
+                    <th>From</th>
+                    <th>Badge</th>
+                    <th style="width: 20%;">When</th>
+                </tr>
+            </thead>
+                <tbody>
+                    {% for rep in reputation_list %}
+                        <tr>
+                            <td>
+                                <div class="mc-username-cell">
+                                    <img src="https://mc-heads.net/avatar/{{ rep.giver.mc_username }}/20"
+                                     alt="MC Head"
+                                     class="mc-avatar">
+                                    <span>{{ rep.giver.mc_username }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                {% if rep.is_negative %}
+                                    <div class="report-badge-column">
+                                        <img src="{% static 'media/report-icon.png' %}" alt="#" class="reputation-table-icon">
+                                        <span>{{ rep.badge }}</span>
+                                    </div>
+                                {% else %}
+                                    <div class="like-badge-column">
+                                        <img src="{% static 'media/already-repped-icon.png' %}" alt="#" class="reputation-table-icon">
+                                        <span>{{ rep.badge }}</span>
+                                    </div>
+                                {% endif %}
+                            </td>
+
+                            <td style="color: #555;">{{ rep.created_at|timeago }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="3">No reputation entries found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const likeBtn = document.getElementById('like-button');
+  const reportBtn = document.getElementById('report-button');
+  const form = document.getElementById('reputation-form');
+  const badgeSelect = document.getElementById('badge-select');
+  const repTypeInput = document.getElementById('rep_type_input');
+  const submitButton = document.getElementById('submit-button');
+  const cancelButton = document.getElementById('cancel-button');
+
+  const POSITIVE_BADGES = {{ positive_badges|safe }};
+  const NEGATIVE_BADGES = {{ negative_badges|safe }};
+
+  function populateBadges(badges) {
+    badgeSelect.innerHTML = '';
+    badges.forEach(badge => {
+      const option = document.createElement('option');
+      option.value = badge;
+      option.textContent = badge;
+      badgeSelect.appendChild(option);
+    });
+  }
+
+  function showForm(type) {
+    likeBtn.style.display = 'none';
+    reportBtn.style.display = 'none';
+    form.style.display = 'block';
+    repTypeInput.value = type;
+  }
+
+  function resetForm() {
+    form.style.display = 'none';
+    likeBtn.style.display = 'flex';
+    reportBtn.style.display = 'flex';
+    repTypeInput.value = '';
+    badgeSelect.innerHTML = '';
+  }
+
+  likeBtn?.addEventListener('click', function () {
+    populateBadges(POSITIVE_BADGES);
+    showForm('like');
+  });
+
+  reportBtn?.addEventListener('click', function () {
+    populateBadges(NEGATIVE_BADGES);
+    showForm('report');
+  });
+
+  cancelButton?.addEventListener('click', function () {
+    resetForm();
+  });
+});
+
+const tabOrders = document.getElementById('tab-orders');
+const tabReputation = document.getElementById('tab-reputation');
+const ordersWrapper = document.getElementById('orders-table-wrapper');
+const reputationWrapper = document.getElementById('reputation-table-wrapper');
+
+tabOrders?.addEventListener('click', function () {
+    tabOrders.classList.add('active');
+    tabReputation.classList.remove('active');
+    ordersWrapper.style.display = 'block';
+    reputationWrapper.style.display = 'none';
+});
+
+tabReputation?.addEventListener('click', function () {
+    tabReputation.classList.add('active');
+    tabOrders.classList.remove('active');
+    ordersWrapper.style.display = 'none';
+    reputationWrapper.style.display = 'block';
+});
+</script>
+{% endblock %}
