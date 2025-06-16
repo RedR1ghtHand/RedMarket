@@ -4,7 +4,9 @@ services:
   web:
     build:
       context: .
-    env_file: .env
+      dockerfile: docker/python/Dockerfile
+    env_file:
+      - .env
     volumes:
       - .:/app:cached
       - /app/.venv
@@ -14,13 +16,16 @@ services:
       - db
 
   db:
-    image: mysql:${MYSQL_VERSION}
+    build:
+      context: ./docker/mysql
+      args:
+        - 'MYSQL_VERSION=${MYSQL_VERSION}'
     environment:
-      - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - TZ=UTC
+      - 'MYSQL_DATABASE=${DB_NAME}'
+      - 'MYSQL_USER=${DB_USER}'
+      - 'MYSQL_PASSWORD=${DB_PASSWORD}'
+      - 'MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}'
+      - 'TZ=UTC'
     ports:
       - "3306:3306"
     volumes:

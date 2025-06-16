@@ -41,6 +41,21 @@ class TestItemModels:
         assert Material.objects.count() == len(material_data)
         assert Enchantment.objects.count() == len(enchantment_data)
 
+        for type_data in item_type_data:
+            item_type = item_type_map[type_data['name']]
+
+            expected_materials = {
+                m['name'] for m in material_data if type_data['name'] in m['applicable_to']
+            }
+            actual_materials = {mat.name for mat in item_type.materials.all()}
+            assert expected_materials == actual_materials, f"{item_type.name} has incorrect materials"
+
+            expected_enchantments = {
+                e['name'] for e in enchantment_data if type_data['name'] in e['applicable_to']
+            }
+            actual_enchantments = {e.name for e in item_type.enchantments.all()}
+            assert expected_enchantments == actual_enchantments, f"{item_type.name} has incorrect enchantments"
+
     def test_invalid_itemtype_reference(self):
         with pytest.raises(IntegrityError):
             ItemType.objects.create(name="wand", description="Magic wand", category_id=999)

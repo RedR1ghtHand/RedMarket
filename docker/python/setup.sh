@@ -8,6 +8,7 @@ done
 
 echo "MySQL is up"
 
+poetry run python manage.py makemigrations
 poetry run python manage.py migrate
 
 # Insert initial items setup
