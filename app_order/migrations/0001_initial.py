@@ -8,10 +8,6 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('app_item', '0001_initial'),
-    ]
-
     operations = [
         migrations.CreateModel(
             name='Order',

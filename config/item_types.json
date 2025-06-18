@@ -73,8 +73,7 @@
     {"name": "stone blocks", "description": "A common building material."},
     {"name": "overworld blocks", "description": "A blocks from the Overworld."},
     {"name": "nether blocks", "description": "Blocks from the Nether."},
-    {"name": "end blocks", "description": "Blocks from the End."},
-    {"name": "blocks of materials", "description": "When the block of flint?."}
+    {"name": "end blocks", "description": "Blocks from the End."}
   ],
   "decorative": [
     {"name": "terracotta", "description": "A block made from clay, useful for decoration."},
