@@ -9,7 +9,7 @@
   <br />
   <a href="https://redmarket.click">Visit Site</a>
   &middot;
-  <a href="https://github.com/RedR1ghtHand/RedMarket/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+  <a href="https://github.com/RedR1ghtHand/RedMarket/issues/new?labels=bug&template=bug-report.md">Report Bug</a>
   &middot;
   <a href="https://github.com/RedR1ghtHand/RedMarket//issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
 </p>
