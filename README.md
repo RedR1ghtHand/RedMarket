@@ -42,7 +42,7 @@
 
 <a id="about"></a>
 ## 🔎 About The Project
-![market-back-580](https://github.com/user-attachments/assets/e41c50ac-701d-465f-93f2-283f32023dc8)
+![redmarket](https://github.com/user-attachments/assets/d8da3054-874e-4641-b5a3-dd74e7f1f921)
 
 RedMarket is a web-based trading platform tailored for Minecraft players. 
 It provides a clean, fast interface for listing and finding item orders, 
