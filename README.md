@@ -1,10 +1,7 @@
 <a id="readme-top"></a>
 
-<div style="display: flex; justify-content: center; align-items: center;">
-    <h1 style="color: #FF5555; margin: 0;">Red</h1>
-    <h1 style="margin: 0;">Market</h1>
-</div>
-    
+![redmarketlogo](https://github.com/user-attachments/assets/8b3bce95-b509-4728-a5da-2bfb2c03c269)
+
 <p align="center">
   Trading platform for Minecraft players
   <br />
@@ -68,20 +65,25 @@ paste in chat, and kick off a trade.
 
 - **Smart Search Panel:**  
   Enhanced search with material-related aliases. For example, typing "wood" or "stone" suggests relevant item types automatically.
-
+  
 - **Order Detail View:**  
   Shows seller info, material (if applicable), enchantments, price, quantity, and a dynamic "Buy" button that copies a ready-to-use trade message to clipboard for quick in-game pasting.
 
-- **User Profile View:**  
+- **User Public Profile:**  
   Displays user’s orders and social features like reputation (give or report) and built-in messaging.
 
 - **Flexible Filtering and Sorting:**  
   Both order and user detail views support sorting by price or quantity, filtering by material or category, and prefetch related enchantments for performance.
 
+- **User Profile:**  
+  Personalized profile pages with intuitive navigation for managing account settings, orders, reputations, and direct messages.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <a id="demo"></a>
 ## 💻 Demo
+- Here you can see order creating, searching and buying button  
+![demo1](https://github.com/user-attachments/assets/9a991ad0-0b2d-4480-8d5a-f9da89c6e549)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
