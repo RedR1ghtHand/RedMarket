@@ -1,6 +1,6 @@
 <a id="readme-top"></a>
 
-![redmarketlogo](https://github.com/user-attachments/assets/8b3bce95-b509-4728-a5da-2bfb2c03c269)
+![redmarketlogo](https://github.com/user-attachments/assets/6c9ebe1d-bd31-4d25-88d0-b3fe52efbe62)
 
 <p align="center">
   Trading platform for Minecraft players
@@ -82,7 +82,7 @@ paste in chat, and kick off a trade.
 
 <a id="demo"></a>
 ## 💻 Demo
-- Here you can see order creating, searching and buying button  
+- Order creating, searching, and buy button  
 ![demo1](https://github.com/user-attachments/assets/9a991ad0-0b2d-4480-8d5a-f9da89c6e549)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -112,7 +112,51 @@ To get a local copy up and running, follow these steps.
 
 <a id="wiki"></a>
 ## 📚 Wiki Documentation
+<details>
+  <summary>💎 Item Models (Business Logic)</summary>
 
+- **Category:** Named entries with descriptions to organize items.  
+- **ItemType:** Represents base item types (e.g., sword), which can be duplicated for specific materials like wooden or stone swords.  
+- **Material:** Linked to ItemTypes, allowing one item type to support multiple materials, giving great flexibility (e.g., easily adding new materials like "damascus" later).  
+- **Enchantments:** Highly flexible with support for dependencies, levels, and plugin-based extensions (e.g., super pickaxe with Fortune 5).  
+
+</details>
+
+<details>
+  <summary>🛠️ Data Initialization & Admin</summary>
+
+- Uses Django management commands to populate ItemType, Category, Material, and Enchantment from config files at setup or runtime.  
+- Admin interface also supports adding and editing these core entries.  
+
+</details>
+
+<details>
+  <summary>🛒 Order Models</summary>
+
+- **Order:** Holds detailed data linking ItemType, Material, price, quantity, and optional custom enchantments.  
+- **OrderEnchantment:** Through model linking orders and enchantments with specific levels.  
+- Provides forms for creating, editing, and deleting orders via user profiles.  
+- Includes mixins to support ordering and metadata across core apps.  
+
+</details>
+
+<details>
+  <summary>💻 Account Features</summary>
+
+- Basic user registration, login, and account settings.  
+- Public profiles displaying orders and social interactions.  
+
+</details>
+
+<details>
+  <summary>💬 Social Features</summary>
+
+- Reputation system using badges (instead of comments) that can be configured as positive or negative in settings.  
+- Simple built-in messaging with a chat window and conversation list.  
+
+</details>
+
+*Note: This is a brief overview of the core components. A more detailed technical documentation and usage guide is currently in progress and will be available soon via an external link.*
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <a id="acks"></a>
@@ -130,6 +174,12 @@ Amazing technologies and tools that make this project possible:
 A big shoutout to the [Best README Template](https://github.com/othneildrew/Best-README-Template) by othneildrew for the awesome README inspiration!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### License
+
+This project is licensed under a custom **Non-Commercial License**.  
+You may use it for learning and educational purposes only.  
+Commercial use is strictly prohibited. See the [LICENSE](./LICENSE.txt) file for details.
 
 
 
