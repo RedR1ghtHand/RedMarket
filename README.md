@@ -175,6 +175,11 @@ A big shoutout to the [Best README Template](https://github.com/othneildrew/Best
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### License
+
+This project is licensed under a custom **Non-Commercial License**.  
+You may use it for learning and educational purposes only.  
+Commercial use is strictly prohibited. See the [LICENSE](./LICENSE.txt) file for details.
 
 
 
