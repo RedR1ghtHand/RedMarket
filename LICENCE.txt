@@ -1,0 +1,33 @@
+RedMarket Non-Commercial License
+Copyright (c) 2025 RedR1ghtHand
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to use,
+copy, study, and modify the Software solely for personal, educational, and
+non-commercial purposes, subject to the following conditions:
+
+1. Non-Commercial Use Only
+   You may not use the Software, in whole or in part, for any commercial purposes.
+   This includes, but is not limited to, selling, sublicensing, hosting, or integrating
+   the Software or any derivative works into a commercial product or service.
+
+2. Attribution Required
+   Any use of the Software must retain this license, copyright notice,
+   and a clear reference to the original repository and author.
+
+3. No Warranty
+   The Software is provided "as is", without warranty of any kind,
+   express or implied, including but not limited to the warranties
+   of merchantability, fitness for a particular purpose, or non-infringement.
+
+4. No Redistribution as a Service
+   You may not deploy or make available this Software as a hosted service
+   for others to use, whether or not monetary gain is involved.
+
+5. Modifications Allowed for Learning Only
+   You may modify the Software for personal or educational use, but you may not
+   distribute modified versions publicly, privately, or commercially.
+
+Violation of these terms automatically terminates your rights under this license.
+
+For commercial licensing or usage inquiries, contact the author directly via GitHub.
