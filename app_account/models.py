@@ -38,9 +38,3 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def reputation_score(self):
         return Reputation.get_score_for_user(self)
-
-    def __str__(self):
-        return self.username
-
-
-

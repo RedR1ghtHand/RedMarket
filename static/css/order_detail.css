@@ -96,6 +96,7 @@ td.buy-button-container {
 }
 
 .order-table form {
+    width: fit-content;
     position: relative;
     top: 8px;
 }
