@@ -3,15 +3,12 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from django.views.generic import ListView
+from django.views.generic import ListView, View
 from django.db.models import Prefetch
 from django.conf import settings
 
-from rest_framework import generics
-
 from .models import User
-from .forms import MCUsernameUpdateForm, OrderManagerForm
-from .serializers import UserRegisterSerializer
+from .forms import MCUsernameUpdateForm, OrderManagerForm, UserRegisterForm
 
 from app_order.models import Order, OrderEnchantment
 from app_item.models import Category
@@ -19,9 +16,20 @@ from app_social.mixins import ReputationMixin
 from app_order.mixins import OrdersSortingMixin
 
 
-class UserRegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserRegisterSerializer
+class UserRegisterView(View):
+    def get(self, request):
+        form = UserRegisterForm()
+        return render(request, 'account/register.html', {'form': form})
+
+    def post(self, request):
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Account created successfully! You can now log in.")
+            return redirect('login')
+        else:
+            messages.error(request, "Please correct the error below.")
+        return render(request, 'account/register.html')
 
 
 def login_view(request):

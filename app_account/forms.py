@@ -1,7 +1,15 @@
 from django import forms
-
+from django.contrib.auth.forms import UserCreationForm
 from app_account.models import User
 from app_order.forms import CreateOrderForm
+
+
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['mc_username', 'email', 'password1', 'password2']
 
 
 class MCUsernameUpdateForm(forms.ModelForm):
