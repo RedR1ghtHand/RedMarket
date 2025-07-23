@@ -1,7 +1,15 @@
 from django import forms
-
+from django.contrib.auth.forms import UserCreationForm
 from app_account.models import User
 from app_order.forms import CreateOrderForm
+
+
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['mc_username', 'email', 'password1', 'password2']
 
 
 class MCUsernameUpdateForm(forms.ModelForm):
@@ -20,9 +28,7 @@ class OrderManagerForm(CreateOrderForm):
         fields = ['price', 'quantity']
 
     def __init__(self, *args, **kwargs):
-        # Don't pass item_type — or override logic to skip extra fields
         super().__init__(*args, **kwargs)
-        # Remove anything dynamically added from parent
         self.fields.pop('material', None)
 
         for field_name in list(self.fields.keys()):

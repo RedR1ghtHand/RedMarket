@@ -22,6 +22,22 @@
     ]
   },
   {
+    "name":"bescar",
+    "description": "Metal.",
+    "applicable_to": [
+      "sword",
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "horse armor"
+    ]
+  },
+  {
     "name":"iron",
     "description": "Metal.",
     "applicable_to": [
