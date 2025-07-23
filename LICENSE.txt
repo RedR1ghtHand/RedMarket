@@ -8,7 +8,7 @@ non-commercial purposes, subject to the following conditions:
 
 1. Non-Commercial Use Only
    You may not use the Software, in whole or in part, for any commercial purposes.
-   This includes, but is not limited to, selling, sublicensing, hosting, or integrating
+   This includes but is not limited to selling, sublicensing, hosting, or integrating
    the Software or any derivative works into a commercial product or service.
 
 2. Attribution Required
