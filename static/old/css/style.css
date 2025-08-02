@@ -1,0 +1,200 @@
+body {
+    background-color: #111;
+    color: #eee;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 300px;
+    margin: 3rem auto;
+    background-color: #1a1a1a;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+
+h1 {
+    font-size: 24px;
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.form-grid label {
+    display: block;
+    margin-top: 1px;
+    font-size: 18px;
+}
+
+.form-grid input, select, textarea {
+    display: block;
+    min-width: 60px;
+    padding: 0.5rem;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #666;
+    border-radius: 0px;
+    font-size: 14px;
+}
+
+fieldset {
+    border: 1px solid #444;
+    border-radius: 0px;
+    padding: 1.5rem;
+    background-color: #222;
+}
+
+legend {
+    font-weight: bold;
+    font-size: 16px;
+    color: #fff;
+
+}
+
+label {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 18px;
+    font-family: 'Minecraft', monospace;
+}
+
+input, select, textarea {
+    display: block;
+    width: auto;
+    padding: 0.5rem;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #666;
+    border-radius: 0px;
+    font-size: 14px;
+    font-family: 'Minecraft', monospace;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #888;
+    background-color: #2a2a2a;
+}
+
+button {
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    font-size: 14px;
+    color: #fff;
+    background-color: #2d6a4f;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+
+button:hover {
+    background-color: #1f513b;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.form-buttons.single-button {
+    justify-content: flex-end;
+}
+
+.form-buttons button {
+    padding: 8px 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-back {
+    background-color: #444;
+    color: white;
+}
+
+.btn-next {
+    background-color: #1f8f4c;
+    color: white;
+}
+
+.toggle-button {
+    background-color: #8932B8;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+    font-family: 'Minecraft', monospace;
+}
+
+.toggle-button:hover {
+    background-color: #C74EBD;
+}
+
+.toggle-button .arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.toggle-button.active {
+    background-color: #C74EBD;
+}
+
+.toggle-button:hover.active {
+    background-color: #8932B8;
+}
+
+.toggle-button.active .arrow {
+    transform: rotate(180deg);
+}
+
+.help-text {
+    font-size: 12px;
+    color: #bbb;
+    margin-top: 0.25rem;
+}
+
+.error-text {
+    font-size: 12px;
+    color: #f77;
+    margin-top: 0.25rem;
+}
+
+#enchantments-section {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+    margin: 0;
+    transition: max-height 0.5s ease, opacity 0.3s ease, padding 0.3s ease;
+}
+
+#enchantments-section.open {
+    max-height: 1000px;
+    opacity: 1;
+    padding: 1.5rem;
+
+}
+
+
+

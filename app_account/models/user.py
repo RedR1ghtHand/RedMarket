@@ -1,25 +1,9 @@
-from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
 from app_social.models import Reputation
-
-
-class UserManager(BaseUserManager):
-    def create_user(self, email, password, **extra):
-        if not email:
-            raise ValueError("Email is required")
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra)
-        user.set_password(password)
-        user.save()
-        return user
-
-    def create_superuser(self, email, password, **extra):
-        extra.setdefault("is_staff", True)
-        extra.setdefault("is_superuser", True)
-        return self.create_user(email, password, **extra)
-
+from .manager import UserManager
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)

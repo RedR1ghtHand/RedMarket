@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'social_django',
     'django_extensions',
     'formtools',
+    'django_htmx',
     'app_item',
     'app_account',
     'app_order',
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 ROOT_URLCONF = 'redmarket.urls'
@@ -192,7 +194,7 @@ LOGGING = {
 }
 
 
-MC_SERVER_WISPER_COMMAND = '/m'  # /msg, /tell, /w
+MC_SERVER_WISPER_COMMAND = '/msg'  # /msg, /tell, /w
 
 REPUTATION_BADGES_POSITIVE = ['fast trader', 'positive', 'just F', 'polite']
 REPUTATION_BADGES_NEGATIVE = ['wrong product', 'ignoring', 'rude', 'wrong price']

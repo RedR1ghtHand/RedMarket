@@ -1,0 +1,206 @@
+.public-profile-container {
+    max-width: 900px;
+    margin: 7.5rem auto;
+    padding: 2rem;
+    color: #f5f5f5;
+    font-family: 'Minecraft', monospace;
+}
+
+.player-profile-block {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.no-orders-msg {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+}
+
+.pp-info-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.mc-item-avatar {
+    width: 25px;
+    height: 25px;
+}
+
+.reputation-box {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: #ccc;
+    width: 20%;
+    max-width: 30%;
+}
+
+.reputation-button-like,
+.reputation-button-report {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.reputation-button-like:hover {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    gap: 8px;
+    cursor: pointer;
+    color: #fc5d5d;
+}
+
+.reputation-button-report:hover {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    gap: 8px;
+    cursor: pointer;
+    color: #aa0000;
+}
+
+.reputation-box-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.reputation-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+#badge-select {
+    padding: 6px 12px;
+    background-color: #1e1e1e;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 4px;
+    font-size: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+#badge-select:hover {
+    border-color: #888;
+    background-color: #2a2a2a;
+}
+
+#badge-select:focus {
+    outline: none;
+    border-color: #66afe9;
+    background-color: #2f2f2f;
+}
+
+#submit-button, #cancel-button {
+    padding: 6px 12px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#submit-button:hover {
+    background-color: #28a745;
+}
+
+#cancel-button:hover {
+    background-color: #a94442;
+}
+
+.pp-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.pp-tab-button {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font: inherit;
+}
+
+.pp-tab-button:hover {
+    background-color: #333;
+}
+
+.pp-tab-button.active {
+    background-color: #444;
+    color: #FFAA00;
+    font-size: 110%;
+}
+
+.reputation-table-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.report-badge-column,
+.like-badge-column {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.report-badge-column span {
+    color: #555;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 2px 4px 2px 4px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.6);
+}
+
+.like-badge-column span {
+    color: #1f8f4c;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 2px 4px 2px 4px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.6);
+}
+
+.reputation-info {
+    display: flex;
+    gap: 2px;
+}
+
+.reputation-info img {
+    width: 20px;
+    height: 20px;
+}
+
+.reputation-info span {
+    color: #1f8f4c;
+    font-size: 18px;
+}
+
+.reputation-table tr th {
+    text-align: left;
+}
+
+.message-icon {
+    width: 45px;
+    height: 45px;
+    margin-left: 8px;
+    padding-top: 8px;
+}
+
+.pp-user-title {
+    display: flex;
+    align-items: center;
+}
+

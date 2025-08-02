@@ -1,0 +1,55 @@
+<div id="orders-table-div">
+  <table id="orders-table" class="table table-hover align-middle text-center table-striped border sh-b">
+      <thead>
+        <tr>
+          <th class="text-start fw-normal">Seller</th>
+          <th class="text-start fw-normal">Rep</th>
+          {% if selected_type.materials.exists %}
+            <th class="fw-normal">Material</th>
+          {% endif %}
+          {% if selected_type.enchantments.exists %}
+            <th colspan="2">
+              <button class="btn enchants-expand-btn p-0">Enchants</button>
+            </th>
+          {% endif %}
+          <th>
+            <button class="btn p-0"
+                    hx-get="?{% if selected_material %}&material={{ selected_material }}{% endif %}&sort=price&direction={% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                    hx-target="#orders-table-div"
+                    hx-swap="outerHTML"
+                    hx-headers='{"HX-Request-Partial": "table"}'>
+              Price
+              {% if current_sort == 'price' %}
+                {% if current_direction == 'asc' %}
+                  ▲
+                {% else %}
+                  ▼
+                {% endif %}
+              {% endif %}
+            </button>
+          </th>
+          <th>
+            <button class="btn p-0"
+                    hx-get="?{% if selected_material %}&material={{ selected_material }}{% endif %}&sort=quantity&direction={% if current_sort == 'quantity' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
+                    hx-target="#orders-table"
+                    hx-swap="outerHTML"
+                    hx-headers='{"HX-Request-Partial": "table"}'>
+              Quantity
+              {% if current_sort == 'quantity' %}
+                {% if current_direction == 'asc' %}
+                  ▲
+                {% else %}
+                  ▼
+                {% endif %}
+              {% endif %}
+            </button>
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody id="orders-table-body">
+        {% include "order/order_table_rows.html" %}
+      </tbody>
+  </table>
+</div>

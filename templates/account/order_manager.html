@@ -1,15 +1,10 @@
-{% extends "base.html" %}
+{% extends "account/base.html" %}
 
 {% block content %}
 {% load static %}
 {% load custom_tags %}
     <link rel="stylesheet" href="{% static 'css/account_order_manager.css' %}">
-
-    <div class="account-layout">
-        {% include "account/account_nav.html" %}
-
-        <div class="main-content">
-            <div class="orders-container">
+            <div class="orders-container container">
                 {% for order in orders %}
                     <div class="order-card" data-order-id="{{ order.id }}">
                         <div class="order-card-header">
@@ -117,8 +112,6 @@
                     <p>No orders available.</p>
                 {% endfor %}
             </div>
-        </div>
-    </div>
 <script>
 function showElement(id) {
     const el = document.getElementById(id);

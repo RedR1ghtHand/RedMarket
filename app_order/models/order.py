@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils import timezone
-from app_item.models import ItemType, Material, Enchantment
+
 from app_account.models import User
+from app_item.models import ItemType, Material, Enchantment
 
 
 class Order(models.Model):
@@ -22,15 +23,9 @@ class Order(models.Model):
         return f"{self.created_by.mc_username} Selling: {self.material.name if self.material else None} {self.item_type.name} for {self.price} (x{self.quantity})"
 
     def soft_delete(self):
-        """Mark order as deleted instead of removing it from database"""
+        """Mark order as deleted instead of removing it from a database"""
         self.deleted_at = timezone.now()
         self.save()
 
     def is_deleted(self):
         return self.deleted_at is not None
-
-
-class OrderEnchantment(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    enchantment = models.ForeignKey(Enchantment, on_delete=models.CASCADE)
-    level = models.PositiveIntegerField(default=1)

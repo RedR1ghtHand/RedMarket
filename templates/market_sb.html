@@ -1,16 +1,26 @@
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'css/market.css' %}">
+<div class="position-relative d-flex align-items-center">
+  <input id="item-search" type="text"
+         class="form-control sh-b rounded-0 pe-5"
+         placeholder="Search Item Type..."
+         value="{{ selected_type|default:'' }}"
+         autocomplete="off"
+         aria-label="Search item type"
+         >
 
-<div class="search-wrapper">
-    <div class="input-container">
-        <input id="item-search" type="text"
-            placeholder="Search Item Type..."
-            value="{{ selected_type|default:'' }}" autocomplete="off">
-        <button type="button" id="clear-btn" class="clear-button hidden">&times;</button>
-    </div>
-    <ul id="suggestions" class="suggestions-list hidden"></ul>
+  <button type="button" id="clear-btn"
+          class="btn btn-sm position-absolute top-50 translate-middle-y end-0 me-1 d-none"
+          aria-label="Clear search">
+    &times;
+  </button>
 </div>
+
+<ul id="suggestions"
+  class="list-group position-absolute w-100 mt-1 d-none border rounded-0"
+  style="z-index: 1000; max-height: 290px; overflow-y: auto;">
+</ul>
+
 
 <script>
     window.itemTypes = {{ enriched_types_json|safe }};

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block content %}
+  <link rel="stylesheet" href="{% static 'css/social_thread_detail.css' %}">
+  <div class="account-layout">
+  {% include "account/account_nav.html" %}
+
+    <div class="main-content">
+      <div class="thread-nav">
+        <h3>🗨️</h3>
+        <div class="threads-block">
+          {% for t in threads %}
+              <a class="user-thread-link {% if t.id == thread.id %}active-thread{% endif %}"
+                 href="{% url 'thread_detail' t.id %}">
+                {% for user in t.participants %}
+                  {% if user != request.user %}
+                    <img src="https://mc-heads.net/avatar/{{ user.mc_username }}/64"
+                                     alt="MC Head"
+                                     class="mc-avatar">
+                    <span>{{ user.mc_username }}</span>
+                  {% endif %}
+                {% endfor %}
+              </a>
+          {% empty %}
+            <p>No conversations yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="thread-box">
+        {% for user in thread.participants %}
+          {% if user != request.user %}
+            <div class="thread-header">
+              <img src="https://mc-heads.net/head/{{ user.mc_username }}/64"
+                   alt="MC Head" class="mc-head">
+              <div>
+                <div>
+                  <span>{{ user.mc_username }}</span>
+
+                  <a title="View orders" href="{% url 'public_profile' user.mc_username %}">
+                    <img class="pp-link-icon" src="{% static 'media/quantity-icon.png' %}" alt="Reputation icon">
+                  </a>
+                </div>
+
+                <div class="reputation-info">
+                  <span>{{ user.reputation_score }}</span>
+
+                  <img class="rep-icon"
+                       src="{% static user.reputation_score|rep_icon %}"
+                       alt="Reputation icon">
+                </div>
+              </div>
+              <form method="post" style="margin-left:auto;" onsubmit="return confirm('Are you sure you want to delete this chat?');">
+                {% csrf_token %}
+                <button type="submit" name="delete" class="delete-thread-button">❌ Delete</button>
+              </form>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        <div class="chat-window">
+          <div id="messages">
+            {% for msg in messages %}
+              <div class="message {% if msg.sender == request.user %}from-me{% else %}from-them{% endif %}">
+                <p>{{ msg.content }}</p>
+
+                <div class="message-ts {% if msg.sender == request.user %}ts-from-me{% endif %}">
+                  {{ msg.created_at|date:"d.m, H:i" }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <form method="post" class="message-form">
+            {% csrf_token %}
+            <textarea name="content" rows="2" required></textarea>
+            <button type="submit">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+  const messagesDiv = document.getElementById('messages');
+  if (messagesDiv) {
+    messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
+  }
+</script>
+{% endblock %}

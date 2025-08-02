@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     operations = [
@@ -17,7 +16,8 @@ class Migration(migrations.Migration):
                 ('price', models.DecimalField(decimal_places=2, default=1, max_digits=10)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('item_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app_item.itemtype')),
-                ('material', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='app_item.material')),
+                ('material', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                               to='app_item.material')),
             ],
         ),
         migrations.CreateModel(
@@ -25,7 +25,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('level', models.PositiveIntegerField(default=1)),
-                ('enchantment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app_item.enchantment')),
+                ('enchantment',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app_item.enchantment')),
                 ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app_order.order')),
             ],
         ),

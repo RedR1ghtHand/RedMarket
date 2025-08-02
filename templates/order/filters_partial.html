@@ -1,0 +1,105 @@
+<div class="row g-2 mb-1">
+  <div class="col-12 col-md-6">
+    <form
+      id="material-filter-form"
+      hx-get="{% url 'order_detail' slug=item_type.slug %}"
+      hx-target="#orders-table-div"
+      hx-include="#material-filter-form, #enchantment-filter-form"
+      hx-push-url="true"
+      hx-headers='{"HX-Request-Partial": "table"}'
+      class="input-group">
+      <label  class="input-group-text rounded-0" for="materialSelect">Filter Material</label>
+      <select
+        class="form-select"
+        id="materialSelect"
+        name="material"
+        onchange="this.form.requestSubmit();">
+        <option value="">Any</option>
+        {% for id, name in materials %}
+          <option value="{{ id }}" {% if selected_material == id %}selected{% endif %}>{{ name.capitalize }}</option>
+        {% endfor %}
+      </select>
+      {% if current_sort %}
+        <input type="hidden" name="sort" value="{{ current_sort }}">
+      {% endif %}
+      {% if current_direction %}
+        <input type="hidden" name="direction" value="{{ current_direction }}">
+      {% endif %}
+    </form>
+  </div>
+
+  <div class="col-12 col-md-6">
+  <form
+    id="enchantment-filter-form"
+    hx-get="{% url 'order_detail' slug=item_type.slug %}"
+    hx-target="#orders-table-body"
+    hx-include="#enchantment-filter-form, #material-filter-form"
+    hx-push-url="true"
+    hx-headers='{"HX-Request-Partial": "rows"}'
+    class="dropdown"
+  >
+
+    <button class="btn btn-outline-secondary dropdown-toggle w-100 rounded-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      Filter Enchantments
+    </button>
+
+    <div class="dropdown-menu p-3" onclick="event.stopPropagation();">
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        {% for enchantment in item_type.enchantments.all %}
+          {% with eid=enchantment.id|stringformat:"s" %}
+            <input
+              type="checkbox"
+              class="btn-check"
+              id="enchant-btn-{{ eid }}"
+              name="enchantments"
+              value="{{ eid }}"
+              {% if eid in selected_enchantments %}checked{% endif %}
+              autocomplete="off"
+            >
+            <label class="btn btn-outline-secondary btn-sm" for="enchant-btn-{{ eid }}">
+              {{ enchantment.name|capfirst }}
+            </label>
+          {% endwith %}
+        {% endfor %}
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <button
+          type="submit"
+          class="btn btn-sm btn-success"
+          onclick="closeDropdown(this)">
+          Apply
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-danger"
+          onclick="clearEnchantmentsAndSubmit()">
+          Clear
+        </button>
+      </div>
+    </div>
+    {% if current_sort %}
+      <input type="hidden" name="sort" value="{{ current_sort }}">
+    {% endif %}
+    {% if current_direction %}
+      <input type="hidden" name="direction" value="{{ current_direction }}">
+    {% endif %}
+  </form>
+</div>
+
+<script>
+  function clearEnchantmentsAndSubmit() {
+    const form = document.getElementById('enchantment-filter-form');
+    const checkboxes = form.querySelectorAll('input[name="enchantments"]');
+    checkboxes.forEach(cb => cb.checked = false);
+    form.requestSubmit();
+  }
+
+  function closeDropdown(button) {
+    const dropdown = button.closest('.dropdown');
+    const toggle = dropdown.querySelector('[data-bs-toggle="dropdown"]');
+    const dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(toggle);
+    dropdownInstance.hide();
+  }
+</script>
+</div>

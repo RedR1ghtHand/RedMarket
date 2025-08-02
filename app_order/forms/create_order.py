@@ -1,7 +1,7 @@
 from django import forms
 
 from app_item.models import ItemType, Material, Enchantment
-from .models import Order
+from app_order.models import Order
 
 
 class SelectItemTypeForm(forms.Form):
@@ -12,7 +12,6 @@ class SelectItemTypeForm(forms.Form):
 
 
 class CreateOrderForm(forms.ModelForm):
-
     class Meta:
         model = Order
         fields = ['material', 'quantity', 'price']
@@ -60,4 +59,3 @@ class CreateOrderForm(forms.ModelForm):
 
         cleaned_data['enchantments'] = enchantments
         return cleaned_data
-

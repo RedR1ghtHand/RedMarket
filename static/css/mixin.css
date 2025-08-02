@@ -1,0 +1,35 @@
+.text-brand {
+color: FF5555;
+}
+
+.sh-b {
+box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+[data-bs-theme="dark"] .sh-b {
+box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
+.pt-navbar {
+padding-top: 57px;
+}
+
+[data-bs-theme="dark"] .text-enchant {
+color: 6ea8fe;
+}
+
+[data-bs-theme="dark"] .text-enchant:hover {
+color: 8bb9fe;
+}
+
+.text-enchant {
+color: 0d6efd;
+}
+
+.text-enchant:hover {
+color: 0a58ca;
+}
+
+.text-price {
+color: 9A5CC6;
+}
