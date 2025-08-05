@@ -1,15 +1,15 @@
-<div id="orders-table-div">
+<div id="orders-table-div" style="">
   <table id="orders-table" class="table table-hover align-middle text-center table-striped border sh-b">
       <thead>
         <tr>
           <th class="text-start fw-normal">Seller</th>
           <th class="text-start fw-normal">Rep</th>
-          {% if selected_type.materials.exists %}
-            <th class="fw-normal">Material</th>
+          {% if item_type.materials.exists %}
+            <th class="text-start fw-normal ps-4">Material</th>
           {% endif %}
-          {% if selected_type.enchantments.exists %}
-            <th colspan="2">
-              <button class="btn enchants-expand-btn p-0">Enchants</button>
+          {% if item_type.enchantments.exists %}
+            <th>
+              <button class="btn p-0 enchant-table">Enchants</button>
             </th>
           {% endif %}
           <th>
@@ -17,7 +17,8 @@
                     hx-get="?{% if selected_material %}&material={{ selected_material }}{% endif %}&sort=price&direction={% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
                     hx-target="#orders-table-div"
                     hx-swap="outerHTML"
-                    hx-headers='{"HX-Request-Partial": "table"}'>
+                    hx-headers='{"HX-Request-Partial": "table"}'
+            id="price-btn">
               Price
               {% if current_sort == 'price' %}
                 {% if current_direction == 'asc' %}

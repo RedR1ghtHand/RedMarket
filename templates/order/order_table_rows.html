@@ -17,14 +17,16 @@
   </td>
   {% if order.material %}
     <td>
-      {% if order.material.icon %}
-        <img src="{{ order.material.icon.url }}" alt="Material Icon" class="me-1" width="20">
-      {% endif %}
-      {{ order.material }}
+      <div class="d-flex align-items-center gap-1 ms-3">
+        {% if order.material.icon %}
+          <img src="{{ order.material.icon.url }}" alt="Material Icon" class="me-1" width="20">
+        {% endif %}
+        <span>{{ order.material }}</span>
+      </div>
     </td>
   {% endif %}
-  {% if order.enchantments.exists or selected_type.enchantments.exists %}
-    <td colspan="2">
+  {% if order.enchantments.exists or item_type.enchantments.exists %}
+    <td>
       {% with enchant_count=order.orderenchantment_set.count %}
         {% if enchant_count > 0 %}
           <button class="btn btn-sm text-enchant" data-bs-toggle="collapse" data-bs-target="#enchants-{{ order.id }}">

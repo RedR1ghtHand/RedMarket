@@ -4,22 +4,41 @@
   hx-post="{% url 'select_item_type' %}"
   hx-target="#mainModal .modal-content"
   hx-swap="innerHTML"
-  class="p-4"
+  class="p-4 mb-0"
   novalidate
 >
-  <h5 class="mb-3">Select Item Type</h5>
   {% csrf_token %}
   {% for field in form %}
     <div class="mb-3">
       <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-      {{ field|add_class:"form-select" }}
+      <select name="{{ field.name }}" id="{{ field.id_for_label }}" class="form-select tom-select">
+        {% for val, label in field.field.choices %}
+          <option value="{{ val }}" {% if val == field.value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
       {% if field.errors %}
         <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
       {% endif %}
     </div>
   {% endfor %}
 
-  <div class="d-flex justify-content-end">
+  <div class="d-flex justify-content-between">
+    <span>Search your type to find it quicker</span>
     <button type="submit" class="btn btn-primary">Next</button>
   </div>
 </form>
+
+<script>
+  document.addEventListener('htmx:afterSwap', (e) => {
+    if (e.detail.target.id === "mainModal") {
+      new TomSelect('.tom-select', {
+        create: false,
+        sortField: {
+          field: "text",
+          direction: "asc"
+        },
+        placeholder: "Select item type...",
+      });
+    }
+  });
+</script>

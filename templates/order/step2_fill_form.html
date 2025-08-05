@@ -4,27 +4,70 @@
   hx-post="{% url 'submit_order' %}"
   hx-target="#mainModal .modal-content"
   hx-swap="innerHTML"
-  class="p-4"
+  class="p-4 mb-0"
   novalidate
 >
   <h5 class="mb-3">Create Order for: <strong>{{ item_type.name }}</strong></h5>
   {% csrf_token %}
   <input type="hidden" name="item_type_id" value="{{ item_type.id }}" />
 
-  {% for field in form %}
-    <div class="mb-3">
-      <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-      {{ field|add_class:"form-select" }}
-      {% if field.help_text %}
-        <div class="form-text">{{ field.help_text }}</div>
+  <div class="row">
+    {% for field in form %}
+      {% if not field.field.is_enchantment %}
+        {% if field.name == "material" %}
+          <div class="col-12 mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            {{ field|add_class:"form-select" }}
+            {% if field.help_text %}
+              <div class="form-text">{{ field.help_text }}</div>
+            {% endif %}
+            {% if field.errors %}
+              <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+            {% endif %}
+          </div>
+        {% elif field.name == "price" or field.name == "quantity" %}
+            <div class="col-md-6 mb-3">
+              <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+              {{ field|add_class:"form-control" }}
+              {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+              {% endif %}
+              {% if field.errors %}
+                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+              {% endif %}
+            </div>
+        {% endif %}
       {% endif %}
-      {% if field.errors %}
-        <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
-      {% endif %}
-    </div>
-  {% endfor %}
+    {% endfor %}
+  </div>
 
-  <div class="d-flex justify-content-between">
+  {% if item_type.enchantments.exists %}
+    <div class="mb-3">
+      <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#enchantment-fields">
+        Add Enchantments
+      </button>
+      <div class="collapse mt-3" id="enchantment-fields">
+        <div class="row">
+          {% for field in form %}
+            {% if field.field.is_enchantment %}
+              <div class="col-md-6 mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {{ field|add_class:"form-control" }}
+                {% if field.help_text %}
+                  <div class="form-text">{{ field.help_text }}</div>
+                {% endif %}
+                {% if field.errors %}
+                  <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="d-flex justify-content-between mt-4">
     <button
       type="button"
       class="btn btn-outline-secondary"
@@ -35,6 +78,6 @@
       ← Back
     </button>
 
-    <button type="submit" class="btn btn-success">Submit Order</button>
+    <button type="submit" class="btn btn-primary">Submit Order</button>
   </div>
 </form>

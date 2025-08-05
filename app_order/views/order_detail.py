@@ -36,9 +36,9 @@ class OrderDetailView(OrdersSortingMixin, EnrichedItemTypeMixin, ListView):
         if material_filter:
             queryset = queryset.filter(material__id=material_filter)
 
-        enchantment_ids = self.request.GET.getlist("enchantments")
-        if enchantment_ids:
-            queryset = queryset.filter(enchantments__id__in=enchantment_ids).distinct()
+        enchantment_filter = self.request.GET.getlist("enchantments")
+        if enchantment_filter :
+            queryset = queryset.filter(enchantments__id__in=enchantment_filter ).distinct()
 
         return self.apply_ordering(queryset)
 
@@ -54,16 +54,15 @@ class OrderDetailView(OrdersSortingMixin, EnrichedItemTypeMixin, ListView):
         context = super().get_context_data(**kwargs)
 
         material_filter = self.request.GET.get('material')
-        enchantment_ids = self.request.GET.getlist("enchantments")
+        enchantment_filter = self.request.GET.getlist("enchantments")
 
         context.update({
             'item_type': self.item_type,
             'materials': Material.objects.filter(applicable_to=self.item_type).values_list('id', 'name'),
             'selected_material': int(material_filter) if material_filter else None,
-            'enchantment_ids': enchantment_ids,
+            'enchantment_filter': enchantment_filter,
             'sort_fields': self.allowed_sort_fields,
             'item_types': ItemType.objects.all(),
-            'selected_type': self.item_type,
             'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
             'enriched_types_json': json.dumps(self.get_enriched_item_types())
         })
