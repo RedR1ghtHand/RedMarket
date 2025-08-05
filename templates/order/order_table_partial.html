@@ -1,5 +1,8 @@
-<div id="orders-table-div" style="">
-  <table id="orders-table" class="table table-hover align-middle text-center table-striped border sh-b">
+<div id="orders-table">
+
+  {% include "order/filters_partial.html" %}
+
+  <table class="table table-hover align-middle text-center table-striped border sh-b">
       <thead>
         <tr>
           <th class="text-start fw-normal">Seller</th>
@@ -13,37 +16,54 @@
             </th>
           {% endif %}
           <th>
-            <button class="btn p-0"
-                    hx-get="?{% if selected_material %}&material={{ selected_material }}{% endif %}&sort=price&direction={% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
-                    hx-target="#orders-table-div"
-                    hx-swap="outerHTML"
-                    hx-headers='{"HX-Request-Partial": "table"}'
-            id="price-btn">
-              Price
-              {% if current_sort == 'price' %}
-                {% if current_direction == 'asc' %}
-                  ▲
-                {% else %}
-                  ▼
+            <form id="price-sort-form"
+                  hx-get="{% url 'order_detail' slug=item_type.slug %}"
+                  hx-target="#orders-table"
+                  hx-swap="outerHTML"
+                  hx-headers='{"HX-Request-Partial": "table"}'
+                  hx-include="#current-filters"
+                  class="mb-0">
+
+              <input type="hidden" name="sort" value="price">
+              <input type="hidden" name="direction"
+                     value="{% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}">
+
+              <button class="btn p-0" type="submit" id="price-btn">
+                Price
+                {% if current_sort == 'price' %}
+                  {% if current_direction == 'asc' %}
+                    ▲
+                  {% else %}
+                    ▼
+                  {% endif %}
                 {% endif %}
-              {% endif %}
-            </button>
+              </button>
+            </form>
           </th>
           <th>
-            <button class="btn p-0"
-                    hx-get="?{% if selected_material %}&material={{ selected_material }}{% endif %}&sort=quantity&direction={% if current_sort == 'quantity' and current_direction == 'asc' %}desc{% else %}asc{% endif %}"
-                    hx-target="#orders-table"
-                    hx-swap="outerHTML"
-                    hx-headers='{"HX-Request-Partial": "table"}'>
-              Quantity
-              {% if current_sort == 'quantity' %}
-                {% if current_direction == 'asc' %}
-                  ▲
-                {% else %}
-                  ▼
+            <form id="quantity-sort-form"
+                  hx-get="{% url 'order_detail' slug=item_type.slug %}"
+                  hx-target="#orders-table"
+                  hx-swap="outerHTML"
+                  hx-headers='{"HX-Request-Partial": "table"}'
+                  hx-include="#current-filters"
+                  class="mb-0">
+
+              <input type="hidden" name="sort" value="quantity">
+              <input type="hidden" name="direction"
+                     value="{% if current_sort == 'quantity' and current_direction == 'asc' %}desc{% else %}asc{% endif %}">
+
+              <button class="btn p-0" type="submit" id="quantity-btn">
+                Quantity
+                {% if current_sort == 'quantity' %}
+                  {% if current_direction == 'asc' %}
+                    ▲
+                  {% else %}
+                    ▼
+                  {% endif %}
                 {% endif %}
-              {% endif %}
-            </button>
+              </button>
+            </form>
           </th>
           <th></th>
         </tr>
@@ -53,4 +73,13 @@
         {% include "order/order_table_rows.html" %}
       </tbody>
   </table>
+
+  <form id="current-filters">
+    {% if selected_material %}
+      <input type="hidden" name="material" value="{{ selected_material }}">
+    {% endif %}
+    {% for eid in enchantment_filter %}
+      <input type="hidden" name="enchantments" value="{{ eid }}">
+    {% endfor %}
+  </form>
 </div>

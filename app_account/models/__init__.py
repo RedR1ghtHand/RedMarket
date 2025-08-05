@@ -1,2 +1,2 @@
-from .user import User
 from .manager import UserManager
+from .user import User
