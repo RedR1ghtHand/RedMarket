@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -28,7 +27,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=35, unique=True)),
                 ('slug', models.SlugField(blank=True, unique=True)),
                 ('description', models.TextField()),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='item_types', to='app_item.category')),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='item_types',
+                                               to='app_item.category')),
             ],
         ),
         migrations.CreateModel(
@@ -38,7 +38,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=50, unique=True)),
                 ('description', models.TextField(blank=True)),
                 ('max_level', models.PositiveIntegerField(default=1)),
-                ('applicable_to', models.ManyToManyField(blank=True, related_name='enchantments', to='app_item.itemtype')),
+                ('applicable_to',
+                 models.ManyToManyField(blank=True, related_name='enchantments', to='app_item.itemtype')),
             ],
         ),
         migrations.CreateModel(
