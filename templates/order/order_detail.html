@@ -23,8 +23,12 @@
     </div>
   </div>
 
-  {% include "order/filters_partial.html" %}
-
   {% include "order/order_table_partial.html" %}
 </div>
+<script>
+  function togglePriceDirection() {
+    const input = document.getElementById("price-direction");
+    input.value = input.value === "asc" ? "desc" : "asc";
+  }
+</script>
 {% endblock %}

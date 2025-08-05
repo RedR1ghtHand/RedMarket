@@ -3,14 +3,14 @@
     <form
       id="material-filter-form"
       hx-get="{% url 'order_detail' slug=item_type.slug %}"
-      hx-target="#orders-table-div"
-      hx-include="#material-filter-form, #enchantment-filter-form, #price-btn"
+      hx-target="#orders-table"
+      hx-include="#material-filter-form, #enchantment-filter-form, #current-sort"
       hx-push-url="true"
       hx-headers='{"HX-Request-Partial": "table"}'
       class="input-group sh-b">
       <label  class="input-group-text rounded-0" for="materialSelect">Filter Material</label>
       <select
-        class="form-select"
+        class="form-select rounded-0"
         id="materialSelect"
         name="material"
         onchange="this.form.requestSubmit();">
@@ -19,12 +19,6 @@
           <option value="{{ id }}" {% if selected_material == id %}selected{% endif %}>{{ name.capitalize }}</option>
         {% endfor %}
       </select>
-      {% if current_sort %}
-        <input type="hidden" name="sort" value="{{ current_sort }}">
-      {% endif %}
-      {% if current_direction %}
-        <input type="hidden" name="direction" value="{{ current_direction }}">
-      {% endif %}
     </form>
   </div>
 
@@ -32,8 +26,8 @@
   <form
     id="enchantment-filter-form"
     hx-get="{% url 'order_detail' slug=item_type.slug %}"
-    hx-target="#orders-table-div"
-    hx-include="#enchantment-filter-form, #material-filter-form"
+    hx-target="#orders-table"
+    hx-include="#enchantment-filter-form, #material-filter-form, #current-sort"
     hx-push-url="true"
     hx-headers='{"HX-Request-Partial": "table"}'
     class="dropdown sh-b"
@@ -53,7 +47,7 @@
               id="enchant-btn-{{ eid }}"
               name="enchantments"
               value="{{ eid }}"
-              {% if eid in selected_enchantments %}checked{% endif %}
+              {% if eid in enchantment_filter %}checked{% endif %}
               autocomplete="off"
             >
             <label class="btn btn-outline-secondary btn-sm" for="enchant-btn-{{ eid }}">
@@ -78,6 +72,9 @@
         </button>
       </div>
     </div>
+  </form>
+
+  <form id="current-sort">
     {% if current_sort %}
       <input type="hidden" name="sort" value="{{ current_sort }}">
     {% endif %}
@@ -85,6 +82,7 @@
       <input type="hidden" name="direction" value="{{ current_direction }}">
     {% endif %}
   </form>
+
 </div>
 
 <script>

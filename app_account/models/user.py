@@ -5,6 +5,7 @@ from django.db import models
 from app_social.models import Reputation
 from .manager import UserManager
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     mc_username = models.CharField(max_length=30, blank=True, null=True, unique=True)

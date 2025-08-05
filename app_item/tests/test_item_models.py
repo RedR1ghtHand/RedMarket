@@ -1,6 +1,6 @@
 import pytest
-from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
+
 from app_item.models import Category, ItemType, Material, Enchantment
 
 
@@ -74,4 +74,3 @@ class TestItemModels:
 
         invalid_level = 5
         assert invalid_level > enchantment.max_level
-

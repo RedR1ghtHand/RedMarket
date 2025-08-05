@@ -1,6 +1,7 @@
 import json
 
 from django.conf import settings
+from django.db.models import Count, Q
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
@@ -17,10 +18,24 @@ class OrderDetailView(OrdersSortingMixin, EnrichedItemTypeMixin, ListView):
     paginate_by = 10
     allowed_sort_fields = ['price', 'quantity']
 
-    def dispatch(self, request, *args, **kwargs):
-        self.slug = kwargs.get('slug')
-        self.item_type = get_object_or_404(ItemType, slug=self.slug)
-        return super().dispatch(request, *args, **kwargs)
+    @property
+    def slug(self):
+        return self.kwargs.get('slug')
+
+    @property
+    def item_type(self):
+        if not hasattr(self, '_item_type'):
+            slug = self.slug
+            if not slug:
+                raise ValueError("slug is required for resolving item_type")
+            self._item_type = get_object_or_404(ItemType, slug=slug)
+        return self._item_type
+
+    @property
+    def materials(self):
+        if not hasattr(self, '_materials'):
+            self._materials = list(Material.objects.filter(applicable_to=self.item_type).values_list('id', 'name'))
+        return self._materials
 
     def get_queryset(self):
         queryset = (
@@ -37,8 +52,14 @@ class OrderDetailView(OrdersSortingMixin, EnrichedItemTypeMixin, ListView):
             queryset = queryset.filter(material__id=material_filter)
 
         enchantment_filter = self.request.GET.getlist("enchantments")
-        if enchantment_filter :
-            queryset = queryset.filter(enchantments__id__in=enchantment_filter ).distinct()
+        if enchantment_filter:
+            queryset = queryset.filter(enchantments__id__in=enchantment_filter)
+            queryset = queryset.annotate(
+                matched_enchantments=Count('enchantments', filter=Q(enchantments__id__in=enchantment_filter),
+                                           distinct=True)
+            ).filter(
+                matched_enchantments=len(enchantment_filter)
+            )
 
         return self.apply_ordering(queryset)
 
@@ -58,7 +79,7 @@ class OrderDetailView(OrdersSortingMixin, EnrichedItemTypeMixin, ListView):
 
         context.update({
             'item_type': self.item_type,
-            'materials': Material.objects.filter(applicable_to=self.item_type).values_list('id', 'name'),
+            'materials': self.materials,
             'selected_material': int(material_filter) if material_filter else None,
             'enchantment_filter': enchantment_filter,
             'sort_fields': self.allowed_sort_fields,

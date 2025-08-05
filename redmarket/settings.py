@@ -196,5 +196,5 @@ LOGGING = {
 
 MC_SERVER_WISPER_COMMAND = '/msg'  # /msg, /tell, /w
 
-REPUTATION_BADGES_POSITIVE = ['fast trader', 'positive', 'just F', 'polite']
+REPUTATION_BADGES_POSITIVE = ['fast trader', 'positive', 'just F', 'polite', "cool jaba"]
 REPUTATION_BADGES_NEGATIVE = ['wrong product', 'ignoring', 'rude', 'wrong price']
