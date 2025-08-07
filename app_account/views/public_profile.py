@@ -5,12 +5,12 @@ from django.views.generic import ListView
 
 from app_account.models import User
 from app_item.models import Category
-from app_order.mixins import OrdersSortingMixin
+from app_order.mixins import OrderSortingMixin
 from app_order.models import Order, OrderEnchantment
 from app_social.mixins import ReputationMixin
 
 
-class PublicProfileView(ReputationMixin, OrdersSortingMixin, ListView):
+class PublicProfileView(ReputationMixin, OrderSortingMixin, ListView):
     model = Order
     template_name = 'account/public_profile.html'
     context_object_name = 'orders'

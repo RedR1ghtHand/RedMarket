@@ -1,4 +1,7 @@
-class OrdersSortingMixin:
+from django.utils.functional import cached_property
+
+
+class OrderSortingMixin:
     """
     Mixin to provide reusable ordering (sorting) logic for Django class-based views.
     Allows views to define `allowed_sort_fields` and automatically apply sorting
@@ -6,9 +9,16 @@ class OrdersSortingMixin:
     """
     allowed_sort_fields = []
 
+    @cached_property
+    def sorting_context(self):
+        return {
+            "sort": self.request.GET.get("sort"),
+            "direction": self.request.GET.get("direction", "asc"),
+        }
+
     def get_ordering_params(self):
-        sort = self.request.GET.get('sort')
-        direction = self.request.GET.get('direction', 'asc')
+        sort = self.sorting_context["sort"]
+        direction = self.sorting_context["direction"]
 
         if sort in self.allowed_sort_fields:
             return sort if direction == 'asc' else f'-{sort}'
@@ -19,9 +29,3 @@ class OrdersSortingMixin:
         if ordering:
             return queryset.order_by(ordering)
         return queryset
-
-    def get_sort_context(self):
-        return {
-            'current_sort': self.request.GET.get('sort'),
-            'current_direction': self.request.GET.get('direction', 'asc'),
-        }

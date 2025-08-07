@@ -71,10 +71,12 @@
     <tr id="load-more">
         <td colspan="10" class="text-center">
             <button class="btn w-100"
-                    hx-get="?page={{ page_obj.next_page_number }}{% if selected_material %}&material={{ selected_material }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if current_direction %}&direction={{ current_direction }}{% endif %}"
+                    hx-get="?page={{ page_obj.next_page_number }}"
                     hx-target="#load-more"
                     hx-swap="outerHTML"
-                    hx-headers='{"HX-Request-Partial": "rows"}'>Load More</button>
+                    hx-headers='{"HX-Request-Partial": "rows"}'
+                    hx-include="#material-filter-form, #enchantment-filter-form, #current-sort">Load More</button>
+
         </td>
     </tr>
 {% endif %}
