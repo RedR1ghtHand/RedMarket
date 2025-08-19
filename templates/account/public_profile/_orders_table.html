@@ -1,0 +1,17 @@
+{% load static %}
+{% load custom_tags %}
+
+<div id="orders-table" class="mb-5">
+
+  {% include "account/public_profile/_filters.html" %}
+
+  <div id="orders-table-header">
+    {% include "account/public_profile/_header_sm.html" %}
+    {% include "account/public_profile/_header_lg.html" %}
+  </div>
+
+  <div id="orders-table-body" class="d-flex flex-column">
+    {% include "account/public_profile/_table_rows.html" %}
+  </div>
+
+</div>

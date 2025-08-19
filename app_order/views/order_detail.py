@@ -3,6 +3,7 @@ import json
 from django.conf import settings
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
+from django.utils.functional import cached_property
 from django.views.generic import ListView
 
 from app_item.models import ItemType, Material
@@ -12,7 +13,7 @@ from app_order.models import Order, OrderEnchantment
 
 class OrderDetailView(OrderSortingMixin, OrderFilteringMixin, EnrichedItemTypeMixin, ListView):
     model = Order
-    template_name = 'order/order_detail.html'
+    template_name = 'order/detail_page/base.html'
     context_object_name = 'orders'
     paginate_by = 10
     allowed_sort_fields = ['price', 'quantity']
@@ -21,20 +22,16 @@ class OrderDetailView(OrderSortingMixin, OrderFilteringMixin, EnrichedItemTypeMi
     def slug(self):
         return self.kwargs.get('slug')
 
-    @property
+    @cached_property
     def item_type(self):
-        if not hasattr(self, '_item_type'):
-            slug = self.slug
-            if not slug:
-                raise ValueError("slug is required for resolving item_type")
-            self._item_type = get_object_or_404(ItemType, slug=slug)
-        return self._item_type
+        slug = self.slug
+        if not slug:
+            raise ValueError("slug is required for resolving item_type")
+        return get_object_or_404(ItemType, slug=slug)
 
-    @property
+    @cached_property
     def materials(self):
-        if not hasattr(self, '_materials'):
-            self._materials = list(Material.objects.filter(applicable_to=self.item_type).values_list('id', 'name'))
-        return self._materials
+        return list(Material.objects.filter(applicable_to=self.item_type).values_list('id', 'name'))
 
     def get_queryset(self):
         queryset = (
@@ -46,17 +43,20 @@ class OrderDetailView(OrderSortingMixin, OrderFilteringMixin, EnrichedItemTypeMi
             .order_by('-updated_at')
         )
 
-        queryset = self.filter_by_material(queryset)
-        queryset = self.filter_by_enchantments(queryset)
+        queryset = self.apply_filters(queryset)
         return self.apply_ordering(queryset)
+
+    def get_htmx_template(self, partial):
+        partial_templates = {
+            "body": "order/detail_page/_body.html",
+            "table": "order/detail_page/_orders_table.html",
+            "rows": "order/detail_page/_table_rows.html"
+        }
+        return partial_templates.get(partial, self.template_name)
 
     def get_template_names(self):
         if self.request.htmx:
-            header = self.request.headers.get("HX-Request-Partial")
-            return {
-                "table": ["order/order_table_partial.html"],
-                "rows": ["order/order_table_rows.html"]
-            }.get(header, [self.template_name])
+            return [self.get_htmx_template(self.request.headers.get("HX-Request-Partial"))]
         return [self.template_name]
 
     def get_context_data(self, **kwargs):

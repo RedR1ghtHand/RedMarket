@@ -1,0 +1,58 @@
+{% load static %}
+{% load custom_tags %}
+
+<div id="user-card" class="card mb-3 border-0 mt-5 align-items-start" style="max-width: 540px;">
+  <div class="row align-items-center">
+    <div class="col-md-4 text-center p-0">
+      <img src="https://mc-heads.net/head/{{ public_user.mc_username }}/128"
+           class="img-fluid"
+           alt="{{ public_user.mc_username }}">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body ps-0">
+        <h5 class="card-title mb-1">{{ public_user.mc_username }}</h5>
+        <p class="card-text mb-2 d-flex align-items-center">
+          <span class="me-1">{{ public_user.reputation_score }}</span>
+          <img src="{% static public_user.reputation_score|rep_icon %}"
+               width="18"
+               alt="Reputation icon">
+        </p>
+        <div class="d-flex gap-2">
+          <button type="button"
+                  class="btn btn-sm btn-outline-secondary flex-fill rounded-0"
+                  onclick="location.href='{% url 'start_message' public_user.mc_username %}'">
+            Message
+          </button>
+
+          <div class="btn-group flex-fill" role="group">
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-0"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+              Reputation
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Option 1</a></li>
+              <li><a class="dropdown-item" href="#">Option 2</a></li>
+              <li><a class="dropdown-item" href="#">Option 3</a></li>
+              <li><a class="dropdown-item" href="#">Option 4</a></li>
+            </ul>
+
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-0"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+              Report
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Option 1</a></li>
+              <li><a class="dropdown-item" href="#">Option 2</a></li>
+              <li><a class="dropdown-item" href="#">Option 3</a></li>
+              <li><a class="dropdown-item" href="#">Option 4</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

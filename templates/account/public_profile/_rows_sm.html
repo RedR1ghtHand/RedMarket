@@ -1,0 +1,68 @@
+{% load static %}
+{% load custom_tags %}
+
+<div class="d-grid gap-2"
+     style="grid-template-columns: auto 60px 60px 60px; grid-auto-rows: auto;">
+
+  <div class="d-flex align-items-center gap-2 ps-1">
+    <a hx-get="{% url 'order_detail' order.item_type.slug %}"
+       hx-target="#profile-container"
+       hx-push-url="true"
+       hx-swap="outerHTML"
+       hx-headers='{"HX-Request-Partial": "body"}'
+       class="d-flex align-items-center gap-2 text-decoration-none"
+       href="">
+      <img src="{% static 'media/item_types/'|add:order.item_type.slug|add:'.png' %}"
+           alt="?" class="rounded-circle" width="24" height="24">
+      {{ order.item_type|capfirst }}
+    </a>
+  </div>
+
+  <div class="d-flex justify-content-center align-items-center">
+    <span class="text-price">{{ order.price }}</span>
+    <img src="{% static 'media/price-icon.png' %}" alt="Price" class="ms-1 mb-1" width="14">
+  </div>
+
+  <div class="d-flex justify-content-center align-items-center">
+    <span>{{ order.quantity }}</span>
+    <img src="{% static 'media/quantity-icon.png' %}" alt="Qty" class="ms-1" width="14">
+  </div>
+
+  <div class="d-flex justify-content-end align-items-center pe-1">
+    <button class="btn btn-sm btn-success"
+            onclick="handleBuy(this)"
+            data-clipboard="{{ mc_server_wisper_command }} {{ order.created_by.mc_username }} Hi! I want to buy - {{ item_type.name|capfirst }}[{{ order.material }}] x1 for {{ order.price }}. RedMarket">
+      Buy
+    </button>
+  </div>
+
+  {% if order.material or order.orderenchantment_set.exists %}
+  <div class="d-flex align-items-center gap-2 ps-1" style="grid-column: 1 / span 1;">
+    {% if order.material %}
+    {% if order.material.icon %}
+    <img src="{{ order.material.icon.url }}" alt="Material" width="20">
+    {% endif %}
+    <span>{{ order.material.name|capfirst }}</span>
+    {% endif %}
+  </div>
+
+  <div class="d-flex flex-column" style="grid-column: 2 / span 3; overflow: hidden;">
+    {% with enchant_count=order.orderenchantment_set.count %}
+    {% if enchant_count > 0 %}
+    <button class="btn btn-sm text-enchant p-0 text-start"
+            data-bs-toggle="collapse"
+            data-bs-target="#enchants-{{ order.id }}">
+      {{ "★"|repeat:enchant_count }}
+    </button>
+    <div id="enchants-{{ order.id }}" class="collapse mt-1 text-start">
+      <ul class="list-unstyled small mb-0">
+        {% for oe in order.orderenchantment_set.all %}
+        <li>{{ oe.enchantment.name }} <span class="text-muted">{{ oe.level|romanize }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+  </div>
+  {% endif %}
+</div>

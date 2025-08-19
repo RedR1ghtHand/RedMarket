@@ -1,0 +1,69 @@
+{% load static %}
+{% load custom_tags %}
+
+<div class="d-grid gap-2"
+     style="grid-template-rows: repeat(2, auto); grid-template-columns: auto 60px 60px 60px;">
+
+  <div class="d-flex flex-column text-center " style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+    {% with enchant_count=order.orderenchantment_set.count %}
+    {% if enchant_count > 0 %}
+    <button class="btn btn-sm text-enchant p-0" data-bs-toggle="collapse" data-bs-target="#enchants-{{ order.id }}">
+      {{ "★"|repeat:enchant_count }}
+    </button>
+    <div id="enchants-{{ order.id }}" class="collapse mt-1 text-start">
+      <ul class="list-unstyled small mb-0">
+        {% for oe in order.orderenchantment_set.all %}
+        <li>{{ oe.enchantment.name }} <span class="text-muted">{{ oe.level|romanize }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% else %}
+    -
+    {% endif %}
+    {% endwith %}
+  </div>
+
+  <div class="d-flex align-items-center">
+    {% if order.material and order.material.icon %}
+    <img src="{{ order.material.icon.url }}" alt="Material" width="20">
+    {% endif %}
+  </div>
+
+  <div class="d-flex justify-content-center align-items-center">
+    <span class="text-price">{{ order.price }}</span>
+    <img src="{% static 'media/price-icon.png' %}" alt="Price" class="ms-1 mb-1" width="14">
+  </div>
+
+  <div class="d-flex justify-content-center align-items-center">
+    <span>{{ order.quantity }}</span>
+    <img src="{% static 'media/quantity-icon.png' %}" alt="Qty" class="ms-1" width="14">
+  </div>
+
+  <div class="d-flex align-items-center gap-2 ps-1">
+    <a hx-get="{% url 'public_profile' order.created_by.mc_username %}"
+       hx-target="#orders-table-container"
+       hx-push-url="true"
+       hx-swap="outerHTML"
+       hx-headers='{"HX-Request-Partial": "body"}'
+       class="d-flex align-items-center gap-2 text-decoration-none"
+       href="">
+      <img src="https://mc-heads.net/avatar/{{ order.created_by.mc_username }}/24"
+           alt="MC Head" class="rounded-circle" width="24" height="24">
+      {{ order.created_by.mc_username }}
+    </a>
+  </div>
+
+  <div class="d-flex align-items-center gap-0 text-muted">
+    <span>{{ order.created_by.reputation_score }}</span>
+    <img style="padding-left: 1px;" src="{% static order.created_by.reputation_score|rep_icon %}" alt="Rep" width="16">
+  </div>
+
+  <div class="d-flex justify-content-end align-items-center pe-1" style="grid-column: 4;">
+    <button class="btn btn-sm btn-success"
+            onclick="handleBuy(this)"
+            data-clipboard="{{ mc_server_wisper_command }} {{ order.created_by.mc_username }} Hi! I want to buy - {{ item_type.name|capfirst }}[{{ order.material }}] x1 for {{ order.price }}. RedMarket">
+      Buy
+    </button>
+  </div>
+
+</div>

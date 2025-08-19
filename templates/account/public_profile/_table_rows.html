@@ -1,0 +1,26 @@
+{% load static %}
+{% load custom_tags %}
+
+{% for order in orders %}
+<div class="order-row d-none d-md-grid align-items-center py-2 border-bottom"
+     style="grid-template-columns: 0.9fr 0.8fr 1fr 0.8fr 0.8fr auto;">
+  {% include "account/public_profile/_rows_lg.html" %}
+</div>
+
+<div class="order-card d-md-none border-bottom py-2">
+  {% include "account/public_profile/_rows_sm.html" %}
+</div>
+{% endfor %}
+
+{% if page_obj.has_next %}
+<div id="load-more" class="text-center py-3">
+  <button class="btn w-100"
+          hx-get="?page={{ page_obj.next_page_number }}"
+          hx-target="#load-more"
+          hx-swap="outerHTML"
+          hx-headers='{"HX-Request-Partial": "rows"}'
+          hx-include="#category-filter-form, #current-sort">
+    Load More
+  </button>
+</div>
+{% endif %}

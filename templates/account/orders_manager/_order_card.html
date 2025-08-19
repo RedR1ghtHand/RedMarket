@@ -1,0 +1,94 @@
+{% load static %}
+{% load custom_tags %}
+
+<div id="order-{{ order.id }}" class="border p-2 sh-b">
+  <div class="row px-2">
+    <div class="d-flex align-items-center gap-2 ps-1 col">
+      <a hx-get="{% url 'order_detail' order.item_type.slug %}"
+         hx-target="#om-container"
+         hx-push-url="true"
+         hx-swap="outerHTML"
+         hx-headers='{"HX-Request-Partial": "body"}'
+         class="d-flex align-items-center gap-2 text-decoration-none"
+         href="">
+        <img src="{% static 'media/item_types/'|add:order.item_type.slug|add:'.png' %}"
+             alt="?" class="rounded-circle" width="24" height="24">
+        {{ order.item_type|capfirst }}
+      </a>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center col-3">
+      <span class="text-price">{{ order.price }}</span>
+      <img src="{% static 'media/price-icon.png' %}" alt="Price" class="ms-1 mb-1" width="14">
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center col-3">
+      <span>{{ order.quantity }}</span>
+      <img src="{% static 'media/quantity-icon.png' %}" alt="Qty" class="ms-1" width="14">
+    </div>
+
+    <div class="d-flex justify-content-end align-items-center pe-1 col-1">
+      <div class="dropdown">
+        <button class="btn btn-sm" data-bs-toggle="dropdown">
+          ⋮
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <a class="dropdown-item"
+               hx-get="{% url 'order_card_manager' order.id %}"
+               hx-headers='{"HX-Request-Partial": "edit"}'
+               hx-target="#mainModal .modal-content"
+               hx-trigger="click"
+               data-bs-toggle="modal"
+               data-bs-target="#orderModal">
+              Edit
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item text-danger"
+               hx-get="{% url 'order_card_manager' order.id %}"
+               hx-headers='{"HX-Request-Partial": "delete"}'
+               hx-target="#mainModal .modal-content"
+               hx-trigger="click"
+               data-bs-toggle="modal"
+               data-bs-target="#orderModal">
+              Delete
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {% if order.material or order.orderenchantment_set.exists %}
+    <div class="row px-2">
+      <div class="d-flex align-items-center gap-2 ps-1 col-5">
+        {% if order.material %}
+          {% if order.material.icon %}
+          <img src="{{ order.material.icon.url }}" alt="Material" width="20">
+          {% endif %}
+          <span>{{ order.material.name }}</span>
+        {% endif %}
+      </div>
+
+      <div class="d-flex flex-column col-7">
+        {% with enchant_count=order.orderenchantment_set.count %}
+        {% if enchant_count > 0 %}
+        <button class="btn btn-sm text-enchant p-0 text-start"
+                data-bs-toggle="collapse"
+                data-bs-target="#enchants-{{ order.id }}">
+          {{ "★"|repeat:enchant_count }}
+        </button>
+        <div id="enchants-{{ order.id }}" class="collapse mt-1 text-start">
+          <ul class="list-unstyled small mb-0">
+            {% for oe in order.orderenchantment_set.all %}
+            <li>{{ oe.enchantment.name }} <span class="text-muted">{{ oe.level|romanize }}</span></li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
+      </div>
+    </div>
+  {% endif %}
+</div>

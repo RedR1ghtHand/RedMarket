@@ -1,14 +1,11 @@
-from app_order.forms import CreateOrderForm
+from django import forms
+from app_order.models import Order
 
-
-class OrderManagerForm(CreateOrderForm):
-    class Meta(CreateOrderForm.Meta):
-        fields = ['price', 'quantity']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields.pop('material', None)
-
-        for field_name in list(self.fields.keys()):
-            if field_name.startswith('enchantment_'):
-                self.fields.pop(field_name)
+class OrderUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ["price", "quantity"]
+        widgets = {
+            "price": forms.NumberInput(attrs={"class": "form-control form-control-sm"}),
+            "quantity": forms.NumberInput(attrs={"class": "form-control form-control-sm"}),
+        }

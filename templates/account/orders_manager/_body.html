@@ -1,0 +1,7 @@
+<div id="om-container" class="container">
+  <div class="accordion my-5" id="accordionPanelsStayOpenExample">
+    {% for category in categories %}
+      {% include "account/orders_manager/_category_accordion.html" %}
+    {% endfor %}
+  </div>
+</div>

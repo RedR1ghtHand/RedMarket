@@ -9,18 +9,18 @@ from app_order.models import Order, OrderEnchantment
 class Step1SelectItemType(View):
     def get(self, request):
         form = SelectItemTypeForm()
-        return render(request, "order/step1_select_type.html", {"form": form})
+        return render(request, "order/create_order/step1_select_type.html", {"form": form})
 
     def post(self, request):
         form = SelectItemTypeForm(request.POST)
         if form.is_valid():
             item_type = form.cleaned_data["item_type"]
             create_form = CreateOrderForm(item_type=item_type)
-            return render(request, "order/step2_fill_form.html", {
+            return render(request, "order/create_order/step2_fill_form.html", {
                 "form": create_form,
                 "item_type": item_type
             })
-        return render(request, "order/step1_select_type.html", {"form": form})
+        return render(request, "order/create_order/step1_select_type.html", {"form": form})
 
 
 class Step2SubmitOrder(View):
@@ -43,5 +43,5 @@ class Step2SubmitOrder(View):
                     enchantment=enchantment,
                     level=level
                 )
-            return render(request, "order/order_success.html")
-        return render(request, "order/step2_fill_form.html", {"form": form, "item_type": item_type})
+            return render(request, "order/create_order/order_success.html")
+        return render(request, "order/create_order/step2_fill_form.html", {"form": form, "item_type": item_type})

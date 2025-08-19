@@ -1,0 +1,23 @@
+<div class="p-4 text-center">
+  <h4 class="text-success mb-4">Order created successfully!</h4>
+
+  <div class="d-flex justify-content-center gap-3">
+    <button
+            type="button"
+            class="btn btn-secondary"
+            x-on:click="hideMainModal()"
+    >
+      Close
+    </button>
+
+    <button
+            type="button"
+            class="btn btn-primary"
+            hx-get="{% url 'select_item_type' %}"
+            hx-target="#mainModal .modal-content"
+            hx-swap="innerHTML"
+    >
+      Add Another Order
+    </button>
+  </div>
+</div>

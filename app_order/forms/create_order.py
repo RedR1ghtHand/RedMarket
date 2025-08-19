@@ -10,7 +10,6 @@ class SelectItemTypeForm(forms.Form):
         label='Select Item Type'
     )
 
-
 class CreateOrderForm(forms.ModelForm):
     class Meta:
         model = Order
@@ -32,6 +31,12 @@ class CreateOrderForm(forms.ModelForm):
             else:
                 self.fields.pop('material', None)
 
+            existing = {}
+            if self.instance.pk:
+                existing = {
+                    e.enchantment_id: e.level
+                    for e in self.instance.orderenchantment_set.all()
+                }
             self.enchantment_fields = []
 
             for enchantment in item_type.enchantments.all():
@@ -40,6 +45,7 @@ class CreateOrderForm(forms.ModelForm):
                     min_value=1,
                     max_value=enchantment.max_level,
                     required=False,
+                    initial=existing.get(enchantment.id, None),
                     widget=forms.NumberInput(attrs={'placeholder': f'1-{enchantment.max_level}'})
                 )
                 self.fields[str(enchantment.id)].is_enchantment = True

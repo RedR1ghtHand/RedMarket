@@ -30,12 +30,15 @@ def timeago(value):
 
 @register.filter
 def rep_icon(score):
-    if score < 0:
-        return 'media/rep-icon-low.png'
-    elif score <= 10:
-        return 'media/rep-icon-normal.png'
+    if score:
+        if int(score) < 0:
+            return 'media/rep-icon-low.png'
+        elif int(score) <= 10:
+            return 'media/rep-icon-normal.png'
+        else:
+            return 'media/rep-icon-high.png'
     else:
-        return 'media/rep-icon-high.png'
+        return 'media/rep-icon-normal.png'
 
 
 @register.filter(name='add_class')

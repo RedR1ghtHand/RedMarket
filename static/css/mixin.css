@@ -37,3 +37,8 @@ color: 9A5CC6;
 .enchant-table {
 width: 155px;
 }
+
+.accordion-button:not(.collapsed) {
+      background-color: rgba(var(--bs-primary-rgb), 0.1);
+      color: var(--bs-body-color);
+  }

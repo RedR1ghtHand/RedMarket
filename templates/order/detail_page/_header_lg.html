@@ -1,0 +1,55 @@
+<div class="d-none d-md-grid border-bottom fw-normal text-muted py-2"
+     style="grid-template-columns: 1.1fr 0.7fr {% if item_type.materials.exists %}0.8fr{% endif %} {% if item_type.enchantments.exists %}1.2fr{% endif %} 1fr 1fr auto;">
+  <div class="text-start">Seller</div>
+  <div class="text-start">Rep</div>
+  {% if item_type.materials.exists %}
+  <div class="text-start ps-3">Material</div>
+  {% endif %}
+  {% if item_type.enchantments.exists %}
+  <div class="text-center">
+    <button class="btn p-0 enchant-table">Enchants</button>
+  </div>
+  {% endif %}
+  <div class="text-center">
+    <form id="price-sort-form"
+          hx-get="{% url 'order_detail' slug=item_type.slug %}"
+          hx-target="#orders-table"
+          hx-swap="outerHTML"
+          hx-headers='{"HX-Request-Partial": "table"}'
+          hx-include="#current-filters"
+          class="mb-0">
+      <input type="hidden" name="sort" value="price">
+      <input type="hidden" name="direction"
+             value="{% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}">
+      <button class="btn p-0" type="submit">
+        Price
+        {% if current_sort == 'price' %}
+        {% if current_direction == 'asc' %}▲{% else %}▼{% endif %}
+        {% else %}
+        ●
+        {% endif %}
+      </button>
+    </form>
+  </div>
+  <div class="text-center">
+    <form id="quantity-sort-form"
+          hx-get="{% url 'order_detail' slug=item_type.slug %}"
+          hx-target="#orders-table"
+          hx-swap="outerHTML"
+          hx-headers='{"HX-Request-Partial": "table"}'
+          hx-include="#current-filters"
+          class="mb-0">
+      <input type="hidden" name="sort" value="quantity">
+      <input type="hidden" name="direction"
+             value="{% if current_sort == 'quantity' and current_direction == 'asc' %}desc{% else %}asc{% endif %}">
+      <button class="btn p-0" type="submit">
+        Quantity
+        {% if current_sort == 'quantity' %}
+        {% if current_direction == 'asc' %}▲{% else %}▼{% endif %}
+        {% else %}
+        ●
+        {% endif %}
+      </button>
+    </form>
+  </div>
+</div>

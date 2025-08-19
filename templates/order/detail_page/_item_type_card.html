@@ -1,14 +1,12 @@
-{% extends "base.html" %}
 {% load static %}
 {% load custom_tags %}
 
-{% block content %}
-<div id="orders-table-container" class="container">
+<div id="item-type-card">
   <div class="mb-3 position-relative" style="margin-top: 6rem; padding-bottom: 4rem;">
     {% include "market_sb.html" %}
   </div>
 
-  <div class="card mb-3 w-50 border-0" >
+  <div class="card mb-3 w-50 border-0">
     <div class="row g-0">
       <div class="col-md-4">
         <img src="{% static 'media/item_types/'|add:item_type.slug|add:'.png' %}" alt="{{ item_type.name }}">
@@ -22,13 +20,4 @@
       </div>
     </div>
   </div>
-
-  {% include "order/order_table_partial.html" %}
 </div>
-<script>
-  function togglePriceDirection() {
-    const input = document.getElementById("price-direction");
-    input.value = input.value === "asc" ? "desc" : "asc";
-  }
-</script>
-{% endblock %}

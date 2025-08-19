@@ -1,25 +1,25 @@
-{% extends "account/base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
 <div class="container text-center">
-    <h2 class="mb-4">Welcome, {{ user.username }}</h2>
+  <h2 class="mb-4">Welcome, {{ user.username }}</h2>
 
-    <ul class="list-group mb-4">
-        <li class="list-group-item">
-          <strong>Email:</strong> {{ user.email }}
-        </li>
-        {% if user.mc_username %}
-          <li class="list-group-item">
-            <strong>Minecraft Username:</strong> {{ user.mc_username }}
-          </li>
-        {% endif %}
-    </ul>
-
+  <ul class="list-group mb-4">
+    <li class="list-group-item">
+      <strong>Email:</strong> {{ user.email }}
+    </li>
     {% if user.mc_username %}
-        <div class="mb-4">
-          <img src="https://mc-heads.net/body/{{ user.mc_username }}/right" alt="MC Head" class="img-fluid">
-        </div>
+    <li class="list-group-item">
+      <strong>Minecraft Username:</strong> {{ user.mc_username }}
+    </li>
     {% endif %}
+  </ul>
+
+  {% if user.mc_username %}
+  <div class="mb-4">
+    <img src="https://mc-heads.net/body/{{ user.mc_username }}/right" alt="MC Head" class="img-fluid">
+  </div>
+  {% endif %}
 
   <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
 </div>

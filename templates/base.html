@@ -1,100 +1,127 @@
 {% load custom_tags %}
 {% load static %}
+
 <html lang="en"
       x-data="{ theme: localStorage.getItem('theme') || 'light' }"
       :data-bs-theme="theme"
       x-init="$watch('theme', val => localStorage.setItem('theme', val))">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/htmx.org@1.9.3"></script>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-
   <title>{% block title %}🛒RedMarket{% endblock %}</title>
 
   <link rel="stylesheet" href="{% static 'css/mixin.css' %}">
   <link rel="stylesheet" href="{% static 'css/mc_font.css' %}">
 </head>
-<body class="d-flex flex-column min-vh-100 mc-font-n">
+<body id="main" class="d-flex flex-column min-vh-100 mc-font-n">
 
-  <nav class="navbar fixed-top bg-body-tertiary border-bottom sh-b">
-    <a class="navbar-brand ps-4 text-brand" href="{% url 'home' %}">RedMarket</a>
+<nav class="navbar fixed-top bg-body-tertiary border-bottom sh-b">
+  <a class="navbar-brand ps-4 text-brand" href="{% url 'home' %}">RedMarket</a>
 
-    <div>
-      <a class="btn" href="{% url 'orders' %}">🛒 Market</a>
+  <div class="d-flex">
+    <a class="btn" href="{% url 'orders' %}">🛒 Market</a>
 
-      <button
-        type="button"
-        class="btn"
-        hx-get="{% url 'select_item_type' %}"
-        hx-target="#mainModal .modal-content"
-        hx-swap="innerHTML"
-      >
-        ➕ Order
-      </button>
+    <button
+            type="button"
+            class="btn"
+            hx-get="{% url 'select_item_type' %}"
+            hx-target="#mainModal .modal-content"
+            hx-swap="innerHTML"
+    >
+      ➕ Order
+    </button>
 
-      <div class="d-inline-flex align-items-center gap-2 me-3">
-        {% block navbar_extra %}{% endblock %}
-
-        <a class="btn" href="{% url 'user' %}">
-          {% if user.is_authenticated and user.mc_username %}
+    <div class="d-inline-flex align-items-center gap-2 me-3">
+      {% if user.is_authenticated and user.mc_username %}
+        <div class="dropdown">
+          <a class="btn dropdown-toggle d-flex align-items-center"
+             href="#"
+             role="button"
+             id="profileDropdown"
+             data-bs-toggle="dropdown"
+             aria-expanded="false">
             <img src="https://mc-heads.net/avatar/{{ user.mc_username }}/20"
-                 alt="MC Head" width="20" height="20">
-          {% endif %}
+                 alt="MC Head" width="20" height="20"
+                 class="me-1">
+            Profile
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+            <li>
+              <a class="dropdown-item {% if request.resolver_match.url_name == 'user' %}active{% endif %}"
+                 href="{% url 'user' %}" title="My Profile">🏠 My Profile</a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if request.resolver_match.url_name == 'thread_detail' %}active{% endif %}"
+                 href="{% url 'thread_detail' %}" title="Messages">✉ Messages</a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if request.resolver_match.url_name == 'order_manager' %}active{% endif %}"
+                 href="{% url 'order_manager' %}" title="My Orders">☲ My Orders</a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if request.resolver_match.url_name == 'settings' %}active{% endif %}"
+                 href="{% url 'settings' %}" title="Settings">🛠 Settings</a>
+            </li>
+          </ul>
+        </div>
+      {% else %}
+        <a class="btn" href="{% url 'user' %}">
           Profile
         </a>
-      </div>
+      {% endif %}
     </div>
-  </nav>
-
-  <div class="pt-navbar">
-      <main id="main-content" class="flex-grow-1">
-          {% block content %}{% endblock %}
-      </main>
   </div>
+</nav>
 
-  <footer class="py-3 mt-auto bg-body-tertiary border-top">
-    <div class="container position-relative" x-data>
+<div class="pt-navbar">
+  <main id="main-content" class="flex-grow-1">
+    {% block content %}{% endblock %}
+  </main>
+</div>
 
-      <div class="position-absolute top-50 translate-middle-y">
-        <div class="d-flex align-items-center gap-2">
-          <span :class="theme === 'dark' ? 'text-muted' : 'text-warning'">☀︎</span>
+<footer class="py-3 mt-auto bg-body-tertiary border-top">
+  <div class="container position-relative" x-data>
 
-          <div class="form-check form-switch m-0 d-flex justify-content-center">
-            <input type="checkbox"
-                   class="form-check-input"
-                   id="themeToggle"
-                   :checked="theme === 'dark'"
-                   @change="theme = theme === 'dark' ? 'light' : 'dark'">
-          </div>
+    <div class="position-absolute top-50 translate-middle-y">
+      <div class="d-flex align-items-center gap-2">
+        <span :class="theme === 'dark' ? 'text-muted' : 'text-warning'">☀︎</span>
 
-          <span :class="theme === 'dark' ? 'text-light' : 'text-muted'">☾</span>
+        <div class="form-check form-switch m-0 d-flex justify-content-center">
+          <input type="checkbox"
+                 class="form-check-input"
+                 id="themeToggle"
+                 :checked="theme === 'dark'"
+                 @change="theme = theme === 'dark' ? 'light' : 'dark'">
         </div>
-      </div>
 
-      <div class="text-center">
-        <small class="text-muted">
-          &copy; {{ now.year }} RedMarket. All rights reserved.
-        </small>
+        <span :class="theme === 'dark' ? 'text-light' : 'text-muted'">☾</span>
       </div>
-
     </div>
-  </footer>
 
-<div
-  id="mainModal"
-  class="modal fade"
-  tabindex="-1"
-  aria-hidden="true"
-  x-init="showMainModal(mainModal)"
->
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="text-center">
+      <small class="text-muted">
+        &copy; {{ now.year }} RedMarket. All rights reserved.
+      </small>
+    </div>
+
+  </div>
+</footer>
+
+<div id="mainModal"
+     class="modal fade"
+     tabindex="-1"
+     aria-hidden="true"
+     x-init="showMainModal(mainModal)">
+  <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content">
     </div>
   </div>
@@ -108,6 +135,12 @@
         }
       });
     }
+
+  window.hideMainModal = function() {
+    const modalEl = document.getElementById('mainModal');
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    if (modal) modal.hide();
+  }
 </script>
 </body>
 </html>

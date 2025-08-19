@@ -1,0 +1,39 @@
+<div class="row g-2 mb-1">
+  <div class="col-12 col-md-6 ">
+    <form
+            id="category-filter-form"
+            hx-get="{% url 'public_profile' public_user.mc_username %}"
+            hx-target="#orders-table"
+            hx-include="#category-filter-form, #current-sort"
+            hx-push-url="true"
+            hx-headers='{"HX-Request-Partial": "table"}'
+            class="input-group sh-b">
+      <label class="input-group-text rounded-0" for="categorySelect">Filter Category</label>
+      <select
+              class="form-select rounded-0"
+              id="categorySelect"
+              name="category"
+              onchange="this.form.requestSubmit();">
+        <option value="">Any</option>
+        {% for id, name in categories %}
+        <option value="{{ id }}" {% if selected_category == id %}selected{% endif %}>{{ name.capitalize }}</option>
+        {% endfor %}
+      </select>
+    </form>
+    <form id="current-sort">
+      {% if current_sort %}
+      <input type="hidden" name="sort" value="{{ current_sort }}">
+      {% endif %}
+      {% if current_direction %}
+      <input type="hidden" name="direction" value="{{ current_direction }}">
+      {% endif %}
+    </form>
+
+    <form id="current-filters">
+      {% if selected_category %}
+      <input type="hidden" name="category" value="{{ selected_category }}">
+      {% endif %}
+    </form>
+  </div>
+</div>
+

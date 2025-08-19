@@ -65,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
+
 ]
 
 ROOT_URLCONF = 'redmarket.urls'
@@ -79,10 +80,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
             ],
         },
     },
 ]
+
+TOMSELECT = {
+    "DEFAULT_CSS_FRAMEWORK": "bootstrap5",
+}
 
 WSGI_APPLICATION = 'redmarket.wsgi.application'
 
