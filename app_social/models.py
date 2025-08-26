@@ -69,7 +69,7 @@ class Thread(models.Model):
                                                between two users (ordered by ID).
     """
     user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="threads_started")
-    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="threads_recieved")
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="threads_received")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -111,8 +111,7 @@ class Message(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.thread.updated_at = timezone.now()
-        self.thread.save(update_fields=['updated_at'])
+        Thread.objects.filter(id=self.thread.id).update(updated_at=timezone.now())
 
     def __str__(self):
         return f"{self.sender.mc_username}: {self.content[:30]}"

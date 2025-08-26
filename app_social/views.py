@@ -1,4 +1,4 @@
-from django.views.generic import View, TemplateView, ListView
+from django.views.generic import View, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
@@ -42,7 +42,7 @@ class MessageRedirectView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('thread_detail'))
 
 
-class ThreadDetailView(ListView):
+class ThreadDetailView(LoginRequiredMixin, ListView):
     model = Message
     template_name = "social/messages/base.html"
     paginate_by = 10
@@ -64,14 +64,12 @@ class ThreadDetailView(ListView):
         self.thread = self.get_thread()
         if not self.thread:
             return Message.objects.none()
-        return (
-            self.thread.messages
-            .order_by("-created_at")
-        )
-
+        return self.thread.messages.order_by("-created_at")
+        
     def get_htmx_template(self, partial):
         partial_templates = {
             "threads": "social/messages/_threads_list.html",
+            "messages": "social/messages/_messages.html",
             "container": "social/messages/_thread_container.html",
             "body": "social/messages/_body.html",
         }
@@ -118,3 +116,4 @@ class ThreadDetailView(ListView):
             create_message_task.delay(self.thread.id, request.user.id, content)
 
         return redirect("thread_detail", thread_id=self.thread.id)
+        

@@ -1,0 +1,28 @@
+<div id="threads-container" class="flex-grow-1 overflow-auto d-flex flex-column gap-2">
+
+  {# Real threads #}
+  {% for t in threads %}
+    {% for user in t.participants %}
+      {% if user != request.user %}
+        <a href="{% url 'thread_detail' t.id %}"
+           class="d-inline-block text-decoration-none">
+          <img src="https://mc-heads.net/avatar/{{ user.mc_username }}/32"
+               alt="{{ user.mc_username }}"
+               class="rounded-circle border border-2">
+        </a>
+      {% endif %}
+    {% endfor %}
+  {% empty %}
+    <p class="text-muted small">No conversations yet.</p>
+  {% endfor %}
+
+  {# Dummy users for scroll test — REMOVE later #}
+  {% for i in "1234567891011121314151617181920"|make_list %}
+    <a href="#" class="d-inline-block">
+      <img src="https://mc-heads.net/avatar/akamant/32"
+           alt="DummyUser{{ i }}"
+           class="rounded-circle border border-2">
+    </a>
+  {% endfor %}
+
+</div>
