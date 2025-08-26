@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import environ
 import os
+from celery.schedules import crontab
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'social_django',
     'django_extensions',
+    'django_celery_beat',
     'formtools',
     'django_htmx',
     'app_item',
@@ -86,10 +88,6 @@ TEMPLATES = [
     },
 ]
 
-TOMSELECT = {
-    "DEFAULT_CSS_FRAMEWORK": "bootstrap5",
-}
-
 WSGI_APPLICATION = 'redmarket.wsgi.application'
 
 
@@ -119,6 +117,15 @@ DATABASES = {
 #         },
 #     }
 # }
+
+# Celery broker
+# CELERY_BROKER_URL = "redis://redis:6379/0"
+# CELERY_RESULT_BACKEND = "redis://redis:6379/1"
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

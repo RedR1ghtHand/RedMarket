@@ -1,0 +1,12 @@
+<div id="messages-container" class="container" style="margin-top: 3rem; padding-bottom: 2rem;">
+  <div class="row">
+    <div class="col-auto pt-2 mt-3 border rounded-3 d-flex flex-column flex-grow-1" style="max-height: 74vh;">
+      {% include "social/messages/_threads_list.html" %}
+    </div>
+
+    <div class="ms-1 col-lg-10 col-9 d-flex flex-column">
+      {% include "social/messages/_user_card.html" %}
+      {% include "social/messages/_thread_container.html" %}
+    </div>
+  </div>
+</div>

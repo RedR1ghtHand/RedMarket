@@ -1,0 +1,76 @@
+<div id="thread-container" class="card d-flex flex-column flex-grow-1" style="max-height: 59vh;">
+  <!-- MESSAGES -->
+  <div class="card-body overflow-auto flex-grow-1 d-flex flex-column-reverse" id="messages">
+
+    <div id="messages-list">
+      {% if page_obj.has_next %}
+        <div class="text-center mb-2">
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            hx-get="?page={{ page_obj.next_page_number }}"
+            hx-target="#thread-container"
+            hx-swap="outerHTML"
+            hx-headers='{"HX-Request-Partial": "container"}'>
+            Load older messages
+          </button>
+        </div>
+      {% endif %}
+      {% for msg in messages %}
+        <div class="d-flex mb-2 {% if msg.sender == request.user %}justify-content-end{% endif %}">
+          <div class="p-2 rounded {% if msg.sender == request.user %}border{% else %}bg-primary text-white border{% endif %}"
+              style="max-width:75%;">
+            <p class="mb-1">
+              {% for user in thread.participants.all %}
+                {% if user != request.user and msg.sender == user %}
+                  <strong>{{ user.username }}</strong><br>
+                {% endif %}
+              {% endfor %}
+              {{ msg.content }}
+            </p>
+            <small class="text-muted">{{ msg.created_at|date:"d.m, H:i" }}</small>
+          </div>
+        </div>
+      {% endfor %}
+
+
+    </div>
+  </div>
+
+  <!-- CHAT FORM -->
+  <form id="chat-form" method="post" class="mt-2 mx-1"
+        hx-post="{% url 'thread_detail' thread.id %}"
+        hx-target="#thread-container"
+        hx-swap="outerHTML"
+        hx-headers='{"HX-Request-Partial": "container"}'>
+    {% csrf_token %}
+    <div class="input-group">
+      <textarea id="chat-input" name="content" class="form-control" rows="2" placeholder="Type a message..." required></textarea>
+      <button id="chat-send" class="btn btn-primary" type="submit">Send</button>
+    </div>
+  </form>
+</div>
+
+
+<script>
+function attachChatShortcut() {
+  const textarea = document.getElementById("chat-input");
+  const form = document.getElementById("chat-form");
+  if (!textarea || !form) return;
+
+  textarea.addEventListener("keydown", function(event) {
+    if (event.key === "Enter" && event.shiftKey) {
+      event.preventDefault();
+      form.requestSubmit();
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", attachChatShortcut);
+
+document.addEventListener("htmx: afterSwap", function(evt) {
+  if (evt.detail.target.id === "thread-container") {
+    attachChatShortcut();
+  }
+});
+</script>
+

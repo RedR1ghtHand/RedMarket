@@ -39,6 +39,10 @@ width: 155px;
 }
 
 .accordion-button:not(.collapsed) {
-      background-color: rgba(var(--bs-primary-rgb), 0.1);
-      color: var(--bs-body-color);
-  }
+background-color: rgba(var(--bs-primary-rgb), 0.1);
+color: var(--bs-body-color);
+}
+
+.bg-msg-from {
+background-color: #cfe2ff;
+}

@@ -14,7 +14,7 @@ class PublicProfileView(ReputationMixin, OrderSortingMixin, CategoryFilterMixin,
     model = Order
     template_name = 'account/public_profile/base.html'
     context_object_name = 'orders'
-    paginate_by = 3
+    paginate_by = 10
     allowed_sort_fields = ['price', 'quantity']
 
     @property

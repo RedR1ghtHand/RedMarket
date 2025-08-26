@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/python/Dockerfile
+    image: redmarket_web:latest
     env_file:
       - .env
     volumes:
@@ -12,6 +13,8 @@ services:
       - /app/.venv
     ports:
       - "8000:8000"
+    networks:
+      - general
     depends_on:
       - db
 
@@ -28,8 +31,54 @@ services:
       - 'TZ=UTC'
     ports:
       - "3306:3306"
+    networks:
+      - general
     volumes:
       - mysql_data:/var/lib/mysql
 
+  redis:
+    image: redis:7-alpine
+    hostname: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - general
+    volumes:
+      - redis_data:/data
+
+  celery:
+    image: redmarket_web:latest
+    env_file:
+      - .env
+    volumes:
+      - .:/app:cached
+    depends_on:
+      - web
+      - redis
+    entrypoint: [ "poetry", "run" ]
+    command: [ "celery", "-A", "redmarket", "worker", "-l", "info" ]
+    networks:
+      - general
+
+  celery-beat:
+    image: redmarket_web:latest
+    env_file:
+      - .env
+    volumes:
+      - .:/app:cached
+    depends_on:
+      - web
+      - redis
+    entrypoint: [ "poetry", "run" ]
+    command: [ "celery", "-A", "redmarket", "beat", "-l", "info", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler" ]
+    networks:
+      - general
+
 volumes:
   mysql_data:
+  redis_data:
+
+networks:
+  general:
+    driver: bridge
