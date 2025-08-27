@@ -32,3 +32,8 @@ db.sqlite3
 db.sqlite3-journal
 media/
 staticfiles/
+# SSH Keys - DO NOT COMMIT
+github-actions-key*
+*.pem
+*.key
+*.pub
