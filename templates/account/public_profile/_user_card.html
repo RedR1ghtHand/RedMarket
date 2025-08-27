@@ -29,31 +29,51 @@
           </button>
 
           <div class="btn-group flex-fill" role="group">
-            <button type="button"
-                    class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-0"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-              Reputation
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Option 1</a></li>
-              <li><a class="dropdown-item" href="#">Option 2</a></li>
-              <li><a class="dropdown-item" href="#">Option 3</a></li>
-              <li><a class="dropdown-item" href="#">Option 4</a></li>
-            </ul>
+            {% if can_repute and not already_repped %}
+              <a type="button"
+                      class="btn btn-sm btn-outline-secondary rounded-0"
+                      hx-get="{% url 'profile_reputation' public_user.mc_username %}"
+                      hx-target="#mainModal .modal-content"
+                      hx-swap="innerHTML"
+                      hx-headers='{"HX-Request-Partial": "reputation"}'
+                      data-bs-toggle="modal"
+                      data-bs-target="#orderModal"
+                      href="">
+                Reputation
+            </a>
 
-            <button type="button"
-                    class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-0"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-              Report
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Option 1</a></li>
-              <li><a class="dropdown-item" href="#">Option 2</a></li>
-              <li><a class="dropdown-item" href="#">Option 3</a></li>
-              <li><a class="dropdown-item" href="#">Option 4</a></li>
-            </ul>
+              <button type="button"
+                      class="btn btn-sm btn-outline-secondary rounded-0"
+                      hx-get="{% url 'profile_reputation' public_user.mc_username %}"
+                      hx-target="#mainModal .modal-content"
+                      hx-swap="innerHTML"
+                      hx-headers='{"HX-Request-Partial": "report"}'
+                      data-bs-toggle="modal"
+                      data-bs-target="#orderModal"
+                      href="">
+                Report
+              </button>
+              
+            {% elif already_repped %}
+              <button type="button"
+                      class="btn btn-sm btn-outline-secondary rounded-0 d-flex align-items-center gap-2"
+                      data-bs-toggle="popover"
+                      data-bs-placement="bottom"
+                      data-bs-trigger="focus"
+                      title="Reputation Given"
+                      data-bs-content="You gave {{ existing_rep.badge|title }} on {{ existing_rep.created_at|date:'Y-m-d H:i' }}">
+                Reputation
+                {% if existing_rep %}
+                  <span class="badge bg-{% if existing_rep.is_negative %}danger{% else %}success{% endif %}">
+                    {{ existing_rep.badge|title }}
+                  </span>
+                {% endif %}
+              </button>
+            {% else %}
+              <div class="d-flex flex-column">
+                <small class="text-muted">Login to give reputation</small>
+              </div>
+            {% endif %}
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ from .views import (
     OrderManagerView,
     PublicProfileView,
     OrderCardManagerView,
+    ReputationHandlerView,
 )
 
 urlpatterns = [
@@ -20,5 +21,6 @@ urlpatterns = [
     path('order/management', OrderManagerView.as_view(), name='order_manager'),
     path("order/<int:pk>/card/", OrderCardManagerView.as_view(), name="order_card_manager"),
     path('profile/<str:mc_username>/', PublicProfileView.as_view(), name='public_profile'),
+    path('profile/<str:mc_username>/reputation/', ReputationHandlerView.as_view(), name='profile_reputation'),
     path('', include("app_social.urls"))
 ]

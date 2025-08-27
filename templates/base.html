@@ -30,64 +30,7 @@
 </head>
 <body id="main" class="d-flex flex-column min-vh-100 mc-font-n">
 
-<nav class="navbar fixed-top bg-body-tertiary border-bottom sh-b">
-  <a class="navbar-brand ps-4 text-brand" href="{% url 'home' %}">RedMarket</a>
-
-  <div class="d-flex">
-    <a class="btn" href="{% url 'orders' %}">🛒 Market</a>
-
-    <button
-            type="button"
-            class="btn"
-            hx-get="{% url 'select_item_type' %}"
-            hx-target="#mainModal .modal-content"
-            hx-swap="innerHTML"
-    >
-      ➕ Order
-    </button>
-
-    <div class="d-inline-flex align-items-center gap-2 me-3">
-      {% if user.is_authenticated and user.mc_username %}
-        <div class="dropdown">
-          <a class="btn dropdown-toggle d-flex align-items-center"
-             href="#"
-             role="button"
-             id="profileDropdown"
-             data-bs-toggle="dropdown"
-             aria-expanded="false">
-            <img src="https://mc-heads.net/avatar/{{ user.mc_username }}/64"
-                 alt="MC Head" width="20" height="20"
-                 class="me-1">
-            Profile
-          </a>
-
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-            <li>
-              <a class="dropdown-item {% if request.resolver_match.url_name == 'user' %}active{% endif %}"
-                 href="{% url 'user' %}" title="My Profile">🏠 My Profile</a>
-            </li>
-            <li>
-              <a class="dropdown-item {% if request.resolver_match.url_name == 'thread_detail' %}active{% endif %}"
-                 href="{% url 'thread_detail' %}" title="Messages">✉ Messages</a>
-            </li>
-            <li>
-              <a class="dropdown-item {% if request.resolver_match.url_name == 'order_manager' %}active{% endif %}"
-                 href="{% url 'order_manager' %}" title="My Orders">☲ My Orders</a>
-            </li>
-            <li>
-              <a class="dropdown-item {% if request.resolver_match.url_name == 'settings' %}active{% endif %}"
-                 href="{% url 'settings' %}" title="Settings">🛠 Settings</a>
-            </li>
-          </ul>
-        </div>
-      {% else %}
-        <a class="btn" href="{% url 'user' %}">
-          Profile
-        </a>
-      {% endif %}
-    </div>
-  </div>
-</nav>
+{% include "navbar.html" %}
 
 <div class="pt-navbar">
   <main id="main-content" class="flex-grow-1">
@@ -134,22 +77,7 @@
   </div>
 </div>
 <script src="{% static 'js/handle_buy.js' %}"></script>
-<script src="{% static 'js/chat_shortcuts.js' %}"></script> 
-<script>
-  function showMainModal(el) {
-      modal = new bootstrap.Modal(el);
-      document.body.addEventListener('htmx:afterSwap', e => {
-        if (e.detail.target.closest('.modal-content') === el.querySelector('.modal-content')) {
-          modal.show();
-        }
-      });
-    }
-
-  window.hideMainModal = function() {
-    const modalEl = document.getElementById('mainModal');
-    const modal = bootstrap.Modal.getInstance(modalEl);
-    if (modal) modal.hide();
-  }
-</script>
+<script src="{% static 'js/chat_shortcuts.js' %}"></script>
+<script src="{% static 'js/modal_manager.js' %}"></script>
 </body>
 </html>

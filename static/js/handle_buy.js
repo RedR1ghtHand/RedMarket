@@ -27,12 +27,11 @@ window.handleBuy = function(btn) {
             });
         }
 
-        const content = `<strong>Message copied!</strong><br>${message}`;
-        popover.setContent({ '.popover-body': content });
+        const content = `<div class="popover-header">Message copied!</div><div class="popover-body">${message}</div>`;
+        popover.setContent({ '.popover': content });
 
         popover.show();
 
         setTimeout(() => popover.hide(), 2000);
     }).catch(err => console.error('Clipboard copy failed:', err));
 };
-

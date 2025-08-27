@@ -3,6 +3,9 @@ from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
 from django.utils.functional import cached_property
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.views import View
 from app_account.models import User
 from app_item.models import Category
 from app_order.mixins import OrderSortingMixin
@@ -71,7 +74,82 @@ class PublicProfileView(ReputationMixin, OrderSortingMixin, CategoryFilterMixin,
             'reputation_list': self.get_reputation_queryset(self.public_user),
         })
 
-
         context.update(self.get_reputation_context(self.request, self.public_user))
 
         return context
+
+
+class ReputationHandlerView(View):
+    """Handle reputation submissions"""
+    
+    def get(self, request, mc_username, *args, **kwargs):
+        public_user = get_object_or_404(User, mc_username=mc_username)
+        
+        partial = request.headers.get("HX-Request-Partial")
+        
+        if partial == "reputation":
+            html = render_to_string(
+                "account/public_profile/_reputation_form.html",
+                {
+                    "public_user": public_user,
+                    "badges": getattr(settings, 'REPUTATION_BADGES_POSITIVE', []),
+                    "is_negative": False
+                },
+                request=request
+            )
+        elif partial == "report":
+            html = render_to_string(
+                "account/public_profile/_reputation_form.html",
+                {
+                    "public_user": public_user,
+                    "badges": getattr(settings, 'REPUTATION_BADGES_NEGATIVE', []),
+                    "is_negative": True
+                },
+                request=request
+            )
+        else:
+            return HttpResponse("Invalid request", status=400)
+            
+        return HttpResponse(html)
+
+    def post(self, request, mc_username, *args, **kwargs):
+        public_user = get_object_or_404(User, mc_username=mc_username)
+        current_user = request.user
+        
+        if not current_user.is_authenticated:
+            return HttpResponse("Unauthorized", status=401)
+            
+        if current_user == public_user:
+            return HttpResponse("Cannot give reputation to yourself", status=400)
+            
+        from app_social.models import Reputation
+        existing_rep = Reputation.objects.filter(giver=current_user, receiver=public_user).first()
+        if existing_rep:
+            return HttpResponse("Already gave reputation to this user", status=400)
+            
+        badge = request.POST.get('badge')
+        is_negative = request.POST.get('is_negative') == 'true'
+        
+        valid_badges = getattr(settings, 'REPUTATION_BADGES_NEGATIVE' if is_negative else 'REPUTATION_BADGES_POSITIVE', [])
+        if badge not in valid_badges:
+            return HttpResponse("Invalid badge", status=400)
+            
+        Reputation.objects.create(
+            giver=current_user,
+            receiver=public_user,
+            badge=badge,
+            is_negative=is_negative,
+        )
+        
+        from app_social.mixins import ReputationMixin
+        mixin = ReputationMixin()
+        context = mixin.get_reputation_context(request, public_user)
+        context['public_user'] = public_user
+        
+        html = render_to_string(
+            "account/public_profile/_user_card.html",
+            context,
+            request=request
+        )
+        
+        return HttpResponse(html)

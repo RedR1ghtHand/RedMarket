@@ -60,7 +60,7 @@
   <img src="{% static 'media/quantity-icon.png' %}" alt="Qty" class="ms-1" width="16">
 </div>
 
-<div class="d-flex justify-content-end align-items-center pe-1">
+<div class="d-flex justify-content-end align-items-center pe-1 ms-4">
   <button class="btn btn-sm btn-success"
           onclick="handleBuy(this)"
           data-clipboard="{{ mc_server_wisper_command }} {{ order.created_by.mc_username }} Hi! I want to buy - {{ item_type.name|capfirst }}[{{ order.material }}] x1 for {{ order.price }}. RedMarket"
