@@ -40,7 +40,7 @@
                       data-bs-target="#orderModal"
                       href="">
                 Reputation
-            </a>
+              </a>
 
               <button type="button"
                       class="btn btn-sm btn-outline-secondary rounded-0"
@@ -54,21 +54,14 @@
                 Report
               </button>
               
-            {% elif already_repped %}
-              <button type="button"
-                      class="btn btn-sm btn-outline-secondary rounded-0 d-flex align-items-center gap-2"
-                      data-bs-toggle="popover"
-                      data-bs-placement="bottom"
-                      data-bs-trigger="focus"
-                      title="Reputation Given"
-                      data-bs-content="You gave {{ existing_rep.badge|title }} on {{ existing_rep.created_at|date:'Y-m-d H:i' }}">
-                Reputation
-                {% if existing_rep %}
-                  <span class="badge bg-{% if existing_rep.is_negative %}danger{% else %}success{% endif %}">
-                    {{ existing_rep.badge|title }}
-                  </span>
-                {% endif %}
-              </button>
+            {% elif already_repped and existing_rep %}
+              <div class="d-flex align-items-center gap-2">
+                <button type="button"
+                        class="btn btn-sm btn-outline-{% if existing_rep.is_negative %}danger{% else %}success{% endif %} rounded-2 reputation-popover-btn"
+                        data-created-date="{{ existing_rep.created_at|date:'Y-m-d H:i' }}">
+                        {{ existing_rep.badge|title }}
+                </button>
+              </div>
             {% else %}
               <div class="d-flex flex-column">
                 <small class="text-muted">Login to give reputation</small>

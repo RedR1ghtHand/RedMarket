@@ -1,37 +1,48 @@
-function initPopovers() {
-    const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-    popoverTriggerList.forEach(function (el) {
-        if (!bootstrap.Popover.getInstance(el)) {
-            new bootstrap.Popover(el, {
-                trigger: 'manual',
-                html: true
-            });
+// Global click handler to close popovers when clicking outside
+document.addEventListener('click', function(event) {
+    const activeButtons = document.querySelectorAll('.popover-active');
+    activeButtons.forEach(btn => {
+        if (!btn.contains(event.target)) {
+            const popover = bootstrap.Popover.getInstance(btn);
+            if (popover) {
+                popover.hide();
+                popover.dispose();
+            }
+            btn.classList.remove('popover-active');
         }
     });
-}
-
-document.addEventListener("DOMContentLoaded", initPopovers);
-document.addEventListener("htmx:afterSwap", initPopovers);
+});
 
 window.handleBuy = function(btn) {
     const message = btn.getAttribute('data-clipboard');
     if (!message) return;
 
-    navigator.clipboard.writeText(message).then(() => {
-        let popover = bootstrap.Popover.getInstance(btn);
+    if (!btn.classList.contains('popover-active')) {
+        navigator.clipboard.writeText(message).then(() => {
+            const existingPopover = bootstrap.Popover.getInstance(btn);
+            if (existingPopover) {
+                existingPopover.dispose();
+            }
 
-        if (!popover) {
-            popover = new bootstrap.Popover(btn, {
+            const popover = new bootstrap.Popover(btn, {
                 trigger: 'manual',
-                html: true
+                html: true,
+                placement: 'left',
+                container: 'body',
+                title: 'Message copied!',
+                content: message
             });
+
+            popover.show();
+            btn.classList.add('popover-active');
+        }).catch(err => console.error('Clipboard copy failed:', err));
+    } 
+    else {
+        const popover = bootstrap.Popover.getInstance(btn);
+        if (popover) {
+            popover.hide();
+            popover.dispose(); // Clean up the popover
         }
-
-        const content = `<div class="popover-header">Message copied!</div><div class="popover-body">${message}</div>`;
-        popover.setContent({ '.popover': content });
-
-        popover.show();
-
-        setTimeout(() => popover.hide(), 2000);
-    }).catch(err => console.error('Clipboard copy failed:', err));
+        btn.classList.remove('popover-active');
+    }
 };
