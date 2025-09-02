@@ -1,7 +1,0 @@
-.sh-b {
-box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-
-[data-bs-theme="dark"] .sh-b {
-box-shadow: 0 0 10px rgba(0,0,0,0.6);
-}

@@ -1,0 +1,100 @@
+{% load static %}
+{% load custom_tags %}
+
+<div id="user-card" class="card mb-3 border-0 mt-5">
+    <div class="card-body p-3">
+        <div class="d-flex align-items-center mb-3">
+            <div class="me-3">
+                <img src="https://mc-heads.net/head/{{ public_user.mc_username }}/128" width="128" height="128"
+                    alt="{{ public_user.mc_username }}">
+            </div>
+            <div class="flex-grow-1">
+                <h3 class="mb-1">{{ public_user.mc_username }}</h3>
+                <div class="d-flex align-items-center gap-1 mt-1">
+                    <span class="">{{ public_user.reputation_score }}</span>
+                    <img src="{% static public_user.reputation_score|rep_icon %}" width="20" height="20"
+                        alt="Reputation icon">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mb-3">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-start-2 rounded-end-0"
+                    hx-get="{% url 'start_message' public_user.mc_username %}" hx-target="#reputation-container"
+                    hx-push-url="true" hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "body"}'
+                    title="Message user">
+                    Message
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary btn-sm"
+                    hx-get="{% url 'public_profile' public_user.mc_username %}" hx-target="#reputation-container"
+                    hx-push-url="true" hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "body"}'
+                    title="View orders">
+                    Orders
+                </button>
+
+                <button type="button" class="btn btn-secondary btn-sm active rounded-0" disabled title="Current view">
+                    Reputation
+                </button>
+            </div>
+
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary btn-sm dropdown-toggle rounded-start-0 rounded-end-2"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Actions
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    {% if can_repute and not already_repped %}
+                    <li>
+                        <a class="dropdown-item" href="#"
+                            hx-get="{% url 'profile_reputation' public_user.mc_username %}"
+                            hx-target="#mainModal .modal-content" hx-swap="innerHTML"
+                            hx-headers='{"HX-Request-Partial": "reputation"}' data-bs-toggle="modal"
+                            data-bs-target="#mainModal">
+                            Give Reputation
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#"
+                            hx-get="{% url 'profile_reputation' public_user.mc_username %}"
+                            hx-target="#mainModal .modal-content" hx-swap="innerHTML"
+                            hx-headers='{"HX-Request-Partial": "report"}' data-bs-toggle="modal"
+                            data-bs-target="#mainModal">
+                            Report User
+                        </a>
+                    </li>
+                    {% elif already_repped and existing_rep %}
+                    <li>
+                        <span class="dropdown-item-text">
+                            Already gave reputation
+                            <span
+                                class="text-nowrap text-{% if existing_rep.is_negative %}danger{% else %}success{% endif %}">
+                                {{ existing_rep.badge|title }}
+                            </span>
+                        </span>
+                    </li>
+                    {% else %}
+                    {% if not is_authenticated %}
+                    <li><span class="dropdown-item-text text-warning">
+                            Login to give reputation
+                        </span></li>
+                    {% elif is_own_profile %}
+                    <li><span class="dropdown-item-text text-warning">
+                            Cannot give reputation to yourself
+                        </span></li>
+                    {% elif account_too_young %}
+                    <li><span class="dropdown-item-text text-warning">
+                            Account must be 7+ days old
+                        </span></li>
+                    {% else %}
+                    <li><span class="dropdown-item-text text-warning">
+                            Cannot give reputation
+                        </span></li>
+                    {% endif %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

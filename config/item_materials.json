@@ -1,6 +1,6 @@
 [
   {
-    "name":"wood",
+    "name": "wood",
     "description": "Just a wood, nothing special",
     "applicable_to": [
       "sword",
@@ -11,7 +11,7 @@
     ]
   },
   {
-    "name":"stone",
+    "name": "stone",
     "description": "Solid.",
     "applicable_to": [
       "sword",
@@ -22,7 +22,7 @@
     ]
   },
   {
-    "name":"bescar",
+    "name": "bescar",
     "description": "Metal.",
     "applicable_to": [
       "sword",
@@ -38,7 +38,7 @@
     ]
   },
   {
-    "name":"iron",
+    "name": "iron",
     "description": "Metal.",
     "applicable_to": [
       "sword",
@@ -54,8 +54,8 @@
     ]
   },
   {
-    "name":"gold",
-    "description": "Shiny. ",
+    "name": "gold",
+    "description": "Shiny.",
     "applicable_to": [
       "sword",
       "axe",
@@ -70,7 +70,7 @@
     ]
   },
   {
-    "name":"diamond",
+    "name": "diamond",
     "description": "Shiny. Solid.",
     "applicable_to": [
       "sword",
@@ -86,7 +86,7 @@
     ]
   },
   {
-    "name":"netherite",
+    "name": "netherite",
     "description": "GOAT",
     "applicable_to": [
       "sword",
@@ -101,7 +101,7 @@
     ]
   },
   {
-    "name":"leather",
+    "name": "leather",
     "description": "Comfort.",
     "applicable_to": [
       "helmet",
@@ -112,7 +112,7 @@
     ]
   },
   {
-    "name":"chainmail",
+    "name": "chainmail",
     "description": "Metal with venting",
     "applicable_to": [
       "helmet",
@@ -122,14 +122,14 @@
     ]
   },
   {
-    "name":"turtle",
+    "name": "turtle",
     "description": "Turtle Master",
     "applicable_to": [
       "helmet"
     ]
   },
   {
-    "name":"oak",
+    "name": "oak",
     "description": "oak wood",
     "applicable_to": [
       "wood",
@@ -146,7 +146,7 @@
     ]
   },
   {
-    "name":"spruce",
+    "name": "spruce",
     "description": "spruce wood",
     "applicable_to": [
       "wood",
@@ -163,7 +163,7 @@
     ]
   },
   {
-    "name":"birch",
+    "name": "birch",
     "description": "birch wood",
     "applicable_to": [
       "wood",
@@ -180,7 +180,7 @@
     ]
   },
   {
-    "name":"jungle",
+    "name": "jungle",
     "description": "jungle wood",
     "applicable_to": [
       "wood",
@@ -197,7 +197,7 @@
     ]
   },
   {
-    "name":"acacia",
+    "name": "acacia",
     "description": "acacia wood",
     "applicable_to": [
       "wood",
@@ -214,7 +214,7 @@
     ]
   },
   {
-    "name":"dark oak",
+    "name": "dark oak",
     "description": "dark oak wood",
     "applicable_to": [
       "wood",
@@ -231,7 +231,7 @@
     ]
   },
   {
-    "name":"mangrove",
+    "name": "mangrove",
     "description": "mangrove wood",
     "applicable_to": [
       "wood",
@@ -248,7 +248,7 @@
     ]
   },
   {
-    "name":"cherry",
+    "name": "cherry",
     "description": "cherry wood",
     "applicable_to": [
       "wood",
@@ -265,7 +265,7 @@
     ]
   },
   {
-    "name":"pale oak",
+    "name": "pale oak",
     "description": "pale oak wood",
     "applicable_to": [
       "wood",
@@ -282,7 +282,7 @@
     ]
   },
   {
-    "name":"crimson",
+    "name": "crimson",
     "description": "crimson wood",
     "applicable_to": [
       "wood",
@@ -299,7 +299,7 @@
     ]
   },
   {
-    "name":"warped",
+    "name": "warped",
     "description": "warped wood",
     "applicable_to": [
       "wood",
@@ -316,7 +316,7 @@
     ]
   },
   {
-    "name":"bamboo",
+    "name": "bamboo",
     "description": "bamboo wood",
     "applicable_to": [
       "wood",

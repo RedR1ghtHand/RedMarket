@@ -1,32 +1,80 @@
+{% load custom_tags %}
+
 <div id="messages-list">
   {% if page_obj.has_next %}
-    <div id="load-more" class="text-center mb-2">
-      <button
-        class="btn btn-sm btn-outline-secondary"
-        hx-get="?page={{ page_obj.next_page_number }}"
-        hx-target="#load-more"
-        hx-swap="outerHTML"
-        hx-headers='{"HX-Request-Partial": "messages"}'
-        hx-indicator="#loading-indicator">
-        Load older messages
-      </button>
-    </div>
+  <div id="load-more" class="text-center mb-4">
+    <button class="btn btn-sm btn-outline-secondary rounded-pill px-4" hx-get="?page={{ page_obj.next_page_number }}"
+      hx-target="#load-more" hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "messages"}'
+      hx-indicator="#loading-indicator">
+      <i class="fas fa-chevron-up me-1"></i>Load older messages
+    </button>
+  </div>
   {% endif %}
-  
+
   {% for msg in messages %}
   <div class="d-flex mb-2 {% if msg.sender == request.user %}justify-content-end{% endif %}">
-    <div class="p-2 rounded {% if msg.sender == request.user %}border{% else %}bg-primary text-white border{% endif %}"
-        style="max-width:75%;">
-    <p class="mb-1">
-      {% for user in thread.participants.all %}
-      {% if user != request.user and msg.sender == user %}
-          <strong>{{ user.username }}</strong><br>
+    <div class="d-flex align-items-end {% if msg.sender == request.user %}flex-row-reverse{% endif %}">
+      <!-- Avatar for other users -->
+      {% if msg.sender != request.user %}
+      <img src="https://mc-heads.net/avatar/{{ msg.sender.mc_username }}/32" alt="{{ msg.sender.mc_username }}"
+        class="rounded-circle border border-2 me-2" width="32" height="32">
       {% endif %}
-      {% endfor %}
-      {{ msg.content }}
-  </p>
-    <small class="text-muted">{{ msg.created_at|date:"d.m, H:i" }}</small>
+
+      <!-- Message bubble -->
+      <div class="{% if msg.sender == request.user %}text-end{% endif %}">
+        <!-- Message content -->
+        {% if msg.sender == request.user %}
+        <div class="px-3 pt-3 pb-1 rounded-3 shadow-sm position-relative message-bubble-own" style="max-width: 400px;">
+          <div class="mb-2">{{ msg.content }}</div>
+          <small class="text-light opacity-75">
+            {{ msg.created_at|timeago }}
+          </small>
+        </div>
+        {% else %}
+        <div class="px-3 pt-3 pb-1 rounded-3 shadow-sm position-relative message-bubble-other"
+          style="max-width: 400px;">
+          <div class="mb-2">{{ msg.content }}</div>
+          <small class="text-muted opacity-75">
+            {{ msg.created_at|timeago }}
+          </small>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </div>
+  {% empty %}
+  <div class="text-center py-5">
+    <i class="fas fa-comment-dots text-muted mb-3" style="font-size: 3rem;"></i>
+    <p class="text-muted mb-0">No messages yet</p>
+    <small class="text-muted">Start the conversation!</small>
+  </div>
   {% endfor %}
-</div> 
+</div>
+
+<style>
+  #thread-container {
+    background: var(--bs-dark-bg-subtle);
+  }
+
+  .message-bubble {
+    position: relative;
+  }
+
+  .message-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .message-bubble-own {
+    background: var(--bs-primary);
+    color: var(--bs-light);
+  }
+
+  .message-bubble-other {
+    background: var(--bs-light-bg-subtle);
+    color: var(--bs-emphasis-color);
+  }
+</style>

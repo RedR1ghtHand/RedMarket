@@ -5,5 +5,5 @@ from .old_views import (
     account_settings_view
 )
 from .order_manager import OrderManagerView, OrderCardManagerView
-from .public_profile import PublicProfileView, ReputationHandlerView
+from .public_profile import PublicProfileView
 from .user_register import UserRegisterView
