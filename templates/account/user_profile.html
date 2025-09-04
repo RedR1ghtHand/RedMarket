@@ -20,7 +20,9 @@
     <img src="https://mc-heads.net/body/{{ user.mc_username }}/right" alt="MC Head" class="img-fluid">
   </div>
   {% endif %}
-
+  <div>
+    {% include 'social/messages/_status_dropdown.html' %}
+  </div>
   <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
 </div>
 {% endblock %}

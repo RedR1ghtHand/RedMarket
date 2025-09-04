@@ -2,11 +2,13 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
+from app_account.mixins import UserStatusMixin
 from app_social.models import Reputation
+
 from .manager import UserManager
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin, UserStatusMixin):
     email = models.EmailField(unique=True)
     mc_username = models.CharField(max_length=30, blank=True, null=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)

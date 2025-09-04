@@ -1,17 +1,15 @@
-from django.contrib import messages
 from django.db.models import Prefetch
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, UpdateView
 
-from app_account.forms import OrderUpdateForm
 from app_item.models import Category
-from app_order.models import Order, OrderEnchantment
 from app_order.forms import CreateOrderForm
+from app_order.models import Order, OrderEnchantment
+
 
 class OrderManagerView(ListView):
     model = Order
@@ -47,89 +45,60 @@ class OrderManagerView(ListView):
         return context
 
 
-class OrderCardManagerView(View):
-    template_name = "account/orders_manager/_order_card.html"
-    edit_template_name = "account/orders_manager/_order_card_edit.html"
-    delete_template_name = "account/orders_manager/_order_card_delete.html"
-
-    def get_object(self, pk, user):
-        return get_object_or_404(Order, pk=pk, created_by=user)
-
-    def get(self, request, pk, *args, **kwargs):
-        order = self.get_object(pk, request.user)
-
-        partial = request.headers.get("HX-Request-Partial")
-
-        if partial == "edit":
-            form = CreateOrderForm(instance=order, item_type=order.item_type)
-            html = render_to_string(
-                self.edit_template_name,
-                {"order": order, "form": form},
-                request=request
+class OrderCardUpdateView(UpdateView):
+    model = Order
+    form_class = CreateOrderForm
+    template_name = 'account/orders_manager/_order_card_edit.html'
+    
+    def get_object(self):
+        return get_object_or_404(Order, pk=self.kwargs['pk'], created_by=self.request.user)
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['item_type'] = self.object.item_type
+        return kwargs
+    
+    def form_valid(self, form):
+        order = form.save()
+        order.orderenchantment_set.all().delete()
+        for enchantment, level in form.cleaned_data["enchantments"]:
+            OrderEnchantment.objects.create(
+                order=order,
+                enchantment=enchantment,
+                level=level
             )
-        elif partial == "delete":
-            html = render_to_string(
-                self.delete_template_name,
-                {"order": order},
-                request=request
+        return HttpResponse(render_to_string('account/orders_manager/_order_card.html', 
+                                           {'order': order}, request=self.request))
+
+
+class OrderCardDeleteView(View):
+    template_name = 'account/orders_manager/_order_card_delete.html'
+    
+    def get_object(self):
+        return get_object_or_404(Order, pk=self.kwargs['pk'], created_by=self.request.user)
+    
+    def get(self, request, *args, **kwargs):
+        order = self.get_object()
+        return render(request, self.template_name, {'order': order})
+
+    def post(self, request, *args, **kwargs):
+        order = self.get_object()
+        category = order.item_type.category
+        order.soft_delete()
+        
+        category_orders = Order.objects.filter(
+            created_by=request.user,
+            deleted_at__isnull=True,
+            item_type__category=category
+        ).prefetch_related(
+            Prefetch(
+                "orderenchantment_set",
+                queryset=OrderEnchantment.objects.select_related("enchantment"),
             )
-        else:
-            html = render_to_string(self.template_name, {"order": order}, request=request)
-
-        return HttpResponse(html)
-
-    def post(self, request, pk, *args, **kwargs):
-        order = self.get_object(pk, request.user)
-
-        if "update_order" in request.POST:
-            form = CreateOrderForm(request.POST, instance=order, item_type=order.item_type)
-            if form.is_valid():
-                order = form.save(commit=False)
-                order.save()
-
-                order.orderenchantment_set.all().delete()
-                for enchantment, level in form.cleaned_data["enchantments"]:
-                    OrderEnchantment.objects.create(
-                        order=order,
-                        enchantment=enchantment,
-                        level=level
-                    )
-
-                messages.success(request, "Order updated.")
-                html = render_to_string(self.template_name, {"order": order}, request=request)
-            else:
-                html = render_to_string(
-                    self.edit_template_name,
-                    {"order": order, "form": form},
-                    request=request
-                )
-            return HttpResponse(html)
-
-        elif "delete_order" in request.POST:
-            category = order.item_type.category
-            order.soft_delete()
-            messages.success(request, "Order deleted.")
-
-            category_orders = (
-                Order.objects.filter(
-                    created_by=request.user,
-                    deleted_at__isnull=True,
-                    item_type__category=category
-                )
-                .prefetch_related(
-                    Prefetch(
-                        "orderenchantment_set",
-                        queryset=OrderEnchantment.objects.select_related("enchantment"),
-                    )
-                )
-            )
-
-            html = render_to_string(
-                "account/orders_manager/_category_accordion.html",
-                {"category": category, "orders": category_orders},
-                request=request,
-            )
-
-            return HttpResponse(html)
-
-        return redirect("order_manager")
+        )
+        
+        return HttpResponse(render_to_string(
+            'account/orders_manager/_category_accordion.html',
+            {'category': category, 'orders': category_orders},
+            request=request
+        ))

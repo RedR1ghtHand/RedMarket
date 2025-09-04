@@ -1,8 +1,5 @@
-<form hx-post="{% url 'order_card_manager' order.id %}"
-      hx-target="#accordion-item-{{ order.item_type.category.id }}"
-      hx-swap="outerHTML"
-      class="p-4 mb-0"
-      x-on:submit="hideMainModal()">
+<form hx-post="{% url 'order_card_delete' order.id %}" hx-target="#accordion-item-{{ order.item_type.category.id }}"
+  hx-swap="outerHTML" class="p-4 mb-0" x-on:submit="hideMainModal()">
   {% csrf_token %}
   <input type="hidden" name="delete_order" value="1">
   <p>Are you sure you want to delete this order?</p>

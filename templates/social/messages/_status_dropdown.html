@@ -1,0 +1,47 @@
+{% load user_status %}
+
+<div id="status-control" class="dropdown m-1">
+    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        <span class="me-1">Status:</span>
+        {% if request.user.manual_status == 'idle' %}
+        <span class="badge bg-warning">Idle</span>
+        {% elif request.user.manual_status == 'invisible' %}
+        <span class="badge bg-secondary">Invisible</span>
+        {% else %}
+        <span class="badge bg-success">Auto</span>
+        {% endif %}
+    </button>
+    <ul class="dropdown-menu">
+        <li>
+            <form method="post" action="{% url 'set_user_status' %}" hx-post="{% url 'set_user_status' %}"
+                hx-target="#status-control" hx-swap="outerHTML">
+                {% csrf_token %}
+                <input type="hidden" name="status" value="">
+                <button type="submit" class="dropdown-item border-0 bg-transparent w-100 text-start">
+                    <span class="badge bg-success me-2">●</span>Auto (Online/Idle/Offline)
+                </button>
+            </form>
+        </li>
+        <li>
+            <form method="post" action="{% url 'set_user_status' %}" hx-post="{% url 'set_user_status' %}"
+                hx-target="#status-control" hx-swap="outerHTML">
+                {% csrf_token %}
+                <input type="hidden" name="status" value="idle">
+                <button type="submit" class="dropdown-item border-0 bg-transparent w-100 text-start">
+                    <span class="badge bg-warning me-2">●</span>Idle
+                </button>
+            </form>
+        </li>
+        <li>
+            <form method="post" action="{% url 'set_user_status' %}" hx-post="{% url 'set_user_status' %}"
+                hx-target="#status-control" hx-swap="outerHTML">
+                {% csrf_token %}
+                <input type="hidden" name="status" value="invisible">
+                <button type="submit" class="dropdown-item border-0 bg-transparent w-100 text-start">
+                    <span class="badge bg-secondary me-2">●</span>Invisible
+                </button>
+            </form>
+        </li>
+    </ul>
+</div>

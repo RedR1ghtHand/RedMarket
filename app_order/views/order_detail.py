@@ -7,7 +7,11 @@ from django.utils.functional import cached_property
 from django.views.generic import ListView
 
 from app_item.models import ItemType, Material
-from app_order.mixins import OrderSortingMixin, EnrichedItemTypeMixin, OrderFilteringMixin
+from app_order.mixins import (
+    EnrichedItemTypeMixin,
+    OrderFilteringMixin,
+    OrderSortingMixin,
+)
 from app_order.models import Order, OrderEnchantment
 
 

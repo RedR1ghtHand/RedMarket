@@ -1,3 +1,5 @@
+{% load user_status %}
+
 <div id="threads-list-container" class="d-flex flex-column h-100 overflow-auto">
   {% for t in threads %}
   {% for user in t.participants %}
@@ -7,8 +9,7 @@
     <div class="position-relative me-2">
       <img src="https://mc-heads.net/avatar/{{ user.mc_username }}/32" alt="{{ user.mc_username }}"
         class="rounded-circle border border-2" width="32" height="32">
-      <div class="position-absolute bottom-0 end-0 bg-success rounded-circle border border-secondary"
-        style="width: 12px; height: 12px;"></div>
+      {% user_status_icon user "12" %}
     </div>
     <div class="flex-grow-1">{{ user.mc_username }}</div>
   </a>
@@ -29,7 +30,7 @@
       <img src="https://mc-heads.net/avatar/akamant/32" class="rounded-circle border border-2" width="32" height="32"
         alt="Dummy {{ i }}">
       <div class="position-absolute bottom-0 end-0 bg-secondary rounded-circle border border-white"
-        style="width: 12px; height: 12px;"></div>
+        style="width: 12px; height: 12px;" title="Offline"></div>
     </div>
     <div class="flex-grow-1">
       <div>Dummy{{ i }}+10000</div>
