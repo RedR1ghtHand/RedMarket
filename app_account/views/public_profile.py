@@ -18,7 +18,7 @@ class PublicProfileView(
     model = Order
     template_name = "account/public_profile/base.html"
     context_object_name = "orders"
-    paginate_by = 10
+    paginate_by = 64
     allowed_sort_fields = ["price", "quantity"]
 
     @property

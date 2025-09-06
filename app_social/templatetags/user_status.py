@@ -65,3 +65,19 @@ def user_status_icon(user, size=12):
     '''
     
     return mark_safe(html)
+
+
+@register.simple_tag
+def user_status_border_class(user):
+    """Return CSS classes for status border around user avatar"""
+    status_data = user_status(user)
+    
+    # Map status to border classes
+    border_classes = {
+        "online": "border-success border-2",
+        "idle": "border-warning border-2", 
+        "offline": "border-secondary border-2",
+        "invisible": "border-secondary border-2"
+    }
+    
+    return border_classes.get(status_data['status'], "border-secondary border-2")

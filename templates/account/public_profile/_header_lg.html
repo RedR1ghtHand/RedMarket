@@ -1,25 +1,21 @@
 <div class="d-none d-md-grid border-bottom fw-normal text-muted py-2"
-     style="grid-template-columns: 0.8fr 0.5fr 1.4fr 0.6fr 0.8fr auto;">
+  style="grid-template-columns: 0.8fr 0.5fr 1.4fr 0.6fr 0.8fr auto;">
   <div class="text-start">Item Type</div>
   <div class="text-start">Material</div>
   <div class="text-center">
     <button class="btn p-0 enchant-table">Enchants</button>
   </div>
   <div class="text-center">
-    <form id="price-sort-form"
-          hx-get="{% url 'public_profile' public_user.mc_username %}"
-          hx-target="#orders-table"
-          hx-swap="outerHTML"
-          hx-headers='{"HX-Request-Partial": "table"}'
-          hx-include="#current-filters"
-          class="mb-0">
+    <form id="price-sort-form" hx-get="{% url 'public_profile' public_user.mc_username %}" hx-target="#orders-table"
+      hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "table"}' hx-include="#current-filters" class="mb-0">
       <input type="hidden" name="sort" value="price">
       <input type="hidden" name="direction"
-             value="{% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}">
+        value="{% if current_sort == 'price' and current_direction == 'off' %}desc{% elif current_sort == 'price' and current_direction == 'desc' %}asc{% elif current_sort == 'price' and current_direction == 'asc' %}off{% else %}desc{% endif %}">
       <button class="btn p-0" type="submit">
         Price
         {% if current_sort == 'price' %}
-        {% if current_direction == 'asc' %}▲{% else %}▼{% endif %}
+        {% if current_direction == 'desc' %}▼{% elif current_direction == 'asc' %}▲
+        {% elif current_direction == 'off' %}●{% endif %}
         {% else %}
         ●
         {% endif %}
@@ -27,20 +23,16 @@
     </form>
   </div>
   <div class="text-center">
-    <form id="quantity-sort-form"
-          hx-get="{% url 'public_profile' public_user.mc_username %}"
-          hx-target="#orders-table"
-          hx-swap="outerHTML"
-          hx-headers='{"HX-Request-Partial": "table"}'
-          hx-include="#current-filters"
-          class="mb-0">
+    <form id="quantity-sort-form" hx-get="{% url 'public_profile' public_user.mc_username %}" hx-target="#orders-table"
+      hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "table"}' hx-include="#current-filters" class="mb-0">
       <input type="hidden" name="sort" value="quantity">
       <input type="hidden" name="direction"
-             value="{% if current_sort == 'quantity' and current_direction == 'asc' %}desc{% else %}asc{% endif %}">
+        value="{% if current_sort == 'quantity' and current_direction == 'off' %}desc{% elif current_sort == 'quantity' and current_direction == 'desc' %}asc{% elif current_sort == 'quantity' and current_direction == 'asc' %}off{% else %}desc{% endif %}">
       <button class="btn p-0" type="submit">
         Quantity
         {% if current_sort == 'quantity' %}
-        {% if current_direction == 'asc' %}▲{% else %}▼{% endif %}
+        {% if current_direction == 'desc' %}▼{% elif current_direction == 'asc' %}▲
+        {% elif current_direction == 'off' %}●{% endif %}
         {% else %}
         ●
         {% endif %}

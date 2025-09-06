@@ -1,35 +1,41 @@
 <div class="d-md-none border-bottom fw-normal pb-2 gap-2 d-flex justify-content-end">
-  <form hx-get="{% url 'order_detail' slug=item_type.slug %}"
-        hx-target="#orders-table"
-        hx-swap="outerHTML"
-        hx-headers='{"HX-Request-Partial": "table"}'
-        hx-include="#current-filters"
-        class="mb-0">
+  <form hx-get="{% url 'order_detail' slug=item_type.slug %}" hx-target="#orders-table" hx-swap="outerHTML"
+    hx-headers='{"HX-Request-Partial": "table"}' hx-include="#current-filters" hx-indicator="#price-loading-sm"
+    class="mb-0">
     <input type="hidden" name="sort" value="price">
     <input type="hidden" name="direction"
-           value="{% if current_sort == 'price' and current_direction == 'asc' %}desc{% else %}asc{% endif %}">
+      value="{% if current_sort == 'price' and current_direction == 'off' %}desc{% elif current_sort == 'price' and current_direction == 'desc' %}asc{% elif current_sort == 'price' and current_direction == 'asc' %}off{% else %}desc{% endif %}">
     <button class="btn btn-sm btn-outline-secondary rounded-0" type="submit">
       Price
       {% if current_sort == 'price' %}
-      {% if current_direction == 'asc' %}▲{% else %}▼{% endif %}
+      {% if current_direction == 'desc' %}▼{% elif current_direction == 'asc' %}▲
+      {% elif current_direction == 'off' %}●{% endif %}
+      {% else %}
+      ●
       {% endif %}
+      <span id="price-loading-sm" class="htmx-indicator ms-1">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      </span>
     </button>
   </form>
 
-  <form hx-get="{% url 'order_detail' slug=item_type.slug %}"
-        hx-target="#orders-table"
-        hx-swap="outerHTML"
-        hx-headers='{"HX-Request-Partial": "table"}'
-        hx-include="#current-filters"
-        class="mb-0">
+  <form hx-get="{% url 'order_detail' slug=item_type.slug %}" hx-target="#orders-table" hx-swap="outerHTML"
+    hx-headers='{"HX-Request-Partial": "table"}' hx-include="#current-filters" hx-indicator="#quantity-loading-sm"
+    class="mb-0">
     <input type="hidden" name="sort" value="quantity">
     <input type="hidden" name="direction"
-           value="{% if current_sort == 'quantity' and current_direction == 'asc' %}desc{% else %}asc{% endif %}">
+      value="{% if current_sort == 'quantity' and current_direction == 'off' %}desc{% elif current_sort == 'quantity' and current_direction == 'desc' %}asc{% elif current_sort == 'quantity' and current_direction == 'asc' %}off{% else %}desc{% endif %}">
     <button class="btn btn-sm btn-outline-secondary rounded-0" type="submit">
       Quantity
       {% if current_sort == 'quantity' %}
-      {% if current_direction == 'asc' %}▲{% else %}▼{% endif %}
+      {% if current_direction == 'desc' %}▼{% elif current_direction == 'asc' %}▲
+      {% elif current_direction == 'off'%}●{% endif %}
+      {% else %}
+      ●
       {% endif %}
+      <span id="quantity-loading-sm" class="htmx-indicator ms-1">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      </span>
     </button>
   </form>
 </div>

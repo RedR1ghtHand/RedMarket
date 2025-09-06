@@ -1,7 +1,10 @@
 {% load static %}
 {% load custom_tags %}
 
-{% for order in orders %}
+{% regroup orders by status_rank as grouped_orders %}
+
+{% for group in grouped_orders %}
+{% for order in group.list %}
 <div class="order-row d-none d-md-grid align-items-center py-2 border-bottom"
   style="grid-template-columns: 1.2fr 0.8fr {% if item_type.materials.exists %}1fr{% endif %} {% if item_type.enchantments.exists %}1fr{% endif %} 1fr 1fr auto;">
   {% include "order/detail_page/_rows_lg.html" %}
@@ -11,13 +14,18 @@
   {% include "order/detail_page/_rows_sm.html" %}
 </div>
 {% endfor %}
+{% endfor %}
 
 {% if page_obj.has_next %}
 <div id="load-more" class="text-center py-3">
   <button class="btn w-100" hx-get="?page={{ page_obj.next_page_number }}" hx-target="#load-more" hx-swap="outerHTML"
     hx-headers='{"HX-Request-Partial": "rows"}'
-    hx-include="#material-filter-form, #enchantment-filter-form, #current-sort">
-    Load More
+    hx-include="#material-filter-form, #enchantment-filter-form, #current-sort" hx-indicator="#loading-spinner">
+    <span class="btn-text">Load More</span>
+    <span id="loading-spinner" class="htmx-indicator">
+      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      Loading...
+    </span>
   </button>
 </div>
 {% endif %}

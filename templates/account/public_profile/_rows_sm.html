@@ -18,14 +18,14 @@
     </a>
   </div>
 
-  <div class="d-flex justify-content-center align-items-center">
+  <div class="d-flex justify-content-center align-items-center gap-1">
     <span class="text-price">{{ order.price }}</span>
-    <img src="{% static 'media/price-icon.png' %}" alt="Price" class="ms-1 mb-1" width="14">
+    <img :src="theme === 'dark' ? '{% static 'media/price-icon.png' %}' : '{% static 'media/price-icon_gold.png' %}'" alt="Price" width="14">
   </div>
 
-  <div class="d-flex justify-content-center align-items-center">
+  <div class="d-flex justify-content-center align-items-center gap-1">
     <span>{{ order.quantity }}</span>
-    <img src="{% static 'media/quantity-icon.png' %}" alt="Qty" class="ms-1" width="14">
+    <img src="{% static 'media/quantity-icon.png' %}" alt="Qty" width="14">
   </div>
 
   <div class="d-flex justify-content-end align-items-center pe-1">

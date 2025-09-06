@@ -3,7 +3,7 @@
 
 {% for order in orders %}
 <div class="order-row d-none d-md-grid align-items-center py-2 border-bottom"
-     style="grid-template-columns: 0.9fr 0.8fr 1fr 0.8fr 0.8fr auto;">
+  style="grid-template-columns: 0.9fr 0.8fr 1fr 0.8fr 0.8fr auto;">
   {% include "account/public_profile/_rows_lg.html" %}
 </div>
 
@@ -14,13 +14,14 @@
 
 {% if page_obj.has_next %}
 <div id="load-more" class="text-center py-3">
-  <button class="btn w-100"
-          hx-get="?page={{ page_obj.next_page_number }}"
-          hx-target="#load-more"
-          hx-swap="outerHTML"
-          hx-headers='{"HX-Request-Partial": "rows"}'
-          hx-include="#category-filter-form, #current-sort">
-    Load More
+  <button class="btn w-100" hx-get="?page={{ page_obj.next_page_number }}" hx-target="#load-more" hx-swap="outerHTML"
+    hx-headers='{"HX-Request-Partial": "rows"}' hx-include="#category-filter-form, #current-sort"
+    hx-indicator="#loading-spinner">
+    <span class="btn-text">Load More</span>
+    <span id="loading-spinner" class="htmx-indicator">
+      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      Loading...
+    </span>
   </button>
 </div>
 {% endif %}

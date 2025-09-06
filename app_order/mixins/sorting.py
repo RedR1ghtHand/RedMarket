@@ -21,7 +21,11 @@ class OrderSortingMixin:
         direction = self.sorting_context["direction"]
 
         if sort in self.allowed_sort_fields:
-            return sort if direction == 'asc' else f'-{sort}'
+            if direction == 'desc':
+                return f'-{sort}'
+            elif direction == 'asc':
+                return sort
+            return None
         return None
 
     def apply_ordering(self, queryset):

@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django.conf import settings
 from django.db.models import Prefetch
@@ -6,20 +7,25 @@ from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django.views.generic import ListView
 
+from app_order.decorators import DetailedQueryTimer, QueryTimer
+
+logger = logging.getLogger(__name__)
+
 from app_item.models import ItemType, Material
 from app_order.mixins import (
     EnrichedItemTypeMixin,
     OrderFilteringMixin,
     OrderSortingMixin,
+    StatusGroupingMixin,
 )
 from app_order.models import Order, OrderEnchantment
 
 
-class OrderDetailView(OrderSortingMixin, OrderFilteringMixin, EnrichedItemTypeMixin, ListView):
+class OrderDetailView(OrderSortingMixin, OrderFilteringMixin, EnrichedItemTypeMixin, StatusGroupingMixin, ListView):
     model = Order
     template_name = 'order/detail_page/base.html'
     context_object_name = 'orders'
-    paginate_by = 10
+    paginate_by = 32
     allowed_sort_fields = ['price', 'quantity']
 
     @property
@@ -27,6 +33,7 @@ class OrderDetailView(OrderSortingMixin, OrderFilteringMixin, EnrichedItemTypeMi
         return self.kwargs.get('slug')
 
     @cached_property
+    @QueryTimer("ItemType Lookup")
     def item_type(self):
         slug = self.slug
         if not slug:
@@ -34,21 +41,30 @@ class OrderDetailView(OrderSortingMixin, OrderFilteringMixin, EnrichedItemTypeMi
         return get_object_or_404(ItemType, slug=slug)
 
     @cached_property
+    @QueryTimer("Materials Lookup")
     def materials(self):
         return list(Material.objects.filter(applicable_to=self.item_type).values_list('id', 'name'))
 
+    @DetailedQueryTimer("Order Query with Status Grouping")
     def get_queryset(self):
         queryset = (
             Order.objects
             .filter(item_type=self.item_type, deleted_at__isnull=True)
+            .select_related('created_by')
             .prefetch_related(
                 Prefetch('orderenchantment_set', queryset=OrderEnchantment.objects.select_related('enchantment'))
             )
-            .order_by('-updated_at')
         )
 
         queryset = self.apply_filters(queryset)
-        return self.apply_ordering(queryset)
+        
+        ordering = self.get_ordering_params()
+        if ordering and ordering.lstrip('-') in self.allowed_sort_fields:
+            queryset = self.apply_status_grouping_with_ordering(queryset, ordering)
+        else:
+            queryset = self.apply_status_grouping_with_ordering(queryset, '-updated_at')
+        
+        return queryset
 
     def get_htmx_template(self, partial):
         partial_templates = {
@@ -63,6 +79,7 @@ class OrderDetailView(OrderSortingMixin, OrderFilteringMixin, EnrichedItemTypeMi
             return [self.get_htmx_template(self.request.headers.get("HX-Request-Partial"))]
         return [self.template_name]
 
+    @QueryTimer("Context Data Preparation")
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
