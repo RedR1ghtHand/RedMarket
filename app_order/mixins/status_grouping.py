@@ -9,17 +9,16 @@ from app_order.decorators import QueryTimer
 class StatusGroupingMixin:
     """
     Mixin to provide status-based grouping for orders.
-    Groups orders by user status: online, idle, recently offline, offline.
+    Groups orders by user status: online, idle, offline.
     """
-    
+
     def get_status_rank_annotation(self):
         return Case(
             When(created_by__manual_status='invisible', then=Value(2)),
             When(created_by__manual_status='idle', then=Value(1)),
             When(created_by__is_online=True, then=Value(0)),
             When(created_by__last_seen_at__gte=timezone.now() - timedelta(minutes=5), then=Value(1)),
-            When(created_by__last_seen_at__gte=timezone.now() - timedelta(minutes=15), then=Value(2)),
-            default=Value(3),
+            default=Value(2),
             output_field=IntegerField(),
         )
     

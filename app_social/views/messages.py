@@ -93,7 +93,6 @@ class ThreadDetailView(LoginRequiredMixin, ReputationMixin, ListView):
         page = context["page_obj"]
         messages = list(page.object_list)[::-1]
 
-        # Get reputation context for the target user (the one being messaged)
         if self.thread:
             target_user = None
             for participant in self.thread.participants():
@@ -125,6 +124,11 @@ class ThreadDetailView(LoginRequiredMixin, ReputationMixin, ListView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests for message-related actions.
+        Allows users to delete threads and redirect to the thread detail page.
+        Message creation is handled via WebSocket.
+        """
         self.thread = self.get_thread()
         if self.thread is None:
             return redirect("thread_detail")
@@ -133,9 +137,5 @@ class ThreadDetailView(LoginRequiredMixin, ReputationMixin, ListView):
             if request.user in self.thread.participants():
                 self.thread.delete()
             return redirect("thread_detail")
-
-        content = request.POST.get("content", "").strip()
-        if content:
-            create_message_task.delay(self.thread.id, request.user.id, content)
 
         return redirect("thread_detail", thread_id=self.thread.id)

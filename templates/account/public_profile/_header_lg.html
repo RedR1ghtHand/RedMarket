@@ -7,7 +7,7 @@
   </div>
   <div class="text-center">
     <form id="price-sort-form" hx-get="{% url 'public_profile' public_user.mc_username %}" hx-target="#orders-table"
-      hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "table"}' hx-include="#current-filters" class="mb-0">
+      hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "table"}' hx-include="#current-filters" hx-indicator="#price-loading" class="mb-0">
       <input type="hidden" name="sort" value="price">
       <input type="hidden" name="direction"
         value="{% if current_sort == 'price' and current_direction == 'off' %}desc{% elif current_sort == 'price' and current_direction == 'desc' %}asc{% elif current_sort == 'price' and current_direction == 'asc' %}off{% else %}desc{% endif %}">
@@ -19,12 +19,15 @@
         {% else %}
         ●
         {% endif %}
+        <span id="price-loading" class="htmx-indicator ms-1">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </span>
       </button>
     </form>
   </div>
   <div class="text-center">
     <form id="quantity-sort-form" hx-get="{% url 'public_profile' public_user.mc_username %}" hx-target="#orders-table"
-      hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "table"}' hx-include="#current-filters" class="mb-0">
+      hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "table"}' hx-include="#current-filters" hx-indicator="#quantity-loading" class="mb-0">
       <input type="hidden" name="sort" value="quantity">
       <input type="hidden" name="direction"
         value="{% if current_sort == 'quantity' and current_direction == 'off' %}desc{% elif current_sort == 'quantity' and current_direction == 'desc' %}asc{% elif current_sort == 'quantity' and current_direction == 'asc' %}off{% else %}desc{% endif %}">
@@ -36,6 +39,9 @@
         {% else %}
         ●
         {% endif %}
+        <span id="quantity-loading" class="htmx-indicator ms-1">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </span>
       </button>
     </form>
   </div>

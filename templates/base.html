@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="{% static 'css/mc_font.css' %}">
 </head>
 
-<body id="main" class="d-flex flex-column min-vh-100 mc-font-n">
+<body id="main" class="d-flex flex-column min-vh-100 mc-font-n" data-user-id="{{ user.id }}">
 
   {% include "navbar.html" %}
 

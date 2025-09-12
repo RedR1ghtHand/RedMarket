@@ -1,4 +1,7 @@
-<div id="thread-container" class="card border-0 shadow-sm d-flex flex-column" style="height: calc(70vh - 60px);">
+{% load static %}
+
+<div id="thread-container" class="card border-0 shadow-sm d-flex flex-column" 
+     style="height: calc(70vh - 60px);" data-thread-id="{{ thread.id }}">
   <!-- MESSAGES -->
   <div class="card-body overflow-auto flex-grow-1 d-flex flex-column-reverse p-4" id="container-chat">
     {% include "social/messages/_messages.html" %}
@@ -6,12 +9,11 @@
 
   <!-- CHAT FORM -->
   <div class="border-top p-3">
-    <form id="chat-form" method="post" hx-post="{% url 'thread_detail' thread.id %}" hx-target="#thread-container"
-      hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "container"}'>
+    <form id="chat-form" method="post">
       {% csrf_token %}
       <div class="input-group">
-        <textarea id="chat-input" name="content" class="form-control" rows="2" placeholder="Type a message..." required
-          style="resize: none;"></textarea>
+        <textarea id="chat-input" name="content" class="form-control" rows="2" 
+                  placeholder="Type a message..." required style="resize: none;"></textarea>
         <button id="chat-send" class="btn btn-primary" type="submit" style="min-width: 80px;">
           <i class="fas fa-paper-plane me-1"></i>Send
         </button>
@@ -19,3 +21,5 @@
     </form>
   </div>
 </div>
+
+<script src="{% static 'js/websocket_chat.js' %}"></script>
