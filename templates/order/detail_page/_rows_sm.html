@@ -1,5 +1,6 @@
 {% load static %}
 {% load custom_tags %}
+{% load user_status %}
 
 <div class="d-grid gap-2" style="grid-template-rows: repeat(2, auto); grid-template-columns: auto 60px 60px 60px;">
 
@@ -42,8 +43,9 @@
     <a hx-get="{% url 'public_profile' order.created_by.mc_username %}" hx-target="#orders-table-container"
       hx-push-url="true" hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "body"}'
       class="d-flex align-items-center gap-2 text-decoration-none" href="">
-      <img src="https://mc-heads.net/avatar/{{ order.created_by.mc_username }}/64" alt="MC Head" class="rounded-circle"
-        width="26" height="26">
+      <img src="https://mc-heads.net/avatar/{{ order.created_by.mc_username }}/64" alt="MC Head" 
+      class="rounded-circle border {{ order.created_by|user_status_border_class }}" 
+      width="26" height="26">
       {{ order.created_by.mc_username }}
     </a>
   </div>

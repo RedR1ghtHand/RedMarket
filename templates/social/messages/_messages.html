@@ -50,31 +50,3 @@
   </div>
   {% endfor %}
 </div>
-
-<style>
-  #thread-container {
-    background: var(--bs-dark-bg-subtle);
-  }
-
-  .message-bubble {
-    position: relative;
-  }
-
-  .message-bubble::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    width: 0;
-    height: 0;
-  }
-
-  .message-bubble-own {
-    background: var(--bs-primary);
-    color: var(--bs-light);
-  }
-
-  .message-bubble-other {
-    background: var(--bs-light-bg-subtle);
-    color: var(--bs-emphasis-color);
-  }
-</style>

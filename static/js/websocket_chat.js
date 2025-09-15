@@ -136,11 +136,19 @@ class WebSocketChat {
     }
 }
 
+// Global variable to track current WebSocket instance
+let currentWebSocket = null;
+
 document.addEventListener('DOMContentLoaded', () => {
-    const threadId = document.querySelector('[data-thread-id]')?.dataset.threadId;
+    const threadContainer = document.querySelector('#thread-container');
+    const threadId = threadContainer?.dataset.threadId;
     const currentUserId = document.querySelector('[data-user-id]')?.dataset.userId;
 
     if (threadId && currentUserId) {
-        new WebSocketChat(threadId, currentUserId);
+        if (currentWebSocket && currentWebSocket.socket) {
+            currentWebSocket.socket.close();
+        }
+
+        currentWebSocket = new WebSocketChat(threadId, currentUserId);
     }
 });

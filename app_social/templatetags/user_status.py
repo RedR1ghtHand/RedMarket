@@ -2,77 +2,64 @@ from datetime import timedelta
 
 from django import template
 from django.utils import timezone
-from django.utils.safestring import mark_safe
 
 register = template.Library()
 
 
-@register.simple_tag
+@register.filter
 def user_status(user):
     if hasattr(user, 'manual_status') and user.manual_status:
         if user.manual_status == 'idle':
-            return {
-                "status": "idle",
-                "class": "bg-warning",
-                "tooltip": "Idle"
-            }
+            return 'idle'
         elif user.manual_status == 'invisible':
-            return {
-                "status": "invisible",
-                "class": "bg-secondary",
-                "tooltip": "Offline"
-            }
+            return 'invisible'
     
     if not user.last_seen_at:
-        return {
-            "status": "offline",
-            "class": "bg-secondary",
-            "tooltip": "Offline"
-        }
+        return 'offline'
 
     now = timezone.now()
     time_difference = now - user.last_seen_at
 
     if time_difference < timedelta(minutes=5):
-        return {
-            "status": "online",
-            "class": "bg-success",
-            "tooltip": "Online"
-        }
+        return 'online'
     elif time_difference < timedelta(minutes=15):
-        return {
-            "status": "idle",
-            "class": "bg-warning",
-            "tooltip": "Idle"
-        }
+        return 'idle'
     else:
-        return {
-            "status": "offline",
-            "class": "bg-secondary",
-            "tooltip": "Offline"
-        }
+        return 'offline'
 
     
-@register.simple_tag
-def user_status_icon(user, size=12):
-    status_data = user_status(user)
-
-    html = f'''
-    <div class="position-absolute bottom-0 end-0 {status_data['class']} rounded-circle border border-white"
-         style="width: {size}px; height: {size}px;" 
-         title="{status_data['tooltip']}">
-    </div>
-    '''
+@register.filter
+def user_status_class(user):
+    status = user_status(user)
     
-    return mark_safe(html)
+    status_classes = {
+        "online": "bg-success",
+        "idle": "bg-warning",
+        "offline": "bg-secondary",
+        "invisible": "bg-secondary"
+    }
+    
+    return status_classes.get(status, "bg-secondary")
 
 
-@register.simple_tag
+@register.filter
+def user_status_tooltip(user):
+    status = user_status(user)
+    
+    tooltips = {
+        "online": "Online",
+        "idle": "Idle", 
+        "offline": "Offline",
+        "invisible": "Offline"
+    }
+    
+    return tooltips.get(status, "Offline")
+
+
+@register.filter
 def user_status_border_class(user):
-    """Return CSS classes for status border around user avatar"""
-    status_data = user_status(user)
-    
-    # Map status to border classes
+    status = user_status(user)
+
     border_classes = {
         "online": "border-success border-2",
         "idle": "border-warning border-2", 
@@ -80,4 +67,20 @@ def user_status_border_class(user):
         "invisible": "border-secondary border-2"
     }
     
-    return border_classes.get(status_data['status'], "border-secondary border-2")
+    return border_classes.get(status, "border-secondary border-2")
+
+
+@register.filter
+def get_item(dictionary, key):
+    """Template filter to get dictionary item by key"""
+    if isinstance(dictionary, dict):
+        return dictionary.get(key)
+    return None
+
+
+@register.filter
+def get_unread_count(unread_counts, thread_id):
+    """Template filter to get unread count for a specific thread"""
+    if unread_counts and thread_id in unread_counts:
+        return unread_counts[thread_id].get('count', 0)
+    return 0

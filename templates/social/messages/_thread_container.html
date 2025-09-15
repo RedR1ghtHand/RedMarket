@@ -1,7 +1,9 @@
 {% load static %}
 
 <div id="thread-container" class="card border-0 shadow-sm d-flex flex-column" 
-     style="height: calc(70vh - 60px);" data-thread-id="{{ thread.id }}">
+     style="height: calc(70vh - 60px);" 
+     data-thread-id="{{ thread.id }}"
+     data-participants="[{{ thread.user1.id }}, {{ thread.user2.id }}]">
   <!-- MESSAGES -->
   <div class="card-body overflow-auto flex-grow-1 d-flex flex-column-reverse p-4" id="container-chat">
     {% include "social/messages/_messages.html" %}
@@ -22,4 +24,4 @@
   </div>
 </div>
 
-<script src="{% static 'js/websocket_chat.js' %}"></script>
+<script src="{% static 'js/websocket_chat.js' %}?v={{ thread.id }}"></script>

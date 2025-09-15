@@ -8,6 +8,7 @@ from django.views.generic import ListView
 from app_account.models import User
 from app_social.mixins.reputation import ReputationMixin
 from app_social.models import Reputation
+from app_social.services.notification_service import NotificationService
 
 
 class ReputationHandlerView(ReputationMixin, ListView):
@@ -92,11 +93,18 @@ class ReputationHandlerView(ReputationMixin, ListView):
         if badge not in valid_badges:
             return HttpResponse("Invalid badge", status=400)
 
-        Reputation.objects.create(
+        reputation = Reputation.objects.create(
             giver=current_user,
             receiver=public_user,
             badge=badge,
             is_negative=is_negative,
+        )
+        
+        # Send notification to the user who received reputation
+        NotificationService.send_reputation_notification(
+            user_id=public_user.id,
+            reputation=reputation,
+            giver=current_user
         )
 
         context = self.get_reputation_context(request, public_user)

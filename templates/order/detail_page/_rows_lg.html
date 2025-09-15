@@ -7,7 +7,7 @@
     hx-push-url="true" hx-swap="outerHTML" hx-headers='{"HX-Request-Partial": "body"}'
     class="d-flex align-items-center gap-2 text-decoration-none" href="">
     <img src="https://mc-heads.net/avatar/{{ order.created_by.mc_username }}/64" alt="MC Head"
-      class="rounded-circle border {% user_status_border_class order.created_by %}" width="26" height="26">
+      class="rounded-circle border {{ order.created_by|user_status_border_class }}" width="26" height="26">
     {{ order.created_by.mc_username }}
   </a>
 </div>

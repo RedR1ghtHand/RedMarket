@@ -1,18 +1,20 @@
 <nav class="navbar fixed-top bg-body-tertiary border-bottom sh-b">
   <a class="navbar-brand ps-4 text-brand" href="{% url 'home' %}">RedMarket</a> 
 
-  <div class="d-flex">
-    <a class="btn" href="{% url 'orders' %}">🛒 Market</a>
+    <div class="d-flex">
+      <a class="btn" href="{% url 'orders' %}">🛒 Market</a>
 
-    <button
-            type="button"
-            class="btn"
-            hx-get="{% url 'select_item_type' %}"
-            hx-target="#mainModal .modal-content"
-            hx-swap="innerHTML"
-    >
-      ➕ Order
-    </button>
+      <button
+              type="button"
+              class="btn"
+              hx-get="{% url 'select_item_type' %}"
+              hx-target="#mainModal .modal-content"
+              hx-swap="innerHTML"
+      >
+        ➕ Order
+      </button>
+
+
 
     <div class="d-inline-flex align-items-center gap-2 me-3">
       {% if user.is_authenticated and user.mc_username %}
@@ -32,7 +34,7 @@
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
             <li>
               <a class="dropdown-item {% if request.resolver_match.url_name == 'user' %}active{% endif %}"
-                 href="{% url 'user' %}" title="My Profile">🏠 My Profile</a>
+                 href="{% url 'user' %}" title="My Profile">🏠︎ My Profile</a>
             </li>
             <li>
               <a class="dropdown-item {% if request.resolver_match.url_name == 'thread_detail' %}active{% endif %}"
@@ -40,7 +42,11 @@
             </li>
             <li>
               <a class="dropdown-item {% if request.resolver_match.url_name == 'order_manager' %}active{% endif %}"
-                 href="{% url 'order_manager' %}" title="My Orders">☲ My Orders</a>
+                 href="{% url 'order_manager' %}" title="Orders Manager">☲ My Orders</a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if request.resolver_match.url_name == 'reputation' %}active{% endif %}"
+                 href="{% url 'profile_reputation' user.mc_username %}" title="My Reputation">❤︎ Reputation</a>
             </li>
             <li>
               <a class="dropdown-item {% if request.resolver_match.url_name == 'settings' %}active{% endif %}"

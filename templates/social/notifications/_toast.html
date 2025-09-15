@@ -1,0 +1,31 @@
+<div id="toast-{{ notification.id }}" 
+     class="toast" 
+     role="alert" 
+     aria-live="assertive" 
+     aria-atomic="true"
+     data-notification-id="{{ notification.id }}">
+    <div class="toast-header">
+        <span class="me-2">{{ notification.icon }}</span>
+        <span class="me-auto text-warning">{{ notification.header }}</span>
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="toast" 
+                aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+        {% if notification.type == 'message' or notification.type == 'reputation' %}
+            <div class="d-flex align-items-center">
+                <img src="https://mc-heads.net/avatar/{{ notification.sender_username }}/64" 
+                     alt="{{ notification.sender_username }}" 
+                     class="rounded-circle border border-2 me-2" 
+                     width="24" height="24">
+                <div>
+                    <div class="">From {{ notification.sender_username }}</div>
+                </div>
+            </div>
+        {% else %}
+            <div class="">{{ notification.title }}</div>
+            <div class="">{{ notification.message }}</div>
+        {% endif %}
+    </div>
+</div>

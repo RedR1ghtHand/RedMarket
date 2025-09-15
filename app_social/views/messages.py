@@ -88,6 +88,10 @@ class ThreadDetailView(LoginRequiredMixin, ReputationMixin, ListView):
         return [self.template_name]
 
     def get_context_data(self, **kwargs):
+        # Ensure thread is set before getting context
+        if not hasattr(self, 'thread') or self.thread is None:
+            self.thread = self.get_thread()
+            
         context = super().get_context_data(**kwargs)
 
         page = context["page_obj"]
@@ -104,6 +108,10 @@ class ThreadDetailView(LoginRequiredMixin, ReputationMixin, ListView):
                 rep_context = self.get_reputation_context(self.request, target_user)
                 context.update(rep_context)
 
+        # Get unread counts for all threads
+        from app_social.services.notification_service import NotificationService
+        unread_counts = NotificationService._get_unread_counts(self.request.user.id)
+
         context.update(
             {
                 "thread": self.thread,
@@ -113,6 +121,7 @@ class ThreadDetailView(LoginRequiredMixin, ReputationMixin, ListView):
                 "messages": messages,
                 "page_obj": page,
                 "is_paginated": context["is_paginated"],
+                "unread_counts": unread_counts,
             }
         )
         return context

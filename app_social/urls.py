@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import MessageRedirectView, ReputationHandlerView, ThreadDetailView
+from .views.notifications import render_toast_template
 from .views.status import SetUserStatusView
 
 urlpatterns = [
@@ -9,4 +10,6 @@ urlpatterns = [
     path('message/<str:mc_username>/', MessageRedirectView.as_view(), name='start_message'),
     path('reputation/<str:mc_username>/', ReputationHandlerView.as_view(), name='profile_reputation'),
     path('set-status/', SetUserStatusView.as_view(), name='set_user_status'),
-]
+    path('notifications/toast-template/', render_toast_template, name='toast_template'),
+    ]
+

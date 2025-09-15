@@ -2,25 +2,37 @@
 
 <div id="threads-list-container" class="d-flex flex-column h-100 overflow-auto">
   {% for t in threads %}
-  {% for user in t.participants %}
-  {% if user != request.user %}
-  <a href="{% url 'thread_detail' t.id %}"
-    class="d-flex align-items-center text-decoration-none p-2 gap-0 hover-bg-secondary transition-all">
-    <div class="position-relative me-2">
-      <img src="https://mc-heads.net/avatar/{{ user.mc_username }}/32" alt="{{ user.mc_username }}"
-        class="rounded-circle border border-2" width="32" height="32">
-      {% user_status_icon user "12" %}
-    </div>
-    <div class="flex-grow-1">{{ user.mc_username }}</div>
-  </a>
-  {% endif %}
-  {% endfor %}
+    {% for user in t.participants %}
+      {% if user != request.user %}
+        <a href="{% url 'thread_detail' t.id %}"
+           class="d-flex align-items-center text-decoration-none p-2 gap-0 hover-bg-secondary transition-all"
+           data-thread-id="{{ t.id }}"
+           data-participants="[{{ t.user1.id }}, {{ t.user2.id }}]">
+          <div class="position-relative me-2">
+            <img src="https://mc-heads.net/avatar/{{ user.mc_username }}/32"
+                 class="rounded-circle border {{ user|user_status_border_class }}"
+                 width="32" height="32"
+                 alt="{{ user.mc_username }}">
+            
+            <!-- Unread message counter badge -->
+            <span id="unread-badge-{{ t.id }}" 
+                  class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill unread-badge"
+                  data-count="{{ unread_counts|get_unread_count:t.id }}">
+                {{ unread_counts|get_unread_count:t.id }}
+            </span>
+          </div>
+          <div class="flex-grow-1 d-flex align-items-center justify-content-between">
+            <span>{{ user.mc_username }}</span>
+          </div>
+        </a>
+      {% endif %}
+    {% endfor %}
   {% empty %}
-  <div class="text-center p-4">
-    <i class="fas fa-comments text-muted mb-2" style="font-size: 2rem;"></i>
-    <p class="text-muted small mb-0">No conversations yet.</p>
-    <small class="text-muted">Start a conversation to see it here</small>
-  </div>
+    <div class="text-center p-4">
+      <i class="fas fa-comments text-muted mb-2" style="font-size: 2rem;"></i>
+      <p class="text-muted small mb-0">No conversations yet.</p>
+      <small class="text-muted">Start a conversation to see it here</small>
+    </div>
   {% endfor %}
 
   {# Dummy users for scroll testing (REMOVE later) #}
@@ -46,5 +58,21 @@
 
   .transition-all {
     transition: all 0.2s ease;
+  }
+
+  .unread-badge {
+    font-size: 0.7rem;
+    min-width: 18px;
+    height: 18px;
+    line-height: 1.2;
+    display: none;
+  }
+
+  .unread-badge[data-count="0"] {
+    display: none !important;
+  }
+
+  .unread-badge:not([data-count="0"]) {
+    display: block !important;
   }
 </style>
