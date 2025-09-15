@@ -41,7 +41,10 @@ def create_message_task(self, thread_id, sender_id, content):
         return msg.id
         
     except ObjectDoesNotExist as e:
-        self.update_state(state='FAILURE', meta={'error': str(e)})
+        self.update_state(
+            state='FAILURE', 
+            meta={'error': str(e), 'exc_type': type(e).__name__}
+        )
         return None
     except Exception as e:
-        raise self.retry(exc=e, countdown=5)
+        self.retry(exc=e, countdown=5)

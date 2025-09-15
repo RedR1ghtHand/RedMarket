@@ -11,12 +11,11 @@
 
   <!-- CHAT FORM -->
   <div class="border-top p-3">
-    <form id="chat-form" method="post">
-      {% csrf_token %}
+    <form id="chat-form" onsubmit="return false;">
       <div class="input-group">
         <textarea id="chat-input" name="content" class="form-control" rows="2" 
                   placeholder="Type a message..." required style="resize: none;"></textarea>
-        <button id="chat-send" class="btn btn-primary" type="submit" style="min-width: 80px;">
+        <button id="chat-send" class="btn btn-primary" type="button" style="min-width: 80px;">
           <i class="fas fa-paper-plane me-1"></i>Send
         </button>
       </div>

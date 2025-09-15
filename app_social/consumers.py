@@ -14,12 +14,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.thread_id = self.scope['url_route']['kwargs']['thread_id']
         user = self.scope['user']
         
-        # Check if user is authenticated
         if not user.is_authenticated:
             await self.close()
             return
         
-        # Check if user is a participant in this thread
         try:
             thread = await sync_to_async(Thread.objects.get)(id=self.thread_id)
             participants = await sync_to_async(thread.participants)()
@@ -38,10 +36,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(
-            self.thread_group_name,
-            self.channel_name
-        )
+        if hasattr(self, 'thread_group_name'):
+            await self.channel_layer.group_discard(
+                self.thread_group_name,
+                self.channel_name
+            )
 
     async def receive(self, text_data):
         data = json.loads(text_data)

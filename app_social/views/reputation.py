@@ -100,7 +100,6 @@ class ReputationHandlerView(ReputationMixin, ListView):
             is_negative=is_negative,
         )
         
-        # Send notification to the user who received reputation
         NotificationService.send_reputation_notification(
             user_id=public_user.id,
             reputation=reputation,

@@ -3,6 +3,6 @@ from .reputation import ReputationHandlerView
 
 __all__ = [
     "MessageRedirectView",
-    "ThreadDetailView",
+    "ThreadDetailView", 
     "ReputationHandlerView",
 ]

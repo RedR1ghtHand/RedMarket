@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
@@ -8,7 +9,7 @@ from django.views.generic import ListView, View
 from app_account.models import User
 from app_social.mixins.reputation import ReputationMixin
 from app_social.models import Message, Thread
-from app_social.tasks import create_message_task
+from app_social.services import NotificationService
 
 
 class MessageRedirectView(LoginRequiredMixin, View):
@@ -18,22 +19,13 @@ class MessageRedirectView(LoginRequiredMixin, View):
     """
 
     def get_or_create_thread(self, request_user, target_user):
-        """
-        Returns an existing thread between two users or creates a new one if none exists.
-        Returns None if the user tries to message themselves.
-        """
         if request_user == target_user:
             return None
-
-        thread = Thread.objects.filter(
-            Q(user1=request_user, user2=target_user)
-            | Q(user1=target_user, user2=request_user)
-        ).first()
-
-        if not thread:
-            thread = Thread.objects.create(user1=request_user, user2=target_user)
-
-        return thread
+        try:
+            thread = Thread.get_or_create_between(request_user, target_user)
+            return thread
+        except ValidationError:
+            return None
 
     def get(self, request, *args, **kwargs):
         target_user = get_object_or_404(User, mc_username=kwargs["mc_username"])
@@ -88,7 +80,6 @@ class ThreadDetailView(LoginRequiredMixin, ReputationMixin, ListView):
         return [self.template_name]
 
     def get_context_data(self, **kwargs):
-        # Ensure thread is set before getting context
         if not hasattr(self, 'thread') or self.thread is None:
             self.thread = self.get_thread()
             
@@ -108,8 +99,7 @@ class ThreadDetailView(LoginRequiredMixin, ReputationMixin, ListView):
                 rep_context = self.get_reputation_context(self.request, target_user)
                 context.update(rep_context)
 
-        # Get unread counts for all threads
-        from app_social.services.notification_service import NotificationService
+        
         unread_counts = NotificationService._get_unread_counts(self.request.user.id)
 
         context.update(
@@ -134,8 +124,7 @@ class ThreadDetailView(LoginRequiredMixin, ReputationMixin, ListView):
 
     def post(self, request, *args, **kwargs):
         """
-        Handles POST requests for message-related actions.
-        Allows users to delete threads and redirect to the thread detail page.
+        Handles POST requests for thread deletion only.
         Message creation is handled via WebSocket.
         """
         self.thread = self.get_thread()
@@ -148,3 +137,5 @@ class ThreadDetailView(LoginRequiredMixin, ReputationMixin, ListView):
             return redirect("thread_detail")
 
         return redirect("thread_detail", thread_id=self.thread.id)
+
+
