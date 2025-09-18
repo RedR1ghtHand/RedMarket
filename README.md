@@ -54,29 +54,65 @@ paste in chat, and kick off a trade.
 
 * [![Python](https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://www.python.org/)
 * [![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
-* [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-* [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
-* [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+* [![HTMX](https://img.shields.io/badge/HTMX-1E1E1E?style=for-the-badge&logo=htmx&logoColor=white)](https://htmx.org/)
+* [![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+* [![Alpine.js](https://img.shields.io/badge/Alpine.js-8BC0D0?style=for-the-badge&logo=alpine.js&logoColor=white)](https://alpinejs.dev/)
+* [![WebSocket](https://img.shields.io/badge/WebSocket-010101?style=for-the-badge&logo=socket.io&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
+* [![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
+* [![Celery](https://img.shields.io/badge/Celery-37814A?style=for-the-badge&logo=celery&logoColor=white)](https://docs.celeryproject.org/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <a id="features"></a>
 ## ⚡ Features
 
-- **Smart Search Panel:**  
-  Enhanced search with material-related aliases. For example, typing "wood" or "stone" suggests relevant item types automatically.
-  
+### Market
 - **Order Detail View:**  
   Shows seller info, material (if applicable), enchantments, price, quantity, and a dynamic "Buy" button that copies a ready-to-use trade message to clipboard for quick in-game pasting.
 
-- **User Public Profile:**  
-  Displays user’s orders and social features like reputation (give or report) and built-in messaging.
+- **Buy Button:**  
+  Purchase process built around Minecraft in-game experience. One-click generates prefilled trade messages with commands compatible with popular chat plugins (/msg, /tell, /w). Instantly alt+tab into Minecraft, paste the message in chat, and initiate trades seamlessly.
 
-- **Flexible Filtering and Sorting:**  
-  Both order and user detail views support sorting by price or quantity, filtering by material or category, and prefetch related enchantments for performance.
+- **Smart Search Panel:**  
+  Enhanced search with material-related aliases. For example, typing "wood" or "stone" suggests relevant item types automatically.
 
-- **User Profile:**  
-  Personalized profile pages with intuitive navigation for managing account settings, orders, reputations, and direct messages.
+- **Advanced Filtering & Sorting:**  
+  Multi-filter support for material, category, and enchantments with sorting by price or quantity. Prefetch related enchantments for optimal performance.
+
+### Social
+- **User Status Pipeline:**  
+  Real-time user status tracking with middleware for online/offline detection and last seen timestamps.
+
+- **User Detail Pages:**  
+  Comprehensive user profiles displaying orders, reputation scores, and related trading information.
+
+- **Real-Time Messaging:**  
+  WebSocket-powered instant messaging system with live chat, message notifications, and real-time updates using Django Channels.
+
+- **Reputation System:**  
+  Badge-based reputation system with positive/negative feedback options and real-time updates.
+
+- **Notification Systems:**  
+  Live notification system with toast messages, unread counts, and instant updates for messages, reputation changes, and system alerts.
+
+- **Account Settings:**  
+  Manual status control, order management, and comprehensive account configuration options.
+
+### Modern Web Development
+- **Smart Search Panel:**  
+  Enhanced search with material-related aliases and intelligent suggestions.
+
+- **Mobile-Responsive Design:**  
+  Mobile-optimized detail pages with responsive layouts and touch-friendly interactions.
+
+- **HTMX Integration:**  
+  Seamless page updates without full reloads. Filter orders, load more content, and navigate between sections instantly with smooth animations.
+
+- **Theme System:**  
+  Dark/light theme toggle with persistent user preferences.
+
+- **Background Task Processing:**  
+  Celery-powered background tasks for message processing, user status updates, and notification delivery with Redis as the message broker.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -152,7 +188,19 @@ To get a local copy up and running, follow these steps.
   <summary>💬 Social Features</summary>
 
 - Reputation system using badges (instead of comments) that can be configured as positive or negative in settings.  
-- Simple built-in messaging with a chat window and conversation list.  
+- Real-time messaging system with WebSocket-powered instant chat, message notifications, and live updates.  
+- Advanced notification system with toast messages, unread counts, and real-time delivery using Django Channels.  
+- Background task processing with Celery for message handling and notification delivery.  
+
+</details>
+
+<details>
+  <summary>⚡ Modern Frontend</summary>
+
+- HTMX integration for seamless page updates without full reloads, providing smooth user interactions.  
+- Bootstrap 5 with responsive design, dark/light theme toggle, and modern UI components.  
+- Alpine.js for reactive UI elements, form handling, and smooth animations.  
+- WebSocket integration for real-time features like live chat and instant notifications.  
 
 </details>
 
@@ -165,9 +213,15 @@ To get a local copy up and running, follow these steps.
 Amazing technologies and tools that make this project possible:
 
 * [![Poetry](https://img.shields.io/badge/Poetry-1.8.0-blue?style=for-the-badge&logo=python&logoColor=white)](https://python-poetry.org/)
-* [![Django](https://img.shields.io/badge/Django-4.2-green?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
+* [![Django](https://img.shields.io/badge/Django-5.2-green?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
+* [![HTMX](https://img.shields.io/badge/HTMX-1.9.3-1E1E1E?style=for-the-badge&logo=htmx&logoColor=white)](https://htmx.org/)
+* [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3.0-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+* [![Alpine.js](https://img.shields.io/badge/Alpine.js-3.12.0-8BC0D0?style=for-the-badge&logo=alpine.js&logoColor=white)](https://alpinejs.dev/)
+* [![Django Channels](https://img.shields.io/badge/Django--Channels-4.3.1-092E20?style=for-the-badge&logo=django&logoColor=white)](https://channels.readthedocs.io/)
+* [![Celery](https://img.shields.io/badge/Celery-5.5.3-37814A?style=for-the-badge&logo=celery&logoColor=white)](https://docs.celeryproject.org/)
+* [![Redis](https://img.shields.io/badge/Redis-6.4.0-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
 * [![Django Extensions](https://img.shields.io/badge/Django--Extensions-4.1+-green?style=for-the-badge)](https://django-extensions.readthedocs.io/)
-* [![Gunicorn](https://img.shields.io/badge/Gunicorn-20.1.0-black?style=for-the-badge)](https://gunicorn.org/)
+* [![Gunicorn](https://img.shields.io/badge/Gunicorn-23.0.0-black?style=for-the-badge)](https://gunicorn.org/)
 * [![Docker](https://img.shields.io/badge/Docker-20.10.24-blue?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 * [![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 

@@ -43,7 +43,8 @@ class UserStatusMixin(models.Model):
 
     def mark_offline(self):
         self.is_online = False
-        self.save(update_fields=["is_online"])
+        self.manual_status = ''  # Clear manual status when going offline
+        self.save(update_fields=["is_online", "manual_status"])
 
     def set_manual_status(self, status):
         valid_statuses = ['', 'idle', 'invisible']
@@ -57,3 +58,4 @@ class UserStatusMixin(models.Model):
 
     def get_valid_manual_statuses(self):
         return ['', 'idle', 'invisible']
+    

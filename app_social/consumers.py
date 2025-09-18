@@ -89,10 +89,11 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(
-            self.notification_group_name,
-            self.channel_name
-        )
+        if hasattr(self, 'notification_group_name'):
+            await self.channel_layer.group_discard(
+                self.notification_group_name,
+                self.channel_name
+            )
 
     async def receive(self, text_data):
         data = json.loads(text_data)

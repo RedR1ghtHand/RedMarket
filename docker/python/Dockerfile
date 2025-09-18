@@ -10,10 +10,10 @@ WORKDIR /app
 # Install dependencies
 RUN apt-get update \
     && apt-get install -y \
-        curl \
-        build-essential \
-        libpq-dev \
-        netcat-openbsd \
+    curl \
+    build-essential \
+    libpq-dev \
+    netcat-openbsd \
     && pip install --upgrade pip \
     && curl -sSL https://install.python-poetry.org | python3 - \
     && ln -s /root/.local/bin/poetry /usr/local/bin/poetry \
@@ -39,4 +39,4 @@ ENTRYPOINT ["/setup.sh"]
 
 EXPOSE 8000
 
-CMD ["poetry", "run", "gunicorn", "redmarket.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["poetry", "run", "daphne", "-b", "0.0.0.0", "-p", "8000", "redmarket.asgi:application"]

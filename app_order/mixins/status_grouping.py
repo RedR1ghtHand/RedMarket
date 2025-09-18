@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from django.db.models import Case, IntegerField, Value, When
+from django.db.models import Case, IntegerField, Q, Value, When
 from django.utils import timezone
 
 from app_order.decorators import QueryTimer
@@ -14,10 +14,16 @@ class StatusGroupingMixin:
 
     def get_status_rank_annotation(self):
         return Case(
-            When(created_by__manual_status='invisible', then=Value(2)),
-            When(created_by__manual_status='idle', then=Value(1)),
-            When(created_by__is_online=True, then=Value(0)),
-            When(created_by__last_seen_at__gte=timezone.now() - timedelta(minutes=5), then=Value(1)),
+            When(
+                Q(created_by__is_online=True) | 
+                Q(created_by__last_seen_at__gte=timezone.now() - timedelta(minutes=5)),
+                then=Value(0)
+            ),
+            When(
+                Q(created_by__manual_status='idle') | 
+                Q(created_by__last_seen_at__gte=timezone.now() - timedelta(minutes=15)),
+                then=Value(1)
+            ),
             default=Value(2),
             output_field=IntegerField(),
         )

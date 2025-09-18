@@ -4,16 +4,15 @@ from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django.views.generic import ListView
 
-from app_account.mixins import CategoryFilterMixin
 from app_account.models import User
 from app_item.models import Category
-from app_order.mixins import OrderSortingMixin
+from app_order.mixins import OrderCategoryFilterMixin, OrderSortingMixin
 from app_order.models import Order, OrderEnchantment
 from app_social.mixins import ReputationMixin
 
 
 class PublicProfileView(
-    ReputationMixin, OrderSortingMixin, CategoryFilterMixin, ListView
+    ReputationMixin, OrderSortingMixin, OrderCategoryFilterMixin, ListView
 ):
     model = Order
     template_name = "account/public_profile/base.html"

@@ -73,3 +73,10 @@
     background: var(--bs-light-bg-subtle);
     color: var(--bs-emphasis-color);
 }
+
+/* Custom container max-width override */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1200px;
+    }
+}

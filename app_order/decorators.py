@@ -60,19 +60,3 @@ class DetailedQueryTimer:
             return result
         return wrapper
 
-
-def time_queries(operation_name: str = "Database Operation", log_level: int = logging.INFO):
-    def decorator(func: Callable) -> Callable:
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            start_time = time.time()
-            result = func(*args, **kwargs)
-            duration = (time.time() - start_time) * 1000
-            
-            message = f"{operation_name} - Duration: {duration:.2f}ms"
-            print(message)
-            logger.log(log_level, message)
-            
-            return result
-        return wrapper
-    return decorator

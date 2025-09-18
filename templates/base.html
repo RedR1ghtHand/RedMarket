@@ -34,6 +34,12 @@
   {% include "navbar.html" %}
 
   <div class="pt-navbar">
+    <div class="position-fixed d-none d-xl-block" style="left: 20px; top: 80px; z-index: 1000; width: 260px;">
+      <div class="bg-body border border-2 rounded p-1 shadow">
+        <img src="{% static 'media/cow-ad.jpg' %}" alt="Advertisement" class="img-fluid rounded">
+      </div>
+    </div>
+    
     <main id="main-content" class="flex-grow-1">
       {% block content %}{% endblock %}
     </main>
@@ -72,8 +78,8 @@
   </div>
 
   <div id="toast-container" class="toast-container position-fixed end-0 p-2" style="top: 60px; z-index: 9999;"></div>
+  
   <script src="{% static 'js/handle_buy.js' %}"></script>
-  <script src="{% static 'js/chat_shortcuts.js' %}"></script>
   <script src="{% static 'js/modal_manager.js' %}"></script>
   <script src="{% static 'js/popover_handler.js' %}"></script>
   <script src="{% static 'js/notification_websocket.js' %}"></script>
