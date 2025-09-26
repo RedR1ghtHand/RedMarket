@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.utils.functional import cached_property
 
 from app_item.models import ItemType
 
@@ -9,7 +10,7 @@ class EnrichedItemTypeMixin:
     Includes item type name, slug, URL, material aliases, and material ID mapping.
     Useful for search bars and filtering logic in templates.
     """
-
+    @cached_property
     def get_enriched_item_types(self):
         item_types = ItemType.objects.all().prefetch_related('materials')
         enriched = []
@@ -27,4 +28,4 @@ class EnrichedItemTypeMixin:
                 'material_map': material_map,
             })
 
-        return enriched
+        return enriched, item_types

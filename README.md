@@ -214,6 +214,7 @@ Amazing technologies and tools that make this project possible:
 
 * [![Poetry](https://img.shields.io/badge/Poetry-1.8.0-blue?style=for-the-badge&logo=python&logoColor=white)](https://python-poetry.org/)
 * [![Django](https://img.shields.io/badge/Django-5.2-green?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
+* [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 * [![HTMX](https://img.shields.io/badge/HTMX-1.9.3-1E1E1E?style=for-the-badge&logo=htmx&logoColor=white)](https://htmx.org/)
 * [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3.0-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
 * [![Alpine.js](https://img.shields.io/badge/Alpine.js-3.12.0-8BC0D0?style=for-the-badge&logo=alpine.js&logoColor=white)](https://alpinejs.dev/)

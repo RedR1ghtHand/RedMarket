@@ -106,11 +106,4 @@ class ReputationHandlerView(ReputationMixin, ListView):
             giver=current_user
         )
 
-        context = self.get_reputation_context(request, public_user)
-        context["public_user"] = public_user
-
-        html = render_to_string(
-            "account/public_profile/_user_card.html", context, request=request
-        )
-
-        return HttpResponse(html)
+        return HttpResponse('', status=200, headers={'HX-Refresh': 'true'})

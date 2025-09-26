@@ -2,6 +2,7 @@ import json
 import logging
 
 from django.conf import settings
+from django.core.cache import cache
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
@@ -82,6 +83,8 @@ class OrderDetailView(OrderSortingMixin, OrderFilteringMixin, EnrichedItemTypeMi
     @QueryTimer("Context Data Preparation")
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        enriched_data, item_types = self.get_enriched_item_types
 
         context.update({
             'item_type': self.item_type,
@@ -91,9 +94,9 @@ class OrderDetailView(OrderSortingMixin, OrderFilteringMixin, EnrichedItemTypeMi
             'sort_fields': self.allowed_sort_fields,
             'current_sort': self.sorting_context["sort"],
             'current_direction': self.sorting_context["direction"],
-            'item_types': ItemType.objects.all(),
+            'item_types': item_types,
             'mc_server_wisper_command': settings.MC_SERVER_WISPER_COMMAND,
-            'enriched_types_json': json.dumps(self.get_enriched_item_types())
+            'enriched_types_json': json.dumps(enriched_data)
         })
 
         return context
